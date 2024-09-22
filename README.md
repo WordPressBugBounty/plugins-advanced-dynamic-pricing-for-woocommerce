@@ -1,0 +1,1 @@
+# plugins-advanced-dynamic-pricing-for-woocommerce

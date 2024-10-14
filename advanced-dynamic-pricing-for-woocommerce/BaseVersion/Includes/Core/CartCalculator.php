@@ -14,6 +14,7 @@ use ADP\BaseVersion\Includes\Database\Repository\PersistentRuleRepository;
 use ADP\BaseVersion\Includes\Database\Repository\PersistentRuleRepositoryInterface;
 use ADP\BaseVersion\Includes\Database\RulesCollection;
 use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Basic\BasicCartItem;
+use ADP\BaseVersion\Includes\SpecialStrategies\CompareStrategy;
 
 defined('ABSPATH') or exit;
 
@@ -44,6 +45,20 @@ class CartCalculator implements ICartCalculator
     protected $persistentRuleRepository;
 
     /**
+     * @var CompareStrategy
+     */
+    protected $compareStrategy;
+
+    /**
+     * @var float
+     */
+    protected $maxDiscountRate;
+    /**
+     * @var float
+     */
+    protected $maxDiscountAmount;
+
+    /**
      * @param Context|RulesCollection $contextOrRuleCollection
      * @param RulesCollection|Listener|null $ruleCollectionOrListener
      * @param Listener|null $deprecated
@@ -54,11 +69,13 @@ class CartCalculator implements ICartCalculator
         $this->ruleCollection           = $contextOrRuleCollection instanceof RulesCollection ? $contextOrRuleCollection : $ruleCollectionOrListener;
         $this->persistentRuleRepository = new PersistentRuleRepository();
         $this->listener                 = $ruleCollectionOrListener instanceof Listener ? $ruleCollectionOrListener : $deprecated;
+        $this->compareStrategy          = new CompareStrategy();
     }
 
     public function withContext(Context $context)
     {
         $this->context = $context;
+        $this->compareStrategy->withContext($context);
     }
 
     public function withPersistentRuleRepository(PersistentRuleRepositoryInterface $repository)
@@ -148,6 +165,8 @@ class CartCalculator implements ICartCalculator
                 $this->announceRuleCalculated($proc);
         }
 
+        $prodPropsWithFilters = $this->context->getOption('initial_price_context') === 'view';
+
         $result = boolval($appliedRules);
 
         if ('compare_discounted_and_sale' === $this->context->getOption('discount_for_onsale')) {
@@ -162,15 +181,7 @@ class CartCalculator implements ICartCalculator
                 }
 
                 $product     = $item->getWcItem()->getProduct();
-                $wcSalePrice = null;
-
-                /** Always remember about scheduled WC sales */
-                if ($product->is_on_sale('edit') && $product->get_sale_price('edit') !== '') {
-                    $wcSalePrice = floatval($product->get_sale_price('edit'));
-                    if ( count($item->getAddons()) > 0 ) {
-                        $wcSalePrice += $item->getAddonsAmount();
-                    }
-                }
+                $wcSalePrice = $this->getWcSalePrice($product, $item, $prodPropsWithFilters);
 
                 $minDiscountRangePrice = $item->prices()->getMinDiscountRangePrice();
                 if (!is_null($wcSalePrice) && ($minDiscountRangePrice === null || $minDiscountRangePrice >= $wcSalePrice) && $wcSalePrice < $productPrice) {
@@ -190,17 +201,31 @@ class CartCalculator implements ICartCalculator
             $newItems = array();
             foreach ($cart->getItems() as $item) {
                 $product     = $item->getWcItem()->getProduct();
-                $wcSalePrice = null;
-
-                /** Always remember about scheduled WC sales */
-                if ($product->is_on_sale('edit') && $product->get_sale_price('edit') !== '') {
-                    $wcSalePrice = floatval($product->get_sale_price('edit'));
-                    if ( count($item->getAddons()) > 0 ) {
-                        $wcSalePrice += $item->getAddonsAmount();
-                    }
-                }
+                $wcSalePrice = $this->getWcSalePrice($product, $item, $prodPropsWithFilters);
 
                 if ( ! is_null($wcSalePrice) && count($item->getHistory()) == 0) {
+                        $newItem = $this->recreateItem($item, $wcSalePrice);
+                        $item->copyAttributesTo($newItem);
+
+                        $minDiscountRangePrice = $item->prices()->getMinDiscountRangePrice();
+                    if ($minDiscountRangePrice !== null) {
+                        $newItem->prices()->setMinDiscountRangePrice($minDiscountRangePrice);
+                    }
+
+                    $item = $newItem;
+                }
+
+                $newItems[] = $item;
+            }
+
+            $cart->setItems($newItems);
+        } elseif ('sale_price' === $this->context->getOption('discount_for_onsale')) {
+            $newItems = array();
+            foreach ($cart->getItems() as $item) {
+                $product     = $item->getWcItem()->getProduct();
+                $wcSalePrice = $this->getWcSalePrice($product, $item, $prodPropsWithFilters);
+
+                if ( ! is_null($wcSalePrice) ) {
                     $newItem = $this->recreateItem($item, $wcSalePrice);
                         $item->copyAttributesTo($newItem);
 
@@ -223,6 +248,32 @@ class CartCalculator implements ICartCalculator
         }
 
         return $result;
+    }
+
+    protected function getWcSalePrice($product, $item, $prodPropsWithFilters) {
+        $wcSalePrice = null;
+        /** Always remember about scheduled WC sales */
+        if( $prodPropsWithFilters
+                && ! $this->compareStrategy->floatsAreEqual(
+                    $product->get_price('edit'),
+                    $product->get_price('view')
+                )
+        ) {
+            if ($product->is_on_sale('view') && $product->get_sale_price('view') !== '') {
+                $wcSalePrice = floatval($product->get_sale_price('view'));
+                if ( count($item->getAddons()) > 0 ) {
+                    $wcSalePrice += $item->getAddonsAmount();
+                }
+            }
+        } else {
+            if ($product->is_on_sale('edit') && $product->get_sale_price('edit') !== '') {
+                $wcSalePrice = floatval($product->get_sale_price('edit'));
+                if ( count($item->getAddons()) > 0 ) {
+                    $wcSalePrice += $item->getAddonsAmount();
+                }
+            }
+        }
+        return $wcSalePrice;
     }
 
     protected function recreateItem(ICartItem $item, $wcSalePrice): ICartItem
@@ -367,5 +418,28 @@ class CartCalculator implements ICartCalculator
         $cart->setItems($newItems);
 
         return $appliedRules;
+    }
+
+    /**
+     * @param Cart $cart
+     *
+     * @return bool
+     */
+    public function findPossibleMaxDiscountsForProducts(&$maxDiscountRate,&$maxDiscountAmount)
+    {
+        //has cached values ?
+        if( isset($this->maxDiscountRate) AND isset($this->maxDiscountAmount) ) {
+            $maxDiscountRate = $this->maxDiscountRate;
+            $maxDiscountAmount = $this->maxDiscountAmount;
+            return;
+        }
+        $maxDiscountRate = $maxDiscountAmount = 0;
+        foreach ($this->ruleCollection->getRules() as $rule) {
+            $rule->findPossibleMaxDiscountsForProducts($maxRuleDiscountRate,$maxRuleDiscountAmount);
+            if($maxRuleDiscountRate>$maxDiscountRate) $maxDiscountRate = $maxRuleDiscountRate;
+            if($maxRuleDiscountAmount>$maxDiscountAmount) $maxDiscountAmount = $maxRuleDiscountAmount;
+        }
+        $this->maxDiscountRate = $maxDiscountRate;
+        $this->maxDiscountAmount = $maxDiscountAmount;
     }
 }

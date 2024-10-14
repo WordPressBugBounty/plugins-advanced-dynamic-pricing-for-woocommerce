@@ -286,6 +286,11 @@ class CartProcessor
         );
     }
 
+    public function installActionFirstProcess_Blocks()
+    {
+        $this->cartCouponsProcessor->installActions();
+    }
+
     /**
      * The main process function.
      * WC_Cart -> Cart -> Cart processing -> New Cart -> modifying global WC_Cart
@@ -325,7 +330,6 @@ class CartProcessor
 
         $optionDontProcessCart = apply_filters('adp_dont_process_cart_on_page_load', $this->context->getOption("dont_recalculate_cart_on_page_load", true));
         if( $first AND $optionDontProcessCart ) {
-            $this->cartCouponsProcessor->applyCouponsToWcCart($cart, $wcCart);
             $doFirst = true;
             return $cart;
         }
@@ -415,6 +419,7 @@ class CartProcessor
 
                 $facade->setCurrency($currencySwitcher->getCurrentCurrency());
                 $clonedWcCart->cart_contents[$cartKey] = $facade->getData();
+                $product->add_meta_data('adp_price_converted', true);
             }
         } else {
             foreach ($clonedWcCart->cart_contents as $cartKey => $wcCartItem) {
@@ -591,6 +596,8 @@ class CartProcessor
             // process free and auto added items ended
 
             $this->addCommonItems($cart, $wcCart);
+
+            do_action('adp_after_add_common_items');
 
             $wcNoFilterWorker->calculateTotals($wcCart, ...$flags);
 
@@ -1256,8 +1263,9 @@ class CartProcessor
             $facade             = new WcCartItemFacade($wcCartItem, $cartItemKey);
             $globalWcCartFacade = new WcCartItemFacade($wcCart->cart_contents[$cartItemKey], $cartItemKey);
 
-            $globalWcCartFacade->setRegularPriceWithoutTax($facade->getSubtotal() / $facade->getQty());
-            $globalWcCartFacade->setRegularPriceTax($facade->getSubtotalTax() / $facade->getQty());
+            // gift has 0 qty when it's in process of adding to cart
+            $globalWcCartFacade->setRegularPriceWithoutTax($facade->getQty() > 0 ? $facade->getSubtotal() / $facade->getQty() : 0);
+            $globalWcCartFacade->setRegularPriceTax($facade->getQty() > 0 ? $facade->getSubtotalTax() / $facade->getQty() : 0);
 
             $wcCart->cart_contents[$cartItemKey] = $globalWcCartFacade->getData();
         }

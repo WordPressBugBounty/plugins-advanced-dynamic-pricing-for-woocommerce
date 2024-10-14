@@ -384,7 +384,7 @@ class PriceDisplay
         // 	return $cartSubtotalHtml;
         // }
 
-        if ($compound) {
+        if ($compound || $wcCart->is_empty()) {
             return $cartSubtotalHtml;
         }
 

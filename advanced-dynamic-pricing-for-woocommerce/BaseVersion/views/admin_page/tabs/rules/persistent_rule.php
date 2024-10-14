@@ -637,7 +637,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.", 'adv
                     ?>
                 </p>
 
-                <a href="https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/"
+                <a href="https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/?currency=USD"
                    target=_blank><?php _e('Need more conditions?', 'advanced-dynamic-pricing-for-woocommerce') ?></a>
             </div>
             <div class="wdp-wrapper wdp-column">

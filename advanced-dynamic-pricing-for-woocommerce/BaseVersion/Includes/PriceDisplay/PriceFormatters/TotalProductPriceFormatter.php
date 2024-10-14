@@ -67,12 +67,14 @@ class TotalProductPriceFormatter
         if ($currencySwitcher->isCurrencyChanged()) {
             $price = $currencySwitcher->getCurrentCurrencyProductPrice($product);
             $regularPrice = $currencySwitcher->getCurrentCurrencyProductRegularPrice($product);
+            if(!$regularPrice)
+                $regularPrice = $price;
         } else {
             $price = $product->get_price('edit');
             $regularPrice = $product->get_regular_price('edit');
         }
 
-        if ( $regularPrice === "" OR $regularPrice === "0" ) {
+        if ( is_null($regularPrice) OR $regularPrice === "" OR $regularPrice === "0" ) {
             return "";
         }
 
@@ -95,13 +97,12 @@ class TotalProductPriceFormatter
             $this->priceFunctions->getPriceToDisplay($product,
                 array('qty' => $qty, 'price' => $regularPrice))
         );
-
         $replacements = array(
             'striked_total'    => $strikedTotal,
             'total'            => $total,
             'price_suffix'     => $product->get_price_suffix($price, $qty),
             'amount_saved'     => $this->priceFunctions->format($amountSaved),
-            'percentage_saved' => $percentageSaved . '%',
+            'percentage_saved' => $percentageSaved>0 ? $percentageSaved . '%' : '',
         );
 
         $replacements = apply_filters(
@@ -133,7 +134,7 @@ class TotalProductPriceFormatter
         );
         $total        = $strikedTotal;
         $amountSaved = $this->priceFunctions->format(0);
-        $percentageSaved = '0%';
+        $percentageSaved = '';//just empty
 
         $replacements = array(
             'striked_total'    => $strikedTotal,
@@ -192,7 +193,7 @@ class TotalProductPriceFormatter
             'total'            => $total,
             'price_suffix'     => $processedProduct->getProduct()->get_price_suffix($subtotal, 1),
             'amount_saved'     => $this->priceFunctions->format($amountSaved),
-            'percentage_saved' => $percentageSaved . '%',
+            'percentage_saved' => $percentageSaved>0 ? $percentageSaved . '%' : '',
         );
 
         $replacements = apply_filters(

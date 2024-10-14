@@ -145,7 +145,7 @@ class WpcBundleCmp extends AbstractContainerCompatibility
         return array_filter(array_map(
             function ($bundleItem) use ($product) {
                 $bundledProduct = CacheHelper::getWcProduct($bundleItem['id']);
-                
+
                 if(!($bundledProduct instanceof \WC_Product)) {
                     return false;
                 }
@@ -240,7 +240,35 @@ class WpcBundleCmp extends AbstractContainerCompatibility
         ContainerPartCartItem $subContainerItem,
         WcCartItemFacade $parentFacade
     ): ContainerPartCartItem {
-        $subContainerItem->setQty($subContainerItem->getQty() / $parentFacade->getQty());
+        $parentProduct = $parentFacade->getProduct();
+
+        if ($parentProduct instanceof \WC_Product_Woosb) {
+            $parentProductItems = $parentProduct->get_items();
+            $defaultSubItemQty = 1;
+            $optionalSubitem = false;
+
+            foreach ($parentProductItems as $tempSubitem) {
+                if (isset($tempSubitem['id']) && !is_null($subContainerItem->getWcItem()) && $tempSubitem['id'] == $subContainerItem->getWcItem()->getProductId()) {
+                    if (isset($tempSubitem['optional']) && $tempSubitem['optional']) {
+                        $optionalSubitem = true;
+                        $defaultSubItemQty = $subContainerItem->getWcItem()->getQty();
+                    } else {
+                        $defaultSubItemQty = $tempSubitem['qty'];
+                    }
+                    break;
+                }
+            }
+
+            if ($optionalSubitem) {
+                $itemQty = $defaultSubItemQty;
+            } else {
+                $itemQty = $defaultSubItemQty * $parentFacade->getQty();
+            }
+        } else {
+            $itemQty = $subContainerItem->getQty() / $parentFacade->getQty();
+        }
+
+        $subContainerItem->setQty($itemQty);
 
         return $subContainerItem;
     }

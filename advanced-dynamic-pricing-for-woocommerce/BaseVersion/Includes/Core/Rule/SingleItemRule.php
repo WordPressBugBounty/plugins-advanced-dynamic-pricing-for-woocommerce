@@ -740,4 +740,43 @@ class SingleItemRule extends BaseRule implements Rule
     {
         return $this->maxAmountForGifts;
     }
+
+    // check only Product Discount, Role and Bulk !!
+    public function findPossibleMaxDiscountsForProducts(&$maxRate,&$maxAmount)
+    {
+        $maxRate = $maxAmount = 0;
+
+        if( $this->productAdjustmentHandler ) {
+            $discount = $this->productAdjustmentHandler->getDiscount();
+            if( $discount->getType() == "percentage" )
+                $maxRate = $discount->getValue();
+            elseif($discount->getType() == "fixed_amount" )
+                $maxAmount= $discount->getValue();
+            //TODO fixed_value
+        }
+
+        if($this->roleDiscounts){
+            foreach($this->roleDiscounts as $roleDiscount ) {
+                $discount = $roleDiscount->getDiscount();
+                if( $discount->getType() == "percentage" )
+                    $maxRate = max($discount->getValue() , $maxRate);
+                elseif($discount->getType() == "fixed_amount" )
+                    $maxAmount= max($discount->getValue() ,$maxAmount);
+                //TODO fixed_value
+            }
+        }
+
+        if( $this->productRangeAdjustmentHandler) {
+            foreach($this->productRangeAdjustmentHandler->getRanges() as $range){
+                $discount = $range->getData();
+                if( $discount->getType() == "percentage" )
+                    $maxRate = $discount->getValue();
+                elseif($discount->getType() == "fixed_amount" )
+                    $maxAmount= $discount->getValue();
+                //TODO fixed_value
+            }
+        }
+
+        //Done, skip other sections of the rule
+    }
 }

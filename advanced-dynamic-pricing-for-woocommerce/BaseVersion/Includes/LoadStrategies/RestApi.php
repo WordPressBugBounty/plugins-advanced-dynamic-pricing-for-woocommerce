@@ -67,6 +67,7 @@ class RestApi implements LoadStrategy
          * @var Engine $engine
          */
         $engine = Factory::get("Engine", WC()->cart);
+        $engine->getCartProcessor()->installActionFirstProcess_Blocks();
 
         // Should we install all price display hooks?
         $engine->installProductProcessorWithEmptyCart();

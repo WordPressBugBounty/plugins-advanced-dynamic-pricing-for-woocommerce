@@ -5,6 +5,7 @@ namespace ADP\BaseVersion\Includes;
 use ADP\BaseVersion\Includes\CartProcessor\CartProcessor;
 use ADP\BaseVersion\Includes\CartProcessor\FreeAutoAddItemsController;
 use ADP\BaseVersion\Includes\Compatibility\CTXFeedCmp;
+use ADP\BaseVersion\Includes\Compatibility\KlarnaCmp;
 use ADP\BaseVersion\Includes\Compatibility\SmartCouponsCmp;
 use ADP\BaseVersion\Includes\Compatibility\WcSubscriptionsCmp;
 use ADP\BaseVersion\Includes\Compatibility\WcQuoteCmp;
@@ -163,7 +164,12 @@ class Engine
 
         $this->process(true);
 
-        $hookPriority = intval(apply_filters('wdp_calculate_totals_hook_priority', PHP_INT_MAX));
+        $klarnaCmp = new KlarnaCmp();
+        if($klarnaCmp->isActive()){
+            $hookPriority = intval(apply_filters('wdp_calculate_totals_hook_priority', 999998));
+        } else {
+            $hookPriority = intval(apply_filters('wdp_calculate_totals_hook_priority', PHP_INT_MAX));
+        }
         add_action('woocommerce_after_calculate_totals', array($this, 'afterCalculateTotals'), $hookPriority);
 
         /**

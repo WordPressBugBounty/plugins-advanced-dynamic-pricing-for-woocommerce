@@ -142,7 +142,6 @@ class Processor implements IWcProductProcessor
                 array_map('wc_get_product', $product->get_children()),
                 'wc_products_array_filter_visible_grouped'
             );
-
             foreach ($children as $childId) {
                 $processedChild = $this->checkCacheFroProcessedProduct($childId, $qty, [], $cartItemData);
 
@@ -167,6 +166,13 @@ class Processor implements IWcProductProcessor
             /** @var $processed ProcessedVariableProduct */
             $processed = Factory::get("PriceDisplay_ProcessedVariableProduct", $this->context, $product, $qty);
             $children = $product->get_visible_children();
+
+            // try optimize calculations at Shop/Category/Tag pages only
+            $req_variations = $this->context->getOption('req_variations_for_optimization_at_shop');
+            if( $req_variations AND count($children) >= $req_variations AND
+                ( is_shop() OR is_product_category() OR is_product_tag() ) ) {
+                $children = $this->getMinMaxCostChilds($children,$product);
+            }
 
             foreach ($children as $childId) {
                 $processedChild = $this->checkCacheFroProcessedProduct($childId, $qty, [], $cartItemData);
@@ -220,6 +226,50 @@ class Processor implements IWcProductProcessor
 
         return $processed;
     }
+
+    protected function getMinMaxCostChilds($variations,$product){
+        $price_mode = $this->context->getOption('discount_for_onsale');
+
+        if($price_mode == "compare_discounted_and_sale")
+            $this->calc->findPossibleMaxDiscountsForProducts($maxDiscountRate,$maxDiscountAmount);
+
+        $result = [];
+        $min_price = $min_id = $max_price = $max_id = null;
+        foreach($variations as $variation_id) {
+            $variation = WcProductProcessorHelper::buildWcProductFromChildId($variation_id, $product);
+            $sale_price = floatval($variation->get_sale_price('edit'));
+            $regular_price = floatval($variation->get_regular_price('edit'));
+            if( $price_mode =='discount_regular')
+                $price = $regular_price;
+            elseif( $price_mode =='sale_price' OR $price_mode =='discount_sale')
+                $price = $sale_price ? $sale_price : $regular_price;
+            elseif( $price_mode =='compare_discounted_and_sale'){//TODO incorrect?
+                $price = $regular_price;
+                if($sale_price AND $sale_price != $regular_price) {
+                    $discountAmount = $regular_price - $sale_price;
+                    $discountRate = 100 - round ($sale_price/$regular_price * 100);
+                    if($discountRate>$maxDiscountRate OR $discountAmount>$maxDiscountAmount )
+                        $price = $sale_price;
+                  //echo "%% $discountRate  VS $maxDiscountRate , USD  $discountAmount VS $maxDiscountAmount<br>\n";
+                }
+            }
+
+            if( !isset($min_cost) OR $price<$min_cost ) {
+                $min_id = $variation_id;
+                $min_cost = $price;
+            }
+            if( !isset($max_cost) OR $price>$max_cost ) {
+                $max_id = $variation_id;
+                $max_cost = $price;
+            }
+        }
+        if($min_id)
+            $result[] = $min_id;
+        if($max_id AND $max_id!=$min_id)
+            $result[] = $max_id;
+        return $result;
+    }
+
 
     protected function checkCacheFroProcessedProduct($prodID, $qty, $variationAttributes, $cartItemData)
     {

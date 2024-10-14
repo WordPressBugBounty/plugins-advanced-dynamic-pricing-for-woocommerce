@@ -58,6 +58,9 @@ class VillaThemeMultiCurrencyCmp
                     'woocommerce_package_rates' => [
                         ["WOOMULTI_CURRENCY_Frontend_Shipping", "woocommerce_package_rates"]
                     ],
+                    'init' => [
+                        ["WOOMULTI_CURRENCY_Frontend_Price", 'add_change_price_hooks']
+                    ],
                 ]
             );
         }

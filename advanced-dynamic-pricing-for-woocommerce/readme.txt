@@ -5,7 +5,7 @@ Tags: woocommerce, dynamic pricing, discount, pricing rule, bulk discount
 Requires PHP: 7.0
 Requires at least: 4.8
 Tested up to: 6.6
-Stable tag: 4.8.3
+Stable tag: 4.9.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,7 +50,7 @@ Check more examples [on our website](https://docs.algolplus.com/algol_pricing/sa
 * Add shortcodes to display discounted or BOGO products at separate pages
 * and much more ...
 
-[Pro version](https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/) can [adjust product price onfly](https://docs.algolplus.com/algol_pricing/advanced-features-in-action/), adds **exclusive rules, extra conditions, a lot of settings, and statistics** (which rules really work, which products are involved and how much does it cost for you).
+[Pro version](https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/?currency=USD) can [adjust product price onfly](https://docs.algolplus.com/algol_pricing/advanced-features-in-action/), adds **exclusive rules, extra conditions and a lot of settings(which allow you to configure different layouts and scenarios).
 
 Have an idea or feature request?
 Please create a topic in the "Support" section with any ideas or suggestions for new features.
@@ -105,6 +105,24 @@ You should be PHP programmer to do it. [Please, review sample addon and adapt it
 
 
 == Changelog ==
+
+= 4.9.0 - 2024-10-14 =
+* Increased speed of generating store/category pages for shops having a lot of variations
+* Added option "Use aproximate price range if product has [10] variations or more"
+* Added position "After subtotal" for amount saved in the cart/checkout
+* Amount saved  supported for block-based cart/checkout
+* Fixed bug - "out of memory" error when WooCommerce Subscriptions was active
+* Fixed bug - "Replace price with lowest bulk price"  worked incorrectly when sale price < price of our discount
+* Fixed bug - "Replace the price with the lowest price of variations" tag  {{regular_price_striked}} shown the striked price even there was no discount
+* Fixed bug - mini-cart shown the striked price after deleting all products from the cart
+* Fixed bug - CURCY(WooCommerce Multi Currency Premium by VillaTheme) can't change currency in the cart
+* Fixed bug - Divi theme builder failed to start
+* Fixed bug - cart condition "Order count" didn't ignore draft orders created by block-based checkout
+* Updated compatibility with "FOX - Currency Switcher Professional"
+* Updated compatibility with "WPC Product Bundles for WooCommerce"
+* Updated compatibility with " WooCommerce Extra Product Options"
+* Updated compatibility with WoodMart theme
+
 
 = 4.8.3 - 2024-08-21 =
 * Fixed bug - wrong coupon amount for the gift (block-based cart)

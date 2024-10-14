@@ -2,6 +2,7 @@
 
 namespace ADP\BaseVersion\Includes\CartProcessor;
 
+use ADP\BaseVersion\Includes\Compatibility\Addons\ThemehighExtraOptionsProCmp;
 use ADP\BaseVersion\Includes\Core\Cart\Cart;
 use ADP\BaseVersion\Includes\Core\Cart\CartContext;
 use ADP\BaseVersion\Includes\Core\Cart\Fee;
@@ -48,6 +49,17 @@ class CartFeeProcessor
      */
     public function calculateFees($wcCart)
     {
+        $themeHighCmp = new ThemehighExtraOptionsProCmp();
+        if ($themeHighCmp->isActive()) {
+            $feesthc = $themeHighCmp->checkFeesFromCart($wcCart->cart_contents);
+
+            if (!empty($feesthc)) {
+                foreach ($feesthc as $fee) {
+                    $wcCart->add_fee($fee['name'], $fee['amount']);
+                }
+            }
+        }
+
         if (empty($this->fees) || empty($this->cartContext)) {
             return;
         }

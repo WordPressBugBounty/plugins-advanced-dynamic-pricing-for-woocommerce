@@ -16,6 +16,7 @@ use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Base\CartItemAddonsCollecti
 use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\ICartItem;
 use ADP\BaseVersion\Includes\PriceDisplay\WcProductCalculationWrapper;
 use ADP\BaseVersion\Includes\WC\WcCartItemFacade;
+use ADP\HighLander\HighLanderShortcuts;
 
 class ToPricingAddonsAdapter
 {
@@ -114,6 +115,8 @@ class ToPricingAddonsAdapter
         } elseif (($wcffCmp = new WcffCmp()) && $wcffCmp->isActive()) {
             $addons = $wcffCmp->getAddonsFromCartItem($facade);
         }
+
+        $addons = apply_filters('adp_compatibility_addons', $addons, $facade);
 
         return $addons;
     }

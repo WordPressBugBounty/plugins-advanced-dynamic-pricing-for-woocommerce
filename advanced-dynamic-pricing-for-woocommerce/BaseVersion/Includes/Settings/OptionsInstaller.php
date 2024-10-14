@@ -436,6 +436,11 @@ class OptionsInstaller
                 __("From {{price}} {{price_suffix}}", 'advanced-dynamic-pricing-for-woocommerce'),
                 __('Replace price with lowest bulk price|Output template', 'advanced-dynamic-pricing-for-woocommerce')
             ),
+            $builder::integer(
+                'req_variations_for_optimization_at_shop',
+                10,
+                __('Show approximate price range if product has X variations or more', 'advanced-dynamic-pricing-for-woocommerce')
+            ),
             $builder::boolean(
                 'disable_shipping_calc_during_process',
                 false,

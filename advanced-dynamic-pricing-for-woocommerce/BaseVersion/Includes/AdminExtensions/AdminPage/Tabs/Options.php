@@ -159,7 +159,9 @@ class Options implements AdminTabInterface
 			"category_page"   => array(
 				'title'     => __("Category page", 'advanced-dynamic-pricing-for-woocommerce'),
                 'doc_link'  => 'https://docs.algolplus.com/algol_pricing/category-page/',
-				'templates' => array(),
+				'templates' => array(
+					4 => "req_variations_for_optimization_at_shop"
+                ),
 			),
 			"product_page"    => array(
 				'title'     => __("Product page", 'advanced-dynamic-pricing-for-woocommerce'),
@@ -221,17 +223,17 @@ class Options implements AdminTabInterface
 				'title'     => __("Calculation", 'advanced-dynamic-pricing-for-woocommerce'),
                 'doc_link'  => 'https://docs.algolplus.com/algol_pricing/calculation-free/',
 				'templates' => array(
-                    1 => "apply_discount_for_onsale_products",
-					2 => "disable_shipping_calc_during_process",
-					3 => "dont_recalculate_cart_on_page_load",
-                    4 => "combine_discounts",
-                    5 => "default_discount_name",
-                    6 => "combine_fees",
-                    7 => "default_fee_name",
-                    8 => "default_fee_tax_class",
-					9 => "is_calculate_based_on_wc_precision",
-                    10 => "override_cents",
-                    13 => "initial_price_context",
+                    10 => "apply_discount_for_onsale_products",
+					20 => "disable_shipping_calc_during_process",
+					30 => "dont_recalculate_cart_on_page_load",
+                    40 => "combine_discounts",
+                    50 => "default_discount_name",
+                    60 => "combine_fees",
+                    70 => "default_fee_name",
+                    80 => "default_fee_tax_class",
+					90 => "is_calculate_based_on_wc_precision",
+                    100 => "override_cents",
+                    130 => "initial_price_context",
 				),
 			),
             "advertising" => array(

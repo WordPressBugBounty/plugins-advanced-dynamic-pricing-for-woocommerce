@@ -185,7 +185,7 @@ class CartCalculator implements ICartCalculator
 
                 $minDiscountRangePrice = $item->prices()->getMinDiscountRangePrice();
                 if (!is_null($wcSalePrice) && ($minDiscountRangePrice === null || $minDiscountRangePrice >= $wcSalePrice) && $wcSalePrice < $productPrice) {
-                    $newItem = $this->recreateItem($item, $wcSalePrice);
+                    $newItem = self::recreateItem($item, $wcSalePrice);
                     $item->copyAttributesTo($newItem);
 
                     $newItem->prices()->setMinDiscountRangePrice($wcSalePrice);
@@ -204,7 +204,7 @@ class CartCalculator implements ICartCalculator
                 $wcSalePrice = $this->getWcSalePrice($product, $item, $prodPropsWithFilters);
 
                 if ( ! is_null($wcSalePrice) && count($item->getHistory()) == 0) {
-                        $newItem = $this->recreateItem($item, $wcSalePrice);
+                        $newItem = self::recreateItem($item, $wcSalePrice);
                         $item->copyAttributesTo($newItem);
 
                         $minDiscountRangePrice = $item->prices()->getMinDiscountRangePrice();
@@ -226,7 +226,7 @@ class CartCalculator implements ICartCalculator
                 $wcSalePrice = $this->getWcSalePrice($product, $item, $prodPropsWithFilters);
 
                 if ( ! is_null($wcSalePrice) ) {
-                    $newItem = $this->recreateItem($item, $wcSalePrice);
+                    $newItem = self::recreateItem($item, $wcSalePrice);
                         $item->copyAttributesTo($newItem);
 
                         $minDiscountRangePrice = $item->prices()->getMinDiscountRangePrice();
@@ -252,6 +252,15 @@ class CartCalculator implements ICartCalculator
 
     protected function getWcSalePrice($product, $item, $prodPropsWithFilters) {
         $wcSalePrice = null;
+        if ($product->is_on_sale('edit') && $product->get_sale_price('edit') !== '') {
+            $wcSalePrice = floatval($product->get_sale_price('edit'));
+            if ( count($item->getAddons()) > 0 ) {
+                $wcSalePrice += $item->getAddonsAmount();
+            }
+        }
+        return $wcSalePrice;
+
+        //Failed code, caused infinite loop  -  some plugins add hook for 'view' context
         /** Always remember about scheduled WC sales */
         if( $prodPropsWithFilters
                 && ! $this->compareStrategy->floatsAreEqual(
@@ -276,7 +285,7 @@ class CartCalculator implements ICartCalculator
         return $wcSalePrice;
     }
 
-    protected function recreateItem(ICartItem $item, $wcSalePrice): ICartItem
+    public static function recreateItem(ICartItem $item, $wcSalePrice): ICartItem
     {
         if ($item instanceof ContainerCartItem) {
             $subItems = array_map(function ($item) {

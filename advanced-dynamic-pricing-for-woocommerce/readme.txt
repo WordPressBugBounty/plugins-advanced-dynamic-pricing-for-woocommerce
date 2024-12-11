@@ -2,10 +2,10 @@
 Contributors: algolplus
 Donate link: https://paypal.me/ipprokaev/0usd
 Tags: woocommerce, dynamic pricing, discount, pricing rule, bulk discount
-Requires PHP: 7.0
+Requires PHP: 7.1
 Requires at least: 4.8
-Tested up to: 6.6
-Stable tag: 4.9.0
+Tested up to: 6.7
+Stable tag: 4.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -105,6 +105,30 @@ You should be PHP programmer to do it. [Please, review sample addon and adapt it
 
 
 == Changelog ==
+
+= 4.9.1 - 2024-12-11 =
+* Fixed XSS vulnerability
+* Added "Exclude products" selectors to section "Filter by products"
+* Added button "Reset to default settings" (>Settings>System), highlight the changed options
+* Optimized calculations for variable products
+* WooCommerce shortcode [products on_sale="true"] displays products modified by [Product Only rules](https://docs.algolplus.com/algol_pricing/product-only-type-rule/)
+* Bulk table hides footer if there's no bulk table message in the rule
+* Fixed bug - shipping cost was not added to  total , if our rules were NOT applied  and option "disable shipping calculation" was active
+* Fixed bug - bulk mode "Based on variation" handled different simple products as ONE variation
+* Fixed bug - wrong prices in bulk table for the products with WC sale price
+* Fixed bug - cart conditions "Subtotal ..." ignored discounts added by other rules
+* Fixed bug - shortcode [adp_products_on_sale] shown products with increased cost (negative discount)
+* Fixed bug - incorrectly updated bulk rules when use >Tools>Update bulk ranges (CSV)
+* Fixed bug - WooCommerce Subscriptions product ignored "signup fee" (in some cases)
+* Fixed bug - an infinite loop if "WooCommerce Prices By User Role" plugin was active
+* Fixed bug - CURCY shown wrong prices after switching currency in the cart
+* Fixed bug - prices were doubled if the bundled product was created using the "Woocommerce Product Bundles" plugin
+* Fixed bug - "YITH WooCommerce Advanced Product Options Premium" break layout for our pages
+* Added compatibility with "WPC Composite Products for WooCommerce"
+* Added compatibility with HeyLight Payment System
+* Updated compatibility with "WPC Product Bundles for WooCommerce"
+* Updated (multi-currency) compatibility with "WooCommerce Payments"
+* Fixed PHP 8.4 warnings
 
 = 4.9.0 - 2024-10-14 =
 * Increased speed of generating store/category pages for shops having a lot of variations

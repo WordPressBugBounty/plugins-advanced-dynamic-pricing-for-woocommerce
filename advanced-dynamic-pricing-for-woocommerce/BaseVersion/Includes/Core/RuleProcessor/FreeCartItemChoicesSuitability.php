@@ -57,7 +57,8 @@ class FreeCartItemChoicesSuitability
         $ruleUsedStock,
         $giftedCount,
         $cart,
-        &$maxAmountForGiftsLeft = null
+        &$maxAmountForGiftsLeft = null,
+        $maxAmountForGift = null
     ) {
         $result = array();
 
@@ -97,8 +98,17 @@ class FreeCartItemChoicesSuitability
             }
 
             $productBaseSubtotal = $this->getProductBaseSubtotal($cart, $currentProduct, $qtyToAdd);
+            $productBasePrice = $this->getProductBaseSubtotal($cart, $currentProduct, 1);
+
+            if ( $maxAmountForGift !== null && $productBasePrice > $maxAmountForGift) {
+
+                $result[md5($currentProduct->get_id())][3] = true;
+                unset($products[$currentIndex]);
+                continue;
+            }
 
             if ( $maxAmountForGiftsLeft !== null && $productBaseSubtotal > $maxAmountForGiftsLeft ) {
+
                 $result[md5($currentProduct->get_id())][3] = true;
                 unset($products[$currentIndex]);
                 continue;

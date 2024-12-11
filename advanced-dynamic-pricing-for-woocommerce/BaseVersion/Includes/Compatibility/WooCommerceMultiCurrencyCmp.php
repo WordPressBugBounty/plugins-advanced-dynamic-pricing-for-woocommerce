@@ -45,7 +45,7 @@ class WooCommerceMultiCurrencyCmp
                 'advanced-dynamic-pricing-for-woocommerce'), 'load_requirements', 'plugins_loaded'), WC_ADP_VERSION);
         }
 
-        if (function_exists('WC_Payments_Features') && function_exists('WC_Payments_Multi_Currency')) {
+        if (class_exists('WC_Payments_Features') && function_exists('WC_Payments_Multi_Currency')) {
             if ( \WC_Payments_Features::is_customer_multi_currency_enabled() ) {
                 $this->multi_currency = WC_Payments_Multi_Currency();
             }

@@ -20,7 +20,7 @@ class OnSaleProducts extends Products
     {
         return
             $rule instanceof SingleItemRule &&
-            $rule->getProductAdjustmentHandler() &&
+            $rule->getProductAdjustmentHandler() && $rule->getProductAdjustmentHandler()->getDiscount()->getValue() > 0 &&
             ! $rule->getProductRangeAdjustmentHandler() &&
             ! $rule->getRoleDiscounts() &&
             count($rule->getGifts()) === 0 &&

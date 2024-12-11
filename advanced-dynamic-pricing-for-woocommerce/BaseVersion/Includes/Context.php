@@ -4,6 +4,7 @@ namespace ADP\BaseVersion\Includes;
 
 use ADP\BaseVersion\Includes\AdminExtensions\AdminNotice;
 use ADP\BaseVersion\Includes\AdminExtensions\AdminPage;
+use ADP\BaseVersion\Includes\Compatibility\HeyLightCmp;
 use ADP\BaseVersion\Includes\Compatibility\PriceBasedOnCountryCmp;
 use ADP\BaseVersion\Includes\Context\Container\ContainerCompatibilityManager;
 use ADP\BaseVersion\Includes\Context\ContextBuilder;
@@ -223,6 +224,11 @@ class Context
         $klarnaCmp = new KlarnaCmp();
         if ($klarnaCmp->isActive()) {
             $klarnaCmp->prepareHooks();
+        }
+
+        $heightCmp = new HeylightCmp();
+        if ($heightCmp->isActive()) {
+            $heightCmp->prepareHooks();
         }
 
         $klarnaOsmCmp = new KlarnaOnSiteMessagingCmp();

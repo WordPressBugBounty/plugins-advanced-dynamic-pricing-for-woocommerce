@@ -448,4 +448,17 @@ class Functions
         return $this->productProcessor;
     }
 
+    public function getProductsWithSalePriceAdp() {
+        global $wpdb;
+
+        $query = "
+            SELECT post_id
+            FROM {$wpdb->postmeta}
+            WHERE meta_key = '_sale_price_adp'
+        ";
+
+        $ids = $wpdb->get_col($query);
+
+        return array_map('intval', $ids);
+    }
 }

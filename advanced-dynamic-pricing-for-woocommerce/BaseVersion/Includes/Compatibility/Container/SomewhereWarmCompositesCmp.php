@@ -94,16 +94,16 @@ class SomewhereWarmCompositesCmp extends AbstractContainerCompatibility
 
     public function calculatePartOfContainerPrice(WcCartItemFacade $facade): float
     {
-        $compositedProduct = $facade->getProduct();
+        /*$compositedProduct = $facade->getProduct();
         $this->probablySetCompositeItem($compositedProduct, $facade);
 
         if ( isset($compositedProduct->composited_item) ) {
             $childItemPrice = floatval($compositedProduct->composited_item->get_price());
         } else {
             $childItemPrice = floatval($compositedProduct->get_price());
-        }
+        }*/
 
-        return $childItemPrice;
+        return 0;
     }
 
     /**
@@ -175,13 +175,14 @@ class SomewhereWarmCompositesCmp extends AbstractContainerCompatibility
             $facade
         );
 
-        $qty = floatval(apply_filters('wdp_get_product_qty', $facade->getQty(), $facade));
 
         $product = $facade->getProduct();
         $reflection = new \ReflectionClass($product);
         $property = $reflection->getProperty('data');
         $property->setAccessible(true);
         $basePrice = $property->getValue($product)['price'];
+
+        $qty = floatval(apply_filters('wdp_get_product_qty', $facade->getQty(), $facade));
 
         $initialPrice = $this->calculatePartOfContainerPrice($facade);
         $initialPrice = (new ToPricingAddonsAdapter())->addAddonsToInitialPriceWithFacade($initialPrice, $facade);
@@ -195,7 +196,7 @@ class SomewhereWarmCompositesCmp extends AbstractContainerCompatibility
         return new ContainerPartCartItem(
             $facade,
             floatval($basePrice),
-            $pricedIndividually,
+            false,
             $basePrice,
             $qty
         );

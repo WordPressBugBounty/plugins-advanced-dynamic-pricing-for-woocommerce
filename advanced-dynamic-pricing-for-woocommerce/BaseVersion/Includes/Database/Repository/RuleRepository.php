@@ -23,6 +23,19 @@ class RuleRepository implements RuleRepositoryInterface {
     }
 
     /**
+     * @return bool
+     */
+    public function hasActiveRulesWithLimits(): bool
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . Rule::TABLE_NAME;
+
+        $sql = "SELECT COUNT(*) FROM $table WHERE `limits` NOT LIKE \"a:0:{}\" AND NOT deleted AND enabled";
+        $count = $wpdb->get_var($sql);
+        return $count>0;
+    }
+
+    /**
      * @return array
      */
     public function getRulesWithBulk(): array
@@ -685,7 +698,7 @@ class RuleRepository implements RuleRepositoryInterface {
               AND `filters` LIKE %s
               AND `filters` NOT LIKE %s
               AND `cart_adjustments` = %s
-              AND (`bulk_adjustments` = %s OR `bulk_adjustments` LIKE %s OR
+              AND (`bulk_adjustments` = %s OR `bulk_adjustments` LIKE %s OR `bulk_adjustments` LIKE %s OR
                    `bulk_adjustments` = %s OR `bulk_adjustments` = %s OR
                    `bulk_adjustments` IS NULL)
         ",
@@ -696,7 +709,8 @@ class RuleRepository implements RuleRepositoryInterface {
             '%s:4:"type";s:3:"any";%', // not any product
             'a:0:{}',
             'a:2:{s:4:"type";s:4:"bulk";s:13:"table_message";s:0:"";}', //no bulk
-            '%s:4:"type";s:4:"bulk";s:9:"qty_based";s:3:"all";%', //bulk with qty based on all matched products
+            '%s:4:"type";s:4:"bulk";%s:9:"qty_based";s:3:"all";%', //bulk with qty based on all matched products
+            '%s:4:"type";s:4:"bulk";%s:9:"qty_based";s:3:"not";%', //bulk with qty based on all matched products if import from csv
             'a:1:{s:13:"table_message";s:0:"";}', //TODO: prevent rules to save bulk like this
             'a:0:{}' //for pre-4.0.0 imported rules with no bulk
         );

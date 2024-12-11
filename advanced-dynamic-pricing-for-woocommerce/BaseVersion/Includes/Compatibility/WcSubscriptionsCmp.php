@@ -143,26 +143,15 @@ class WcSubscriptionsCmp
     public function setHooksBeforeCalculateTotals()
     {
         \WC_Subscriptions_Synchroniser::maybe_set_free_trial();
-        static $hook_set = false;
-
-        if (!$hook_set) {
-            \WC_Subscriptions_Cart::add_calculation_price_filter();
-            if (!has_action('woocommerce_calculated_total')) {
-                add_filter('woocommerce_calculated_total', '\WC_Subscriptions_Cart::calculate_subscription_totals', 1000, 2);
-            }
-            $hook_set = true;
+        \WC_Subscriptions_Cart::add_calculation_price_filter();
+        if (!has_action('woocommerce_calculated_total')) {
+            add_filter('woocommerce_calculated_total', '\WC_Subscriptions_Cart::calculate_subscription_totals', 1000, 2);
         }
     }
 
     public function removeHooksAfterCalculateTotals()
     {
         \WC_Subscriptions_Cart::remove_calculation_price_filter();
-        static $hook_removed = false;
-
-        if (!$hook_removed) {
-            remove_filter('woocommerce_calculated_total', '\WC_Subscriptions_Cart::calculate_subscription_totals', 1000);
-            $hook_removed = true;
-        }
     }
 
 }

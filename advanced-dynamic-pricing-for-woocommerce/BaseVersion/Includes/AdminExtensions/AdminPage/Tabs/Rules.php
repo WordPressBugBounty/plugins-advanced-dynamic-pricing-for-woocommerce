@@ -252,7 +252,7 @@ class Rules implements AdminTabInterface
 
     protected function getSearchQueryIfExists()
     {
-        return isset($_GET['action']) && $_GET['action'] === 'search_rules' && isset($_GET['q']) ? $_GET['q'] : "";
+        return isset($_GET['action']) && $_GET['action'] === 'search_rules' && isset($_GET['q']) ? esc_attr($_GET['q']) : "";
     }
 
     protected function getBulkAction()
@@ -327,7 +327,7 @@ class Rules implements AdminTabInterface
         $args['exclusive'] = 0;
 
         if ($this->getSearchQueryIfExists()) {
-            $args['q'] = sanitize_text_field((string)$_GET['q']);
+            $args['q'] = $this->getSearchQueryIfExists();
         }
 
         return $args;
@@ -449,7 +449,6 @@ class Rules implements AdminTabInterface
             'persistence_bulk_rule' => static::getAllAvailablePersistenceTypes(),
             'options' => array(
                 'close_on_select' => defined("WC_ADP_PRO_VERSION_URL") ? false : true,
-                'enable_product_exclude' => $context->getOption('allow_to_exclude_products'),
                 'rules_per_page' => $context->getOption('rules_per_page'),
             ),
             'paged' => $paged,

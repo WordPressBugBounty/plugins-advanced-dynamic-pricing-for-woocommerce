@@ -21,6 +21,7 @@ use ADP\BaseVersion\Includes\Shortcodes\OnSaleProducts as OnSaleProductsShortCod
 use ADP\BaseVersion\Includes\Shortcodes\ProductRangeDiscountTableShortcode;
 use ADP\BaseVersion\Includes\StatsCollector\WcCartStatsCollector;
 use ADP\BaseVersion\Includes\VolumePricingTable\RangeDiscountTableDisplay;
+use ADP\BaseVersion\Includes\WC\Utils;
 use ADP\BaseVersion\Includes\WC\WcProductCustomAttributesCache;
 use ADP\Factory;
 use ADP\BaseVersion\Includes\Compatibility\Addons\WcffCmp;
@@ -120,6 +121,8 @@ class ClientCommon implements LoadStrategy
 
         $wcffCmp = new WcffCmp();
         $wcffCmp->installRenderHooks();
+
+        Utils::addPersistentProductsToSaleQuery();
     }
 
     /**

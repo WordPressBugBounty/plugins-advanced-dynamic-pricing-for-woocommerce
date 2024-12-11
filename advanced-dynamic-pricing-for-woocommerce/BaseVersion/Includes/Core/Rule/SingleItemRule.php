@@ -150,6 +150,11 @@ class SingleItemRule extends BaseRule implements Rule
     protected $maxAmountForGifts;
 
     /**
+     * @var bool
+     */
+    protected $isGiftsBelowCheapestItem;
+
+    /**
      * @var ConditionMessage
      */
     protected $conditionMessageHandler;
@@ -183,6 +188,7 @@ class SingleItemRule extends BaseRule implements Rule
         $this->autoAddSubtotalDivider  = null;
         $this->roleDiscounts           = array();
         $this->maxAmountForGifts       = null;
+        $this->isGiftsBelowCheapestItem = false;
     }
 
     public function __clone()
@@ -739,6 +745,22 @@ class SingleItemRule extends BaseRule implements Rule
     public function getMaxAmountForGifts()
     {
         return $this->maxAmountForGifts;
+    }
+
+    /**
+     * @param bool $isGiftsBelowCheapestItem
+     */
+    public function setGiftsBelowCheapestItem($isGiftsBelowCheapestItem)
+    {
+        $this->isGiftsBelowCheapestItem = $isGiftsBelowCheapestItem;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isGiftsBelowCheapestItem()
+    {
+        return $this->isGiftsBelowCheapestItem;
     }
 
     // check only Product Discount, Role and Bulk !!

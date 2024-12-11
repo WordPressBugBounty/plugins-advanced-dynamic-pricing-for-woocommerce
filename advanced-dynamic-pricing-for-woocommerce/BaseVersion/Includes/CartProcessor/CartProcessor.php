@@ -339,7 +339,7 @@ class CartProcessor
 
         if (is_array($chosenShippingMethods)) {
             foreach ($chosenShippingMethods as $index => $chosenShippingMethod) {
-                if (strpos($chosenShippingMethod, ShippingMethodEnum::TYPE_ADP_FREE_SHIPPING) !== false) {
+                if (is_string($chosenShippingMethod) && strpos($chosenShippingMethod, ShippingMethodEnum::TYPE_ADP_FREE_SHIPPING) !== false) {
                     $chosenOwnShippingMethods[$index] = $chosenShippingMethod;
                 }
             }
@@ -674,9 +674,6 @@ class CartProcessor
             }
         } else {
             $flags = array();
-            if ($this->context->getOption("disable_shipping_calc_during_process", false)) {
-                $flags[] = $wcNoFilterWorker::FLAG_DISALLOW_SHIPPING_CALCULATION;
-            }
             if ($this->wcSubsCmp->isActive() && $this->wcsAttCmp->isActive()) {
                 $flags[] = $wcNoFilterWorker::FLAG_ALLOW_PRICE_HOOKS;
             }

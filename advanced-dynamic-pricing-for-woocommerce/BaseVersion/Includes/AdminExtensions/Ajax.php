@@ -214,9 +214,11 @@ class Ajax
                 $parent    = get_term($parent_id, 'product_cat');
             }
 
+            $id = (string)$term->term_id;
+
             return array(
-                'id'   => (string)$term->term_id,
-                'text' => $parent == $term ? $term->name : $parent->name . '>' . $term->name,
+                'id'   => $id,
+                'text' => $parent == $term ? "#$id $term->name" : "#$id $parent->name>$term->name",
                 'link' => $this->context->getOption("products_as_links_in_the_product_filter", false) ? get_category_link($term->term_id) : ''
             );
         }, $terms);
@@ -305,10 +307,12 @@ AND $wpdb->terms.name  like '%$query%' LIMIT $this->limit
             'number'     => $this->limit
         ));
 
+
         return array_map(function ($term) {
+            $id = (string)$term->term_id;
             return array(
-                'id'   => (string)$term->term_id,
-                'text' => $term->name,
+                'id'   => $id,
+                'text' => "#$id $term->name",
                 'link' => $this->context->getOption("products_as_links_in_the_product_filter", false) ? get_category_link($term->term_id) : ''
             );
         }, $terms);
@@ -543,6 +547,7 @@ WHERE products.post_type IN ('product','product_variation') AND CONCAT(fields.me
         $table = $wpdb->prefix . Rule::TABLE_NAME;
 
         $this->persistentRuleRepository->truncate();
+        $this->persistentRuleRepository->clearCacheInProductMetaData();
 
         $sql = "SELECT id FROM $table WHERE (rule_type = 'persistent' ) AND enabled = 1 AND deleted = 0";
         foreach ($wpdb->get_col($sql) as $id) {
@@ -559,6 +564,7 @@ WHERE products.post_type IN ('product','product_variation') AND CONCAT(fields.me
         $table = $wpdb->prefix . Rule::TABLE_NAME;
 
         $this->persistentRuleRepository->truncate();
+        $this->persistentRuleRepository->clearCacheInProductMetaData();
 
         $sql = "SELECT COUNT(*) FROM $table WHERE (rule_type = 'persistent' ) AND enabled = 1 AND deleted = 0";
         $totalCount = (int)($wpdb->get_var($sql));

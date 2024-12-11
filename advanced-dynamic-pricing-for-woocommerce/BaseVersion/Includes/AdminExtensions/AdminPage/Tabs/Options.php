@@ -89,6 +89,20 @@ class Options implements AdminTabInterface
 			$settings->save();
 
 			wp_redirect($_SERVER['HTTP_REFERER']);
+		} else if(isset($_POST['reset-options'])) {
+            if (wp_verify_nonce($_POST[$this->nonceParam] ?? null, $this->nonceName) === false) {
+                wp_die(
+                    __('Invalid nonce specified', 'advanced-dynamic-pricing-for-woocommerce'),
+                    __('Error', 'advanced-dynamic-pricing-for-woocommerce'),
+                    array('response' => 403,)
+                );
+            }
+
+			$settings = $this->context->getSettings();
+
+			$settings->drop();
+
+			wp_redirect($_SERVER['HTTP_REFERER']);
 		}
 	}
 
@@ -109,6 +123,18 @@ class Options implements AdminTabInterface
 		$data['security_param'] = $this->nonceParam;
 
 		return $data;
+	}
+
+	public function getScriptData()
+	{
+		return [
+			'labels' => [
+				'are_you_sure_to_reset_settings' => __(
+					"Are you sure to reset all settings to default?",
+					'advanced-dynamic-pricing-for-woocommerce'
+				),
+			]
+		];
 	}
 
 	public static function getRelativeViewPath()
@@ -136,6 +162,12 @@ class Options implements AdminTabInterface
 		$baseVersionUrl = WC_ADP_PLUGIN_URL . "/BaseVersion/";
 		wp_enqueue_script('wdp_options-scripts', $baseVersionUrl . 'assets/js/options.js', array('jquery'),
 			WC_ADP_VERSION);
+
+		$defaultOptions = $this->context->getSettings()->getOptions(true);
+		wp_add_inline_script('wdp_options-scripts', 'var wdp_default_options = '. wp_json_encode($defaultOptions) .';', 'before');
+
+		wp_localize_script('wdp_options-scripts', 'wdp_data', $this->getScriptData());
+
 		wp_enqueue_style('wdp_options-styles', $baseVersionUrl . 'assets/css/options.css', array(), WC_ADP_VERSION);
 	}
 
@@ -149,7 +181,6 @@ class Options implements AdminTabInterface
 					100 => "rules_per_page",
 					"rule_max_exec_time",
 					"limit_results_in_autocomplete",
-					"allow_to_exclude_products",
                     "support_persistence_rules",
 					"support_shortcode_products_on_sale",
 					"support_shortcode_products_bogo",
@@ -256,6 +287,7 @@ class Options implements AdminTabInterface
 					"update_prices_while_doing_cron",
                     "update_prices_while_doing_rest_api",
 					"uninstall_remove_data",
+					"reset_settings"
 				),
 			),
 			"debug"           => array(

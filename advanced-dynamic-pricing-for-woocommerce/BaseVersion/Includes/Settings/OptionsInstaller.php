@@ -239,13 +239,6 @@ class OptionsInstaller
                 __('Suppress other pricing plugins in frontend', 'advanced-dynamic-pricing-for-woocommerce')
             ),
 
-
-            $builder::boolean(
-                'allow_to_exclude_products',
-                true,
-                __('Allow to exclude products in filters', 'advanced-dynamic-pricing-for-woocommerce')
-            ),
-
             $builder::boolean(
                 'create_blank_rule',
                 false,

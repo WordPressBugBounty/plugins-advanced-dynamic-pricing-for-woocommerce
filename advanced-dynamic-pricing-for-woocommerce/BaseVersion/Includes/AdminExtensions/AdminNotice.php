@@ -227,7 +227,7 @@ class AdminNotice
 
     public function notifyAboutPersistenceRules()
     {
-        if ($this->isDismissedPersistenceRulesNotice()) {
+        if ($this->isDismissedPersistenceRulesNotice() || !(isset($_GET['page']) && $_GET['page'] == 'wdp_settings')) {
           return;
         }
 
@@ -244,7 +244,7 @@ class AdminNotice
         <div class="notice notice-success is-dismissible">
             <p>
                 <?php
-                printf( 
+                printf(
                     __( 'You have more than %s rules. You need to ', 'advanced-dynamic-pricing-for-woocommerce')
                         .'<a href="%s">' .__('enable the "Product only" rules', 'advanced-dynamic-pricing-for-woocommerce').'</a>',
                     self::persistenceRulesNoticeThreshold, $ruleEditUrl);

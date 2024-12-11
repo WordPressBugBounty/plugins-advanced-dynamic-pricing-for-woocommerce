@@ -107,6 +107,9 @@ class Processor implements IWcProductProcessor
      */
     public function calculateProduct($theProduct, $qty = 1.0, $cartItemData = array())
     {
+        static $last_product_key='';
+        static $last_product_result;
+
         if (is_numeric($theProduct)) {
             $product = CacheHelper::getWcProduct($theProduct);
         } elseif ($theProduct instanceof WC_Product) {
@@ -114,14 +117,27 @@ class Processor implements IWcProductProcessor
         } else {
             $this->context->handleError(new Exception("Product does not exists",
                 self::ERR_PRODUCT_DOES_NOT_EXISTS));
-
             return null;
         }
 
-        return $this->calculateWithProductWrapper(
+        //try cache
+        $key = array( $product->get_id() , $qty, json_encode($cartItemData) );
+        foreach ($this->cart->getItems() as $item) {
+            $key[] = "T".$item->getHash();
+        }
+        foreach ($this->calc->getRulesCollection()->getRules() as $rule) {
+            $key[] = "R".$rule->getId();
+        }
+        $key = md5(implode('_', $key));
+        if( $key == $last_product_key )
+            return $last_product_result;
+
+        $last_product_key = $key;
+        $last_product_result = $this->calculateWithProductWrapper(
             new WcProductCalculationWrapper($product, $cartItemData, []),
             $qty
         );
+        return $last_product_result;
     }
 
     /**
@@ -374,6 +390,7 @@ class Processor implements IWcProductProcessor
                 $product->set_sale_price($salePrice);
             }
             $product->set_regular_price($currencySwitcher->getCurrentCurrencyProductRegularPrice($product));
+            $product->add_meta_data('adp_price_converted', true);
         }
 
         $cart = clone $this->cart;

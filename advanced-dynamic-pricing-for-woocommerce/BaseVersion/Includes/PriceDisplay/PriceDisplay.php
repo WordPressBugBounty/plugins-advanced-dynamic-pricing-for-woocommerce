@@ -284,10 +284,6 @@ class PriceDisplay
             return $onSale;
         }
 
-        if ($onSale) {
-            return $onSale;
-        }
-
         $processedProduct = $this->processor->calculateProduct($product);
         if (is_null($processedProduct)) {
             return $onSale;

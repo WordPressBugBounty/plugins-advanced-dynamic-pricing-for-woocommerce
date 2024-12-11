@@ -259,11 +259,12 @@ class WpcBundleCmp extends AbstractContainerCompatibility
                 }
             }
 
-            if ($optionalSubitem) {
-                $itemQty = $defaultSubItemQty;
-            } else {
-                $itemQty = $defaultSubItemQty * $parentFacade->getQty();
-            }
+            $itemQty = $defaultSubItemQty;
+//            if ($optionalSubitem) {
+//                $itemQty = $defaultSubItemQty;
+//            } else {
+//                $itemQty = $defaultSubItemQty * $parentFacade->getQty();
+//            }
         } else {
             $itemQty = $subContainerItem->getQty() / $parentFacade->getQty();
         }

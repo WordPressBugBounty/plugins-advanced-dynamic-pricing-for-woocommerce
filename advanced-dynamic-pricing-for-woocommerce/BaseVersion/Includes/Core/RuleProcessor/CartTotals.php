@@ -62,8 +62,18 @@ class CartTotals
 
             if ($item->isPriceChanged()) {
                 $price = $item->getTotalPrice();
+
+                if($product->is_on_sale('edit') && 'compare_discounted_and_sale' === $context->getOption('discount_for_onsale')) {
+                    $salePrice = (float)$product->get_sale_price('edit') * $item->getQty();
+                    $price = min([$price, $salePrice]);
+                }
             } else {
-                $price = $product->is_on_sale('edit') ? (float)$product->get_sale_price('edit') : $item->getPrice();
+                $facade    = $item->getWcItem();
+                if($facade->getNewPrice() !== null) {
+                    $price = $facade->getNewPrice();
+                } else {
+                    $price = $product->is_on_sale('edit') ? (float)$product->get_sale_price('edit') : $item->getPrice();
+                }
                 $price *= $item->getQty();
             }
 
@@ -166,7 +176,12 @@ class CartTotals
             if ($item->isPriceChanged()) {
                 $price = $item->getTotalPrice();
             } else {
-                $price = $product->is_on_sale('edit') ? (float)$product->get_sale_price('edit') : $item->getPrice();
+                $facade    = $item->getWcItem();
+                if($facade->getNewPrice() !== null) {
+                    $price = $facade->getNewPrice();
+                } else {
+                    $price = $product->is_on_sale('edit') ? (float)$product->get_sale_price('edit') : $item->getPrice();
+                }
                 $price *= $item->getQty();
             }
 

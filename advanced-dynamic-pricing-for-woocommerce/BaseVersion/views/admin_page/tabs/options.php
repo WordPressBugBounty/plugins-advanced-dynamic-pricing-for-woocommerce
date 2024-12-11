@@ -42,6 +42,8 @@ defined('ABSPATH') or exit;
     </ul><br class="clear"/>
 
     <div class="wdp-settings-sections-wrapper">
+        <script>
+            </script>
         <form method="post">
             <input type="hidden" name="action" value="wdp">
             <input type="hidden" name="tab" value="<?php echo $tabHandler::getKey(); ?>"/>

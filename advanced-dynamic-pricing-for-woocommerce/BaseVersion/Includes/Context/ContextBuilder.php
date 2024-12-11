@@ -9,6 +9,7 @@ use ADP\BaseVersion\Includes\Compatibility\Container\MixAndMatchCmp;
 use ADP\BaseVersion\Includes\Compatibility\Container\SomewhereWarmCompositesCmp;
 use ADP\BaseVersion\Includes\Compatibility\Container\SomewhereWarmBundlesCmp;
 use ADP\BaseVersion\Includes\Compatibility\Container\WpcBundleCmp;
+use ADP\BaseVersion\Includes\Compatibility\Container\WpcCompositeCmp;
 use ADP\BaseVersion\Includes\Compatibility\Container\YithBundlesCmp;
 use ADP\BaseVersion\Includes\Compatibility\PriceBasedOnCountryCmp;
 use ADP\BaseVersion\Includes\Compatibility\VillaThemeMultiCurrencyCmp;
@@ -35,6 +36,7 @@ class ContextBuilder
     {
         $context->getContainerCompatibilityManager()->register(new SomewhereWarmBundlesCmp($context));
         $context->getContainerCompatibilityManager()->register(new WpcBundleCmp($context));
+        $context->getContainerCompatibilityManager()->register(new WpcCompositeCmp($context));
         $context->getContainerCompatibilityManager()->register(new MixAndMatchCmp($context));
         $context->getContainerCompatibilityManager()->register(new YithBundlesCmp($context));
         $context->getContainerCompatibilityManager()->register(new SomewhereWarmCompositesCmp($context));

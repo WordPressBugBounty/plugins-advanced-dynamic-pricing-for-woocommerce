@@ -138,6 +138,43 @@ class CartContext
         return $this->orderRepository->getCountOfRuleUsagesPerCustomer($ruleId, $customerId);
     }
 
+    public function getCountOfRuleUsagesPerCustomerData($ruleId) {
+        $data = array();
+        if (isset($_POST['post_data'])) {
+            parse_str(wp_unslash($_POST['post_data']), $postData);
+            $data['customer_email'] = $postData['billing_email'];
+            $data['customer_first_name'] = $postData['billing_first_name'];
+            $data['customer_last_name'] = $postData['billing_last_name'];
+            $data['customer_address_1'] = $postData['billing_address_1'];
+            $data['customer_address_2'] = $postData['billing_address_2'];
+            $data['customer_city'] = $postData['billing_city'];
+            $data['customer_state'] = $postData['billing_state'];
+            $data['customer_zip'] = $postData['billing_postcode'];
+        } else {
+            $wcCustomer = WC()->cart->get_customer();
+            $data['customer_email'] = $wcCustomer->get_billing_email();
+            $data['customer_first_name'] = $wcCustomer->get_billing_first_name();
+            $data['customer_last_name'] = $wcCustomer->get_billing_last_name();
+            $data['customer_address_1'] = $wcCustomer->get_billing_address_1();
+            $data['customer_address_2'] = $wcCustomer->get_billing_address_2();
+            $data['customer_city'] = $wcCustomer->get_billing_city();
+            $data['customer_state'] = $wcCustomer->get_billing_state();
+            $data['customer_zip'] = $wcCustomer->get_shipping_postcode();
+        }
+
+        if (!empty($data['customer_email']) ||
+            ($data['customer_first_name'] &&
+                $data['customer_last_name'] &&
+                $data['customer_address_1'] &&
+                $data['customer_city'] &&
+                $data['customer_state'] &&
+                $data['customer_zip'])) {
+            return $this->orderRepository->getCountOfRuleUsagesPerCustomerData($ruleId, $data);
+        } else {
+            return 0;
+        }
+    }
+
     public function isTaxEnabled()
     {
         return isset($this->environment['tab_enabled']) ? $this->environment['tab_enabled'] : false;

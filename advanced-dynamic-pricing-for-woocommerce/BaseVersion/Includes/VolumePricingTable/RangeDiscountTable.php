@@ -921,8 +921,7 @@ class RangeDiscountTable
                             );
                         }
 
-                        $wcSalePrice = $processedProd->getProduct()->get_sale_price('edit');
-                        $price = !$wcSalePrice || $priceToDisplay < $wcSalePrice ? $priceToDisplay : $wcSalePrice;
+                        $price = $priceToDisplay;
                         $value = $this->priceFunctions->format($price);
                         $dataRow['discounted_price'] = $price;
                     }
@@ -1327,18 +1326,6 @@ class RangeDiscountTable
                     $footerText = "<p>" . _x($rule->getProductRangeAdjustmentHandler()->getPromotionalMessage(),
                             "Bulk table promotional message",
                             'advanced-dynamic-pricing-for-woocommerce') . "</p>";
-                }
-            } else {
-                $footerText       = '';
-                $humanizedFilters = $this->filtersFormatter->formatRule($rule);
-                if ($humanizedFilters) {
-                    $footerText = "<div>" . __('Bulk pricing will be applied to package:',
-                            'advanced-dynamic-pricing-for-woocommerce') . "</div>";
-                    $footerText .= "<ul>";
-                    foreach ($humanizedFilters as $filterText) {
-                        $footerText .= "<li>" . $filterText . "</li>";
-                    }
-                    $footerText .= "</ul>";
                 }
             }
         }

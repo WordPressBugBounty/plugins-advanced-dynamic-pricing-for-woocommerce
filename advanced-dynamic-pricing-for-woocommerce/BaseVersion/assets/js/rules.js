@@ -1458,6 +1458,10 @@ jQuery(document).ready(function ($) {
       new_rule.find('input.max-amount-for-gifts').val(data.get_products.max_amount_for_gifts)
     }
 
+    if (data.get_products.is_gifts_below_cheapest) {
+      new_rule.find('input.is_gifts_below_cheapest:checkbox').prop('checked', true)
+    }
+
     let blocks = new RuleBlocks(new_rule)
     blocks.applyPreloadedData(data)
 
@@ -1720,14 +1724,6 @@ jQuery(document).ready(function ($) {
 			      $container.find('.wdp-filter-type option[value="same_previous_filter"]').first().remove();
         });
 
-        if (!wdp_data.options.enable_product_exclude) {
-            $container.find(".wdp-product-exclude").hide();
-            $container.find(".wdp-exclude-title").hide();
-            $container.find(".wdp-exclude-on-wc-sale-container").hide();
-            $container.find(".wdp-exclude-already-affected-container").hide();
-            $container.find(".wdp-exclude-backorder-container").hide();
-            $container.find(".wdp-matched-previous-filters-container").hide();
-        }
 
         if ( product_filter_index === 0 ) {
           $container.find(".wdp-matched-previous-filters-container").hide();
@@ -1922,6 +1918,7 @@ jQuery(document).ready(function ($) {
               if (data.product_exclude.matched_previous_filters) {
                 $container.find('.wdp-matched-previous-filters-container input').prop('checked', true);
               }
+              $container.find('.wdp-product-exclude details').prop('open', true);
             }
 
             if (data.limitation) {

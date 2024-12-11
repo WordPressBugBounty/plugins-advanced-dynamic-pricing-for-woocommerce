@@ -73,7 +73,7 @@ class SqlGeneratorPersistent
         }
 
         $excludeIds = array();
-        if ($this->context->getOption('allow_to_exclude_products') && $filter->getExcludeProductIds()) {
+        if ($filter->getExcludeProductIds()) {
             $excludeIds = $filter->getExcludeProductIds();
         }
 

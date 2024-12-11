@@ -239,38 +239,43 @@ defined('ABSPATH') or exit;
                                     <div class="wdp-product-exclude wdp-column wdp-column-subfields">
                                         <div style="width: 100px"></div>
                                         <div class="wdp-column" style="flex: 1">
-                                            <div style="display: flex">
-                                                <div>
-                                                    <label>
-                                                        <span class="wdp-exclude-title">
-                                                            <?php _e( 'Exclude products', 'advanced-dynamic-pricing-for-woocommerce' ); ?>
-                                                        </span>
-                                                    </label>
+                                            <details>
+                                                <summary class="wdp-link">
+                                                    <?php _e( 'Exclude products', 'advanced-dynamic-pricing-for-woocommerce' ); ?>
+                                                </summary>
+                                                <div style="display: flex">
+                                                    <div>
+                                                        <label>
+                                                            <span class="wdp-exclude-title">
+                                                                <?php _e( 'Exclude products', 'advanced-dynamic-pricing-for-woocommerce' ); ?>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                    <div style="margin-left: 5px" class="wdp-exclude-on-wc-sale-container">
+                                                        <label>
+                                                            <input type="checkbox" class="wdp-exclude-on-wc-sale" name="rule[{t}][{f}][product_exclude][on_wc_sale]" value="1" >
+                                                            <span class="wdp-exclude-on-wc-sale-title">
+                                                                <?php _e( 'on sale products', 'advanced-dynamic-pricing-for-woocommerce' ); ?>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                    <div style="margin-left: 5px" class="wdp-exclude-already-affected-container">
+                                                        <label>
+                                                            <input type="checkbox" class="wdp-exclude-already-affected" name="rule[{t}][{f}][product_exclude][already_affected]" value="1" >
+                                                            <span>
+                                                                <?php _e( 'modified by other pricing rules', 'advanced-dynamic-pricing-for-woocommerce' ); ?>
+                                                            </span>
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                                <div style="margin-left: 5px" class="wdp-exclude-on-wc-sale-container">
-                                                    <label>
-                                                        <input type="checkbox" class="wdp-exclude-on-wc-sale" name="rule[{t}][{f}][product_exclude][on_wc_sale]" value="1" >
-                                                        <span class="wdp-exclude-on-wc-sale-title">
-                                                            <?php _e( 'on sale products', 'advanced-dynamic-pricing-for-woocommerce' ); ?>
-                                                        </span>
-                                                    </label>
-                                                </div>
-                                                <div style="margin-left: 5px" class="wdp-exclude-already-affected-container">
-                                                    <label>
-                                                        <input type="checkbox" class="wdp-exclude-already-affected" name="rule[{t}][{f}][product_exclude][already_affected]" value="1" >
-                                                        <span>
-                                                            <?php _e( 'modified by other pricing rules', 'advanced-dynamic-pricing-for-woocommerce' ); ?>
-                                                        </span>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <select multiple
-                                                    data-list="products"
-                                                    data-field="autocomplete"
-                                                    data-placeholder="<?php _e("Select values",
-                                                        "advanced-dynamic-pricing-for-woocommerce") ?>"
-                                                    name="rule[{t}][{f}][product_exclude][values][]">
-                                            </select>
+                                                <select multiple
+                                                        data-list="products"
+                                                        data-field="autocomplete"
+                                                        data-placeholder="<?php _e("Select values",
+                                                            "advanced-dynamic-pricing-for-woocommerce") ?>"
+                                                        name="rule[{t}][{f}][product_exclude][values][]">
+                                                </select>
+                                            </details>
                                         </div>
                                     </div>
                                 </div>

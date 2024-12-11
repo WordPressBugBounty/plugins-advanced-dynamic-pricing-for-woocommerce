@@ -285,13 +285,13 @@ class AdminPageFilterTitles
         // type 'product_tags'
         $result['product_tags'] = array();
         foreach ($filtersByType['product_tags'] as $id) {
-            $result['product_tags'][$id] = Helpers::getTagTitle($id);
+            $result['product_tags'][$id] = '#' . $id . ' ' . Helpers::getTagTitle($id);
         }
 
         // type 'product_categories'
         $result['product_categories'] = array();
         foreach ($filtersByType['product_categories'] as $id) {
-            $result['product_categories'][$id] = Helpers::getCategoryTitle($id);
+            $result['product_categories'][$id] = '#' . $id . ' ' . Helpers::getCategoryTitle($id);
         }
 
         // type 'product_category_slug'

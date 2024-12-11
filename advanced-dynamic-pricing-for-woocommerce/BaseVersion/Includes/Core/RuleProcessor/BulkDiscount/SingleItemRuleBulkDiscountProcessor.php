@@ -52,12 +52,13 @@ class SingleItemRuleBulkDiscountProcessor
         } elseif ($handler::GROUP_BY_VARIATION === $handler->getGroupBy()) {
             foreach ($collection->get_items() as $item) {
                 $facade = $item->getWcItem();
+                $productId = $facade->getVariationId() ?: $facade->getProductId();
 
-                if (!isset($groupedItems[$facade->getVariationId()])) {
-                    $groupedItems[$facade->getVariationId()] = array();
+                if (!isset($groupedItems[$productId])) {
+                    $groupedItems[$productId] = array();
                 }
 
-                $groupedItems[$facade->getVariationId()][] = $item;
+                $groupedItems[$productId][] = $item;
             }
         } elseif ($handler::GROUP_BY_CART_POSITIONS === $handler->getGroupBy()) {
             foreach ($collection->get_items() as $item) {

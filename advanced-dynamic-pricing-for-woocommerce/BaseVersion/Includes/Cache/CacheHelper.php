@@ -95,7 +95,7 @@ class CacheHelper
      *
      * @return array<int, Rule>
      */
-    public static function loadRules($ruleIds, Context $context = null)
+    public static function loadRules($ruleIds, ?Context $context = null)
     {
         $ruleIds = (array)$ruleIds;
         $ruleIds = array_map('intval', $ruleIds);
@@ -143,7 +143,7 @@ class CacheHelper
      *
      * @return array<int, Rule>
      */
-    public static function loadProductOnlyRules($ruleIds, Context $context = null)
+    public static function loadProductOnlyRules($ruleIds, ?Context $context = null)
     {
         $ruleIds = (array)$ruleIds;
         $ruleIds = array_map('intval', $ruleIds);

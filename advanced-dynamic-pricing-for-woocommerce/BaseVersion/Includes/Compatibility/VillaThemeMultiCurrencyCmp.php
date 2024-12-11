@@ -58,11 +58,36 @@ class VillaThemeMultiCurrencyCmp
                     'woocommerce_package_rates' => [
                         ["WOOMULTI_CURRENCY_Frontend_Shipping", "woocommerce_package_rates"]
                     ],
-                    'init' => [
-                        ["WOOMULTI_CURRENCY_Frontend_Price", 'add_change_price_hooks']
-                    ],
                 ]
             );
+            $hooks = array(
+                'woocommerce_product_get_price',
+                'woocommerce_product_variation_get_price',
+                'woocommerce_product_variation_get_regular_price',
+                'woocommerce_product_get_regular_price',
+                'woocommerce_product_get_sale_price',
+                'woocommerce_get_variation_regular_price',
+                'woocommerce_get_variation_sale_price'
+            );
+            foreach ($hooks as $hook) {
+                $returnTrueCallback = function () {
+                    return true;
+                };
+                add_filter($hook, function ($price, $product) use ($returnTrueCallback) {
+                    if ($product->get_meta('adp_price_converted')) {
+                        add_filter('wmc_get_price_condition', $returnTrueCallback);
+                    }
+                    return $price;
+                }, 10, 2);
+                add_filter($hook, function ($price) use ($returnTrueCallback) {
+                    HighLanderShortcuts::removeFilters(
+                        [
+                            'wmc_get_price_condition' => [$returnTrueCallback]
+                        ]
+                    );
+                    return $price;
+                }, PHP_INT_MAX);
+            }
         }
     }
 

@@ -134,7 +134,7 @@ class CartCalculatorPersistent implements ICartCalculator
                 $wcSalePrice = $this->getWcSalePrice($product, $item, $prodPropsWithFilters);
 
                 if ( ! is_null($wcSalePrice) ) {
-                    $newItem = $this->recreateItem($item, $wcSalePrice);
+                    $newItem = CartCalculator::recreateItem($item, $wcSalePrice);
                         $item->copyAttributesTo($newItem);
 
                         $minDiscountRangePrice = $item->prices()->getMinDiscountRangePrice();

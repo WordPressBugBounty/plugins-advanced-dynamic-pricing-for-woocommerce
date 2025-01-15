@@ -17,7 +17,20 @@ class RuleRepository implements RuleRepositoryInterface {
         global $wpdb;
         $table = $wpdb->prefix . Rule::TABLE_NAME;
 
-        $sql = "SELECT COUNT(*) FROM $table WHERE `advertising` NOT LIKE \"a:0:{}\" AND NOT deleted AND enabled";
+        $sql = "SELECT COUNT(*) FROM $table WHERE `advertising` NOT LIKE \"a:0:{}\" AND NOT deleted AND enabled  LIMIT 1";
+        $count = $wpdb->get_var($sql);
+        return $count>0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasActiveRulesDependOnShipping(): bool
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . Rule::TABLE_NAME;
+
+        $sql = "SELECT COUNT(*) FROM $table WHERE `conditions` LIKE \"%shipping%\" AND NOT deleted AND enabled  LIMIT 1";
         $count = $wpdb->get_var($sql);
         return $count>0;
     }
@@ -30,10 +43,24 @@ class RuleRepository implements RuleRepositoryInterface {
         global $wpdb;
         $table = $wpdb->prefix . Rule::TABLE_NAME;
 
-        $sql = "SELECT COUNT(*) FROM $table WHERE `limits` NOT LIKE \"a:0:{}\" AND NOT deleted AND enabled";
+        $sql = "SELECT COUNT(*) FROM $table WHERE `limits` NOT LIKE \"a:0:{}\" AND NOT deleted AND enabled  LIMIT 1";
         $count = $wpdb->get_var($sql);
         return $count>0;
     }
+
+    /**
+     * @return bool
+     */
+    public function hasActiveRulesWithCompexCartDiscounts(): bool
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . Rule::TABLE_NAME;
+
+        $sql = "SELECT COUNT(*) FROM $table WHERE (`cart_adjustments` LIKE \"%discount_repeatable%\" OR `cart_adjustments` LIKE \"%fee_repeatable%\") AND NOT deleted AND enabled LIMIT 1";
+        $count = $wpdb->get_var($sql);
+        return $count>0;
+    }
+
 
     /**
      * @return array

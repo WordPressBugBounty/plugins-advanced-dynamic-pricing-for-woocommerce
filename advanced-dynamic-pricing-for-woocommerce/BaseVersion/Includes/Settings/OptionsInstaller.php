@@ -401,6 +401,11 @@ class OptionsInstaller
                 "apply"
             ),
 
+            $builder::boolean('admin_footer_text_rated',
+                false,
+                __('Has the administrator visited the plugin review page', 'advanced-dynamic-pricing-for-woocommerce')
+            ),
+
             // deprecated
             $builder::selective(
                 'disable_external_coupons',

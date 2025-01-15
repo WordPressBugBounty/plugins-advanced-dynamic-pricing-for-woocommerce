@@ -120,8 +120,9 @@ class WpcBundleCmp extends AbstractContainerCompatibility
     public function calculateContainerBasePrice(WcCartItemFacade $facade, array $children): float
     {
         $thirdPartyData = $facade->getThirdPartyData();
+        $parentProduct = $facade->getProduct();
         if (!empty($thirdPartyData['woosb_discount'])) {
-            $_price = floatval(CartProcessor::getProductPriceDependsOnPriceMode($facade->getProduct()));
+            $_price = floatval(CartProcessor::getProductPriceDependsOnPriceMode($parentProduct));
             $_price   *=  (float) $thirdPartyData['woosb_discount']  / 100;
             return -$_price;
         }
@@ -133,6 +134,11 @@ class WpcBundleCmp extends AbstractContainerCompatibility
         if (!empty($thirdPartyData['woosb_price'])) {
             return 0.0;
         }
+
+        if ($parentProduct instanceof \WC_Product_Woosb && !$parentProduct->is_fixed_price()) {
+            return 0.0;
+        }
+
         return floatval(CartProcessor::getProductPriceDependsOnPriceMode($facade->getProduct()));
     }
 
@@ -240,36 +246,9 @@ class WpcBundleCmp extends AbstractContainerCompatibility
         ContainerPartCartItem $subContainerItem,
         WcCartItemFacade $parentFacade
     ): ContainerPartCartItem {
-        $parentProduct = $parentFacade->getProduct();
-
-        if ($parentProduct instanceof \WC_Product_Woosb) {
-            $parentProductItems = $parentProduct->get_items();
-            $defaultSubItemQty = 1;
-            $optionalSubitem = false;
-
-            foreach ($parentProductItems as $tempSubitem) {
-                if (isset($tempSubitem['id']) && !is_null($subContainerItem->getWcItem()) && $tempSubitem['id'] == $subContainerItem->getWcItem()->getProductId()) {
-                    if (isset($tempSubitem['optional']) && $tempSubitem['optional']) {
-                        $optionalSubitem = true;
-                        $defaultSubItemQty = $subContainerItem->getWcItem()->getQty();
-                    } else {
-                        $defaultSubItemQty = $tempSubitem['qty'];
-                    }
-                    break;
-                }
-            }
-
-            $itemQty = $defaultSubItemQty;
-//            if ($optionalSubitem) {
-//                $itemQty = $defaultSubItemQty;
-//            } else {
-//                $itemQty = $defaultSubItemQty * $parentFacade->getQty();
-//            }
-        } else {
-            $itemQty = $subContainerItem->getQty() / $parentFacade->getQty();
+        if (!$parentFacade->getProduct()->is_fixed_price()) {
+            $subContainerItem->setQty($subContainerItem->getQty() / $parentFacade->getQty());
         }
-
-        $subContainerItem->setQty($itemQty);
 
         return $subContainerItem;
     }

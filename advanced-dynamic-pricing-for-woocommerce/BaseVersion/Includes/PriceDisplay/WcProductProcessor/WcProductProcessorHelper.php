@@ -39,7 +39,10 @@ class WcProductProcessorHelper
             if ($parent && $parent->is_type('variable')) {
 
                 // We do not need to get product type if the parent product is known
-                $overrideProductTypeQuery = function () {
+                $overrideProductTypeQuery = function ($type, $product_id) use ($parent){
+                    //if hook called for parent
+                    if( $parent->get_id() == $product_id)
+                        return $parent->get_type();
                     return 'variation';
                 };
 
@@ -54,9 +57,9 @@ class WcProductProcessorHelper
 
                 if ($context->isReplaceProductVariationDataStore()) {
                     add_filter('woocommerce_product-variation_data_store', $applyDataStore, 10);
-                    add_filter('woocommerce_product_type_query', $overrideProductTypeQuery, 10);
+                    add_filter('woocommerce_product_type_query', $overrideProductTypeQuery, 10, 2);
                     $product = CacheHelper::getWcProduct($theProduct);
-                    remove_filter('woocommerce_product_type_query', $overrideProductTypeQuery, 10);
+                    remove_filter('woocommerce_product_type_query', $overrideProductTypeQuery, 10, 2);
                     remove_filter('woocommerce_product-variation_data_store', $applyDataStore, 10);
                 } else {
                     $product = CacheHelper::getWcProduct($theProduct);

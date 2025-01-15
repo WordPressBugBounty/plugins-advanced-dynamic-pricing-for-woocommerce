@@ -621,6 +621,15 @@ WHERE products.post_type IN ('product','product_variation') AND CONCAT(fields.me
         $this->partial_rebuild_list('Shortcodes_OnSaleProducts');
     }
 
+    public function ajax_admin_footer_text_rated()
+    {
+        $settings = $this->context->getSettings();
+        $settings->set('admin_footer_text_rated', true);
+        $settings->save();
+
+        wp_send_json_success();
+    }
+
     protected function start_partial_rebuild_list($name)
     {
         $rules = Factory::callStaticMethod(

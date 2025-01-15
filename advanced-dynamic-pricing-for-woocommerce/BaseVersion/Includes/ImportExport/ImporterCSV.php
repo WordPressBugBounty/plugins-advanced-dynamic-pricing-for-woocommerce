@@ -29,35 +29,22 @@ class ImporterCSV {
             foreach ($rule as $key => $value) {
                 if ($key !== 'filter') {
                     $filteredData[$key] = $value;
-                }   
+                }
             }
             $newRulesHash[] = array (md5(json_encode($filteredData)), $rule);
         }
-        
         usort($newRulesHash, function($a, $b) {
             return strcmp($a[0], $b[0]);
         });
 
         $newRules= array();
-        $previosCount = null;
+        $previosHash = null;
         for($i = 0; $i < count($newRulesHash); $i++) {
-            if(is_null($previosCount)){
-                $previosCount = $i;
-
-                if(count($newRulesHash) == 1)
-                    array_push($newRules, $newRulesHash[$i][1]);
-            
-            } else {
-                if($newRulesHash[$i][0] == $newRulesHash[$previosCount][0]){
-                    $newRulesHash[$previosCount][1]['filter']['value'][0] .= '|' . $newRulesHash[$i][1]['filter']['value'][0];
-
-                    if ($i == count($newRulesHash) - 1 && $previosCount < $i) {
-                        array_push($newRules, $newRulesHash[$previosCount][1]);
-                    }
-                }else {
-                    array_push($newRules, $newRulesHash[$previosCount][1]);
-                    $previosCount = $i;
-                }
+            if($newRulesHash[$i][0] == $previosHash){
+                $newRules[count($newRules)-1]['filter']['value'][0] .= '|' . $newRulesHash[$i][1]['filter']['value'][0];
+            }else {
+                $newRules[] = $newRulesHash[$i][1];
+                $previosHash = $newRulesHash[$i][0];
             }
         }
 
@@ -338,15 +325,23 @@ class ImporterCSV {
                         'conditions_relationship' => 'and',
                     );
                 } else {
-                    $rule['role_discounts'] = array(
-                        'rows' => array(
-                            array(
+                    $rows = array();
+                    if(count($rule['discountedprice']['value']) ==  count($rule['role']['value']) ) {
+                        for($i=0;$i<count($rule['discountedprice']['value']);$i++ )
+                            $rows[] = array(
+                                'discount_type'  => $rule['discountedprice']['type'],
+                                'discount_value' => $rule['discountedprice']['value'][$i],
+                                'roles'          => array($rule['role']['value'][$i]),
+                            );
+                    } else {
+                        // one discount for all roles
+                        $rows[] = array(
                                 'discount_type'  => $rule['discountedprice']['type'],
                                 'discount_value' => $rule['discountedprice']['value'][0],
                                 'roles'          => $rule['role']['value'],
-                            ),
-                        ),
-                    );
+                        );
+                    }
+                    $rule['role_discounts'] = array('rows' =>$rows);
                 }
             }
             if ( ! isset($rule['bulk_adjustments']) && ! isset($rule['role_discounts'])) {

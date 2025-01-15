@@ -156,10 +156,26 @@ class Rules implements AdminTabInterface
             }
         }
 
+        //This code disables complex cart discounts for free version only
+        // and if user NOT added them to existing rules already!
+        $cart_adjustments_disabled_options = array();
+        if( !defined('WC_ADP_PRO_VERSION_PATH') ) {
+            $ruleRepository = new RuleRepository();
+            if ( apply_filters("adp_disable_complex_cart_discounts", !$ruleRepository->hasActiveRulesWithCompexCartDiscounts() ) ) {
+                $cart_adjustments_disabled_options[] ='discount_repeatable__amount';
+                $cart_adjustments_disabled_options[] ='discount_repeatable_sets_count__amount';
+                $cart_adjustments_disabled_options[] ='fee_repeatable__amount';
+                $cart_adjustments_disabled_options[] ='fee_repeatable_sets_count__amount';
+            }
+        }
+
         $cart_templates = array();
         $cart_titles    = array();
         foreach ($cartAdjLoader->getAsList() as $group => $items) {
             foreach ($items as $item) {
+                if ( in_array($item[$cartAdjLoader::LIST_TYPE_KEY], $cart_adjustments_disabled_options))
+                    continue;
+                //$cart_adjustments_disabled_options
                 $key          = $item[$cartAdjLoader::LIST_TYPE_KEY];
                 $label        = $item[$cartAdjLoader::LIST_LABEL_KEY];
                 $templatePath = $item[$cartAdjLoader::LIST_TEMPLATE_PATH_KEY];

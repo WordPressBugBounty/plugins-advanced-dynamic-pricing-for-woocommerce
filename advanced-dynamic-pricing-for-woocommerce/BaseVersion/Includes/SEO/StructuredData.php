@@ -2,6 +2,7 @@
 
 namespace ADP\BaseVersion\Includes\SEO;
 
+use ADP\BaseVersion\Includes\Compatibility\YoastSEOCmp;
 use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\Engine;
 use ADP\BaseVersion\Includes\PriceDisplay\ProcessedGroupedProduct;
@@ -64,6 +65,7 @@ class StructuredData
         if (is_object($product) && $product->get_price()) {
             $productProcessor = $this->globalEngine->getProductProcessor();
             $processedProduct = $productProcessor->calculateProduct($product, 1);
+            $priceSpecification = null;
 
             if (is_null($processedProduct)) {
                 return $data;
@@ -77,7 +79,7 @@ class StructuredData
                     $data['price'] = wc_format_decimal($processedProduct->getLowestPrice(), $decimals);
                     // Assume prices will be valid until the end of next year, unless on sale and there is an end date.
                     $data['priceValidUntil']    = gmdate('Y-12-31', time() + YEAR_IN_SECONDS);
-                    $data['priceSpecification'] = [
+                    $priceSpecification = [
                         'price'                 => wc_format_decimal($processedProduct->getLowestPrice(), $decimals),
                         'priceCurrency'         => $this->context->getCurrencyCode(),
                         'valueAddedTaxIncluded' => $this->context->getIsPricesIncludeTax() ? 'true' : 'false',
@@ -93,11 +95,23 @@ class StructuredData
                 }
             } elseif ($processedProduct instanceof ProcessedProductSimple) {
                 $data['price']              = wc_format_decimal($processedProduct->getPrice(), $decimals);
-                $data['priceSpecification'] = [
+                $priceSpecification = [
                     'price'                 => wc_format_decimal($processedProduct->getPrice(), $decimals),
                     'priceCurrency'         => $this->context->getCurrencyCode(),
                     'valueAddedTaxIncluded' => $this->context->getIsPricesIncludeTax() ? 'true' : 'false',
                 ];
+            }
+
+            if (isset($priceSpecification)) {
+                if (YoastSEOCmp::isNewPriceSpecification()) {
+                    $priceSpecification["@type"] = "UnitPriceSpecification";
+                    $priceSpecification['validThrough']  = gmdate('Y-12-31', time() + YEAR_IN_SECONDS);
+                    $priceSpecification['valueAddedTaxIncluded'] = filter_var($priceSpecification['valueAddedTaxIncluded'], FILTER_VALIDATE_BOOLEAN);
+
+                    $data['priceSpecification'] = [ $priceSpecification ];
+                } else {
+                    $data['priceSpecification'] = $priceSpecification;
+                }
             }
 
             $data['priceCurrency'] = $this->context->getCurrencyCode();

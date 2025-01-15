@@ -647,9 +647,9 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.", 'adv
                 <div class="wdp-conditions-relationship">
                     <label><?php _e('Conditions relationship', 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
                     <label><input type="radio" name="rule[additional][conditions_relationship]" value="and"
-                                  checked><?php _e('AND', 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
+                                  checked><?php _e('Match All', 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
                     <label><input type="radio" name="rule[additional][conditions_relationship]"
-                                  value="or"><?php _e('OR', 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
+                                  value="or"><?php _e('Match Any', 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
                 </div>
                 <div class="wdp-conditions-container"></div>
                 <div class="add-condition">

@@ -690,6 +690,11 @@ class CartProcessor
             }
         }
 
+        foreach ($wcCart->cart_contents as $item_key => $item) {
+            $item['quantity'] = (int)$item['quantity'];
+            $wcCart->cart_contents[$item_key] = $item;
+        }
+
         $this->listener->processFinished($wcCart, WC()->session);
 
         do_action('wdp_process_complete', $wcCart, $result, $cart, $this);

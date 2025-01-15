@@ -5,7 +5,7 @@ Tags: woocommerce, dynamic pricing, discount, pricing rule, bulk discount
 Requires PHP: 7.1
 Requires at least: 4.8
 Tested up to: 6.7
-Stable tag: 4.9.1
+Stable tag: 4.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -106,6 +106,19 @@ You should be PHP programmer to do it. [Please, review sample addon and adapt it
 
 == Changelog ==
 
+= 4.9.2 - 2025-01-15 =
+* Added "Percentage discount" to section "Cart adjustments"
+* Removed complex discounts in section "Cart adjustments" (existing rules will work)
+* Fixed bug - block-based cart removed gifts (in some cases)
+* Fixed bug - "on sale" badge was not displayed if regular price = 1000 and sale price = 900
+* Fixed bug - shortcode [adp_products_on_sale] ignored the rule's date conditions
+* Fixed bug - variable subscription shown fatal error in the cart
+* Fixed bug - rules importer(CSV) used same discount for all roles in "role-based" import
+* Fixed bug - rules backup tool ignored fields "Start Date" and "End Date"
+* Updated compatibility with "Yoast SEO"
+* Updated compatibility with "WPC Product Bundles for WooCommerce"
+* Updated (multi-currency) compatibility with "WooCommerce Payments"
+
 = 4.9.1 - 2024-12-11 =
 * Fixed XSS vulnerability
 * Added "Exclude products" selectors to section "Filter by products"
@@ -146,7 +159,6 @@ You should be PHP programmer to do it. [Please, review sample addon and adapt it
 * Updated compatibility with "WPC Product Bundles for WooCommerce"
 * Updated compatibility with " WooCommerce Extra Product Options"
 * Updated compatibility with WoodMart theme
-
 
 = 4.8.3 - 2024-08-21 =
 * Fixed bug - wrong coupon amount for the gift (block-based cart)

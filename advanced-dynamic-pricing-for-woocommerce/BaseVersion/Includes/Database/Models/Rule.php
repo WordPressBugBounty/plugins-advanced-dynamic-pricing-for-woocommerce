@@ -490,6 +490,8 @@ class Rule
         foreach ($array as &$value) {
             if (is_array($value)) {
                 $value = self::sanitizeArrayTextFields($value);
+            }elseif (is_null($value)) {
+                $value = '';
             } else {
                 $value = wp_kses($value, $allowed_html_tags);
             }

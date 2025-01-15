@@ -55,7 +55,8 @@ class WcSubscriptionsCmp
 
         $this->isActive = class_exists("\WC_Subscriptions") && defined("WCS_INIT_TIMESTAMP");
         if($this->isActive) {
-        	add_action( 'woocommerce_after_calculate_totals', [$this,"rememberLastCalculationType"], 0 );
+            add_action( 'woocommerce_subscription_cart_after_grouping', [$this,"setRecurringCalculationType"], 10 );
+            add_filter( 'woocommerce_subscriptions_calculated_total', [$this,"setNoneCalculationType"], 10 );
         }
 
     }
@@ -104,9 +105,14 @@ class WcSubscriptionsCmp
             array('price' => $priceHtml, 'tax_calculation' => $this->context->getTaxDisplayCartMode()));
     }
 
-    public static function rememberLastCalculationType() {
-        if (method_exists('\WC_Subscriptions_Cart', 'get_calculation_type'))
-            self::$calculation_type = \WC_Subscriptions_Cart::get_calculation_type();
+    public static function setRecurringCalculationType()
+    {
+        self::$calculation_type = 'recurring_total';
+    }
+    public static function setNoneCalculationType($amount)
+    {
+        self::$calculation_type = 'none';
+        return $amount;
     }
 
     public static function isRecurringCartCalculation()

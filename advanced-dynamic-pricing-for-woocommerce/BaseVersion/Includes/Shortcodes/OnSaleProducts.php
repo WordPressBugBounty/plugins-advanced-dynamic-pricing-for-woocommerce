@@ -18,6 +18,8 @@ class OnSaleProducts extends Products
      */
     protected static function filterRule($rule)
     {
+        $date = (new \DateTime("now", new \DateTimeZone("UTC")))->setTimestamp(current_time('timestamp'));
+        $date->setTime(0, 0, 0);
         return
             $rule instanceof SingleItemRule &&
             $rule->getProductAdjustmentHandler() && $rule->getProductAdjustmentHandler()->getDiscount()->getValue() > 0 &&
@@ -26,7 +28,9 @@ class OnSaleProducts extends Products
             count($rule->getGifts()) === 0 &&
             count($rule->getItemGiftsCollection()->asArray()) === 0 &&
             adp_functions()->isRuleMatchedCart($rule) &&
-            count($rule->getLimits()) === 0;
+            count($rule->getLimits()) === 0 &&
+            (!$rule->getDateFrom() || $rule->getDateFrom()->getTimestamp() <= $date->getTimestamp()) &&
+            (!$rule->getDateTo() || $rule->getDateTo()->getTimestamp() > $date->getTimestamp());
     }
 
 }

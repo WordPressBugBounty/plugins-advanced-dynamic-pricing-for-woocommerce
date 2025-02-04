@@ -166,7 +166,7 @@ class BasicCartItem extends AbstractCartItem implements ICartItem
 
     public function isHistoryEqualsDiscounts(): bool
     {
-        return $this->getDiscounts() === $this->getHistory();
+        return $this->getDiscounts(true) === $this->getHistory();
     }
 
     // hash methods

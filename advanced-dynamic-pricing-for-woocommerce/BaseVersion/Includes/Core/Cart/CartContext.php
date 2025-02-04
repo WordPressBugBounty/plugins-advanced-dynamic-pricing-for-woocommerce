@@ -150,7 +150,7 @@ class CartContext
             $data['customer_city'] = $postData['billing_city'];
             $data['customer_state'] = $postData['billing_state'];
             $data['customer_zip'] = $postData['billing_postcode'];
-        } else {
+        } elseif( WC()->cart ) { // loaded when WC cart exists?
             $wcCustomer = WC()->cart->get_customer();
             $data['customer_email'] = $wcCustomer->get_billing_email();
             $data['customer_first_name'] = $wcCustomer->get_billing_first_name();

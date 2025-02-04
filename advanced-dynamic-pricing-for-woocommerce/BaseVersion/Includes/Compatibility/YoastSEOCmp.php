@@ -21,7 +21,11 @@ class YoastSEOCmp
         add_action("adp_schema_data_ready", function($data, $processedProduct, $decimals){
 
             add_filter( 'wpseo_schema_product', function($wpseo_data) use ($data) {
-                if (YoastSEOCmp::isNewPriceSpecification()) {
+                if (isset($wpseo_data['hasVariant']) || !isset($wpseo_data['offers'])) {
+                    return $wpseo_data;
+                }
+
+                if (isset($wpseo_data['offers'][0]['priceSpecification'][0])) {
                     $priceSpecification = $wpseo_data['offers'][0]['priceSpecification'][0];
                 } else {
                     $priceSpecification = $wpseo_data['offers'][0]['priceSpecification'];
@@ -31,7 +35,7 @@ class YoastSEOCmp
                     $priceSpecification['price'] = $data['price'];
 
                     if (YoastSEOCmp::isNewPriceSpecification()) {
-                        $wpseo_data['offers'][0]['priceSpecification'][0] = $priceSpecification;
+                        $wpseo_data['offers'][0]['priceSpecification'] = [ $priceSpecification ];
                     } else {
                         $wpseo_data['offers'][0]['priceSpecification'] = $priceSpecification;
                     }
@@ -43,18 +47,30 @@ class YoastSEOCmp
             add_filter('wpseo_schema_offer', function($offer) use ($processedProduct, $decimals) {
                 $childPrices = YoastSEOCmp::getChildPrices($processedProduct, $decimals);
                 if(isset($childPrices)) {
-                    foreach($childPrices as $child) {
-                        if (YoastSEOCmp::isNewPriceSpecification()) {
-                            $priceSpecification = $offer['priceSpecification'][0];
-                        } else {
-                            $priceSpecification = $offer['priceSpecification'];
-                        }
+                    if (isset($offer['priceSpecification'][0])) {
+                        $priceSpecification = $offer['priceSpecification'][0];
+                    } else {
+                        $priceSpecification = $offer['priceSpecification'];
+                    }
 
-                        if(isset($child['priceOriginal']) && $child['price'] && $child['priceOriginal'] === $priceSpecification['price']) {
+                    foreach($childPrices as $child) {
+                        if (isset($offer['priceSpecification'][0])) {
+                            $offer['priceSpecification'] = [ $priceSpecification ];
+                        } else {
+                            $offer['priceSpecification'] = $priceSpecification;
+                        }
+                        $priceSpecification = $offer['priceSpecification'];
+
+                        if(
+                            isset($child['priceOriginal'])
+                            && isset($priceSpecification['price'])
+                            && isset($child['price'])
+                            && $child['priceOriginal'] === $priceSpecification['price']
+                        ) {
                             $priceSpecification['price'] = $child['price'];
 
                             if (YoastSEOCmp::isNewPriceSpecification()) {
-                                $offer['priceSpecification'][0] = $priceSpecification;
+                                $offer['priceSpecification'] = [ $priceSpecification ];
                             } else {
                                 $offer['priceSpecification'] = $priceSpecification;
                             }

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Advanced Dynamic Pricing for WooCommerce (Pro)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-14 11:47+0000\n"
+"POT-Creation-Date: 2025-02-03 10:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -64,7 +64,7 @@ msgstr ""
 msgid "%1$s should not be called earlier the %2$s action."
 msgstr ""
 
-#: BaseVersion/Includes/ImportExport/ImporterCSV.php:76
+#: BaseVersion/Includes/ImportExport/ImporterCSV.php:77
 #, php-format
 msgid "%s rule were imported"
 msgid_plural "%s  rules were imported"
@@ -570,14 +570,11 @@ msgstr ""
 msgid "Bold text"
 msgstr ""
 
+#: BaseVersion/Includes/ImportExport/ImporterCSV.php:210
 #: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:270
 #: BaseVersion/views/admin_page/tabs/rules/rule.php:173
 #: BaseVersion/views/admin_page/tabs/rules/rule.php:442
 msgid "Bulk"
-msgstr ""
-
-#: BaseVersion/Includes/ImportExport/ImporterCSV.php:204
-msgid "Bulk "
 msgstr ""
 
 #: BaseVersion/views/admin_page/tabs/rules.php:76
@@ -641,11 +638,11 @@ msgstr ""
 msgid "Can be applied "
 msgstr ""
 
-#: BaseVersion/Includes/ImportExport/ImporterCSV.php:270
+#: BaseVersion/Includes/ImportExport/ImporterCSV.php:263
 msgid "Can not find "
 msgstr ""
 
-#: BaseVersion/Includes/ImportExport/ImporterCSV.php:197
+#: BaseVersion/Includes/ImportExport/ImporterCSV.php:198
 msgid "Can't open file."
 msgstr ""
 
@@ -1019,10 +1016,6 @@ msgstr ""
 msgid "Discount"
 msgstr ""
 
-#: BaseVersion/Includes/ImportExport/ImporterCSV.php:215
-msgid "Discount "
-msgstr ""
-
 #: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:300
 #: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:507
 msgid "Discount column title"
@@ -1226,7 +1219,7 @@ msgstr ""
 msgid "Fees with the same name are grouped in the cart."
 msgstr ""
 
-#: BaseVersion/Includes/ImportExport/ImporterCSV.php:152
+#: BaseVersion/Includes/ImportExport/ImporterCSV.php:153
 msgid "File must contain one rule or more."
 msgstr ""
 
@@ -1308,8 +1301,8 @@ msgstr ""
 msgid "Fixed unit price"
 msgstr ""
 
-#: BaseVersion/Includes/ImportExport/ImporterCSV.php:207
-msgid "for Role "
+#: BaseVersion/Includes/ImportExport/ImporterCSV.php:213
+msgid "for Roles"
 msgstr ""
 
 #: BaseVersion/Includes/Settings/OptionsInstaller.php:193
@@ -1507,6 +1500,10 @@ msgstr ""
 
 #: BaseVersion/views/admin_page/tabs/tools/backup.php:45
 msgid "Import settings"
+msgstr ""
+
+#: BaseVersion/Includes/ImportExport/ImporterCSV.php:224
+msgid "Imported Rule"
 msgstr ""
 
 #: BaseVersion/Includes/Settings/OptionsInstaller.php:312
@@ -2259,7 +2256,7 @@ msgstr ""
 msgid "Remove rule?"
 msgstr ""
 
-#: BaseVersion/Includes/CartProcessor/CartProcessor.php:1047
+#: BaseVersion/Includes/CartProcessor/CartProcessor.php:1051
 msgid "Removed {{qty}} free {{product_name}}"
 msgstr ""
 
@@ -2307,10 +2304,6 @@ msgstr ""
 msgid "Role"
 msgstr ""
 
-#: BaseVersion/Includes/ImportExport/ImporterCSV.php:210
-msgid "Role "
-msgstr ""
-
 #: BaseVersion/views/admin_page/tabs/rules/rule.php:177
 msgid "Role Bulk"
 msgstr ""
@@ -2326,6 +2319,10 @@ msgstr ""
 
 #: BaseVersion/views/admin_page/tabs/rules/rule.php:345
 msgid "Role discounts and bulk discounts applied"
+msgstr ""
+
+#: BaseVersion/Includes/ImportExport/ImporterCSV.php:218
+msgid "Roles"
 msgstr ""
 
 #: BaseVersion/Includes/Settings/OptionsInstaller.php:209
@@ -2388,10 +2385,6 @@ msgstr ""
 
 #: BaseVersion/views/admin_page/tabs/rules/templates.php:212
 msgid "Same variation only"
-msgstr ""
-
-#: BaseVersion/Includes/ImportExport/ImporterCSV.php:213
-msgid "Sample Product "
 msgstr ""
 
 #: BaseVersion/Includes/Helpers/Helpers.php:290
@@ -2906,7 +2899,7 @@ msgstr ""
 msgid "Tuesday"
 msgstr ""
 
-#: BaseVersion/Includes/ImportExport/ImporterCSV.php:117
+#: BaseVersion/Includes/ImportExport/ImporterCSV.php:118
 msgid "Unknown type "
 msgstr ""
 

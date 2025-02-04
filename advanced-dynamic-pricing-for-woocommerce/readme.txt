@@ -5,7 +5,7 @@ Tags: woocommerce, dynamic pricing, discount, pricing rule, bulk discount
 Requires PHP: 7.1
 Requires at least: 4.8
 Tested up to: 6.7
-Stable tag: 4.9.2
+Stable tag: 4.9.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -105,6 +105,12 @@ You should be PHP programmer to do it. [Please, review sample addon and adapt it
 
 
 == Changelog ==
+
+= 4.9.3 - 2025-02-04 =
+* Importer generates meaningful names for created rules
+* Fixed bug - can't edit the pages in some visual page builders
+* Fixed bug - missed value 0% for tag {{percentage_saved}}
+* Updated compatibility with "Yoast SEO"(PHP warnings)
 
 = 4.9.2 - 2025-01-15 =
 * Added "Percentage discount" to section "Cart adjustments"

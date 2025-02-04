@@ -97,12 +97,13 @@ class TotalProductPriceFormatter
             $this->priceFunctions->getPriceToDisplay($product,
                 array('qty' => $qty, 'price' => $regularPrice))
         );
+
         $replacements = array(
             'striked_total'    => $strikedTotal,
             'total'            => $total,
             'price_suffix'     => $product->get_price_suffix($price, $qty),
             'amount_saved'     => $this->priceFunctions->format($amountSaved),
-            'percentage_saved' => $percentageSaved>0 ? $percentageSaved . '%' : '',
+            'percentage_saved' => $percentageSaved . '%',
         );
 
         $replacements = apply_filters(
@@ -134,7 +135,7 @@ class TotalProductPriceFormatter
         );
         $total        = $strikedTotal;
         $amountSaved = $this->priceFunctions->format(0);
-        $percentageSaved = '';//just empty
+        $percentageSaved = '0%';
 
         $replacements = array(
             'striked_total'    => $strikedTotal,
@@ -193,7 +194,7 @@ class TotalProductPriceFormatter
             'total'            => $total,
             'price_suffix'     => $processedProduct->getProduct()->get_price_suffix($subtotal, 1),
             'amount_saved'     => $this->priceFunctions->format($amountSaved),
-            'percentage_saved' => $percentageSaved>0 ? $percentageSaved . '%' : '',
+            'percentage_saved' => $percentageSaved . '%',
         );
 
         $replacements = apply_filters(

@@ -690,9 +690,13 @@ class CartProcessor
             }
         }
 
-        foreach ($wcCart->cart_contents as $item_key => $item) {
-            $item['quantity'] = (int)$item['quantity'];
-            $wcCart->cart_contents[$item_key] = $item;
+        if( apply_filters('adp_force_integer_qty', true) ) {
+            foreach ($wcCart->cart_contents as $item_key => $item) {
+                if((float)$item['quantity'] == (int)$item['quantity']) {
+                    $item['quantity'] = (int)$item['quantity'];
+                }
+                $wcCart->cart_contents[$item_key] = $item;
+            }
         }
 
         $this->listener->processFinished($wcCart, WC()->session);

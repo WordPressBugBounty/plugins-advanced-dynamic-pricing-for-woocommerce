@@ -300,7 +300,7 @@ abstract class AbstractCartItem
 
     public function isHistoryEqualsDiscounts(): bool
     {
-        return $this->getDiscounts() === $this->getHistory();
+        return $this->getDiscounts(true) === $this->getHistory();
     }
 
     abstract protected function recalculateHash();

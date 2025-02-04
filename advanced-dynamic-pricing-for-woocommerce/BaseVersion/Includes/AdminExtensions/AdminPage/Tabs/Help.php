@@ -117,7 +117,7 @@ class Help implements AdminTabInterface
             array(
                 'title' => __('Tools', 'advanced-dynamic-pricing-for-woocommerce'),
                 'description' => __('More details about Tools tab.', 'advanced-dynamic-pricing-for-woocommerce'),
-                'link' => esc_url('https://docs.algolplus.com/algol_pricing/tools-free/')
+                'link' => esc_url('https://docs.algolplus.com/algol_pricing/system-report/')
             ),
         );
     }

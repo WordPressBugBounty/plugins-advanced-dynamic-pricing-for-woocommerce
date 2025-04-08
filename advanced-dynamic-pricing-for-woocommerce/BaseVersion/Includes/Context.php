@@ -760,4 +760,12 @@ class Context
     public function isBaseVersion(): bool {
         return defined('WC_ADP_PRO_VERSION_PATH');
     }
+
+    public function __serialize() {
+        return [];
+    }
+
+    public function __unserialize($data) {
+        $this->__construct();
+    }
 }

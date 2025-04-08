@@ -628,6 +628,8 @@ class CartProcessor
 
             $wcNoFilterWorker->calculateTotals($wcCart, ...$flags);
 
+            $this->normalizeCart($wcCart);
+
             $this->modifySession($cart, $wcCart, $initialTotals);
             $wcCart->set_session(); // Push updated totals into the session. Should be after 'updateTotals'
 
@@ -681,6 +683,8 @@ class CartProcessor
             $this->addCommonItems($cart, $wcCart);
             $wcNoFilterWorker->calculateTotals($wcCart, ...$flags);
 
+            $this->normalizeCart($wcCart);
+
             $cart->getContext()->getSession()->flush()->push();
             if ($this->context->refreshShippingProcessorWhenNoAppliedRules()) {
                 if ( ! $this->context->getOption("disable_shipping_calc_during_process", false)) {
@@ -690,6 +694,14 @@ class CartProcessor
             }
         }
 
+        $this->listener->processFinished($wcCart, WC()->session);
+
+        do_action('wdp_process_complete', $wcCart, $result, $cart, $this);
+
+        return $cart;
+    }
+
+    protected function normalizeCart($wcCart) {
         if( apply_filters('adp_force_integer_qty', true) ) {
             foreach ($wcCart->cart_contents as $item_key => $item) {
                 if((float)$item['quantity'] == (int)$item['quantity']) {
@@ -698,12 +710,6 @@ class CartProcessor
                 $wcCart->cart_contents[$item_key] = $item;
             }
         }
-
-        $this->listener->processFinished($wcCart, WC()->session);
-
-        do_action('wdp_process_complete', $wcCart, $result, $cart, $this);
-
-        return $cart;
     }
 
     protected function replaceCouponSuccessNotices($initialCoupons) {

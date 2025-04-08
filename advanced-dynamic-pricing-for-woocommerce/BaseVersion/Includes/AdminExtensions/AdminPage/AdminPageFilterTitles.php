@@ -61,6 +61,7 @@ class AdminPageFilterTitles
             'giftable_categories'   => array(),
             'auto_add_products'     => array(),
             'product_tags'          => array(),
+            'product_brand'         => array(),
             'product_categories'    => array(),
             'product_category_slug' => array(),
             'product_attributes'    => array(),
@@ -286,6 +287,12 @@ class AdminPageFilterTitles
         $result['product_tags'] = array();
         foreach ($filtersByType['product_tags'] as $id) {
             $result['product_tags'][$id] = '#' . $id . ' ' . Helpers::getTagTitle($id);
+        }
+
+        // type 'product_brand'
+        $result['product_brand'] = array();
+        foreach ($filtersByType['product_brand'] as $id) {
+            $result['product_brand'][$id] = '#' . $id . ' ' . Helpers::getCategoryTitle($id);
         }
 
         // type 'product_categories'

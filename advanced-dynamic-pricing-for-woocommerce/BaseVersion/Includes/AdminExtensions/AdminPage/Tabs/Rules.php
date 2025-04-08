@@ -52,6 +52,14 @@ class Rules implements AdminTabInterface
     public function handleSubmitAction()
     {
         if ( $bulkAction = $this->getBulkAction() ) {
+            if(wp_verify_nonce($_POST[Ajax::SECURITY_QUERY_ARG] ?? null, Ajax::SECURITY_ACTION) === false) {
+                wp_die(
+                    __('Invalid nonce specified', 'advanced-dynamic-pricing-for-woocommerce'),
+                    __('Error', 'advanced-dynamic-pricing-for-woocommerce'),
+                    array('response' => 403,)
+                );
+            }
+            
             $ruleRepository = new RuleRepository();
             $rulesList = array_map('intval', is_array($_POST['rules']) ? $_POST['rules'] : []);
 

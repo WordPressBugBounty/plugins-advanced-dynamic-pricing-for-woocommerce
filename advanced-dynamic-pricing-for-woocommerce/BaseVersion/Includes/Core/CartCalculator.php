@@ -184,11 +184,15 @@ class CartCalculator implements ICartCalculator
                 $wcSalePrice = $this->getWcSalePrice($product, $item, $prodPropsWithFilters);
 
                 $minDiscountRangePrice = $item->prices()->getMinDiscountRangePrice();
-                if (!is_null($wcSalePrice) && ($minDiscountRangePrice === null || $minDiscountRangePrice >= $wcSalePrice) && $wcSalePrice < $productPrice) {
+                if (!is_null($wcSalePrice) && $wcSalePrice < $productPrice) {
                     $newItem = self::recreateItem($item, $wcSalePrice);
                     $item->copyAttributesTo($newItem);
+                    $newItem->setPriceAdjustments($item->getPriceAdjustments());
 
-                    $newItem->prices()->setMinDiscountRangePrice($wcSalePrice);
+                    if ($minDiscountRangePrice !== null) {
+                        $minDiscountRangePrice = min($minDiscountRangePrice, $wcSalePrice);
+                        $newItem->prices()->setMinDiscountRangePrice($minDiscountRangePrice);
+                    }
 
                     $item = $newItem;
                 }

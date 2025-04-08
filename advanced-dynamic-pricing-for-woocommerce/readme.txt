@@ -4,8 +4,8 @@ Donate link: https://paypal.me/ipprokaev/0usd
 Tags: woocommerce, dynamic pricing, discount, pricing rule, bulk discount
 Requires PHP: 7.1
 Requires at least: 4.8
-Tested up to: 6.7
-Stable tag: 4.9.3
+Tested up to: 6.8
+Stable tag: 4.9.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -105,6 +105,18 @@ You should be PHP programmer to do it. [Please, review sample addon and adapt it
 
 
 == Changelog ==
+
+= 4.9.4 - 2025-04-08 =
+* Fixed CSRF vulnerability
+* Added new discount type "Buy 3 for X"
+* Updated section Tools>Import rules (new option, fixed some bugs)
+* Fixed bug - excessive memory usage, plugin uses  wp_cache_* functions now
+* Fixed bug - blocks cart displayed with fatal error if cart contained "Sold individually" item
+* Fixed bug - some warnings for filters by product brands( native for WooCommerce products)
+* Updated compatibility with "WPC Composite Products for WooCommerce"
+* Updated compatibility with "Woocommerce Product Bundles"
+* Updated compatibility with "TM Extra product options"
+* Updated compatibility with "Klarna On-Site Messaging for WooCommerce"
 
 = 4.9.3 - 2025-02-04 =
 * Importer generates meaningful names for created rules

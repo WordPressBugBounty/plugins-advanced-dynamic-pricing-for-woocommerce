@@ -182,6 +182,11 @@ class SomewhereWarmBundlesCmp extends AbstractContainerCompatibility
 
     public function isPartOfContainerFacadePricedIndividually(WcCartItemFacade $facade): ?bool
     {
+        $plugin_version = defined('WC_PB_VERSION') ? WC_PB_VERSION : null;
+        if ($plugin_version && version_compare($plugin_version, '8.3', '>=')) {
+            return true;
+        }
+
         $product = $facade->getProduct();
         $this->probablySetBundledItem($product, $facade);
 

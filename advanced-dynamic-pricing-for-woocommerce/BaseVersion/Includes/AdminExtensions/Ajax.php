@@ -318,6 +318,27 @@ AND $wpdb->terms.name  like '%$query%' LIMIT $this->limit
         }, $terms);
     }
 
+    public function ajax_product_brand()
+    {
+        $query = htmlspecialchars($_POST['query'] ?? "", ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401);
+        $terms = get_terms(array(
+            'taxonomy'   => 'product_brand',
+            'name__like' => $query,
+            'hide_empty' => false,
+            'number'     => $this->limit
+        ));
+
+
+        return array_map(function ($term) {
+            $id = (string)$term->term_id;
+            return array(
+                'id'   => $id,
+                'text' => "#$id $term->name",
+                'link' => $this->context->getOption("products_as_links_in_the_product_filter", false) ? get_category_link($term->term_id) : ''
+            );
+        }, $terms);
+    }
+
     public function ajax_product_custom_fields()
     {
         global $wpdb;

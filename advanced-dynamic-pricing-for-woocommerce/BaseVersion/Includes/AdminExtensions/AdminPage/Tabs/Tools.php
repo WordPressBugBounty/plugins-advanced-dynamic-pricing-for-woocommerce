@@ -154,6 +154,9 @@ class Tools implements AdminTabInterface
 
     public function handleSubmitAction()
     {
+        if(isset($_POST['wdp-import-data-optimize-import'])) {
+            add_filter("adp_import_merge_rules","__return_false");
+        }
         if (isset($_POST['wdp-import']) && ! empty($_POST['wdp-import-data']) && ! empty($_POST['wdp-import-type'])) {
             $this->checkNonceOrDie();
 

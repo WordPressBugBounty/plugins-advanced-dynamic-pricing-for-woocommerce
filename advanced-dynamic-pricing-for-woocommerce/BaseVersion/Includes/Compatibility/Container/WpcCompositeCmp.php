@@ -87,7 +87,6 @@ class WpcCompositeCmp extends AbstractContainerCompatibility
      */
     public function calculateContainerPrice(WcCartItemFacade $facade, array $children): float
     {
-
         $thirdPartyData = $facade->getThirdPartyData();
 
         if ($thirdPartyData['wooco_price'] != "") {
@@ -104,7 +103,16 @@ class WpcCompositeCmp extends AbstractContainerCompatibility
      */
     public function calculateContainerBasePrice(WcCartItemFacade $facade, array $children): float
     {
+        $thirdPartyData = $facade->getThirdPartyData();
         $parentProduct = $facade->getProduct();
+
+        if ($parentProduct instanceof \WC_Product_Composite && $parentProduct->get_pricing() === 'exclude') {
+            return 0.0;
+        }
+
+        if ($this->isComponentsHidden($facade) && isset($thirdPartyData['wooco_price'])) {
+            return $thirdPartyData['wooco_price'];
+        }
 
         if($parentProduct->get_sale_price()){
             return floatval($parentProduct->get_sale_price());
@@ -128,8 +136,8 @@ class WpcCompositeCmp extends AbstractContainerCompatibility
         if (!($product instanceof \WC_Product_Composite)) {
             return null;
         }
-        return ContainerPriceTypeEnum::BASE_PLUS_SUM_OF_SUB_ITEMS();
 
+        return $this->isComponentsHidden($facade) ? ContainerPriceTypeEnum::FIXED() : ContainerPriceTypeEnum::BASE_PLUS_SUM_OF_SUB_ITEMS();
     }
 
     public function isPartOfContainerFacadePricedIndividually(WcCartItemFacade $facade): ?bool
@@ -173,5 +181,19 @@ class WpcCompositeCmp extends AbstractContainerCompatibility
     ): ContainerPartCartItem {
 
         return $subContainerItem;
+    }
+
+    protected function isComponentsHidden(WcCartItemFacade $facade): bool {
+        if (!class_exists('WPCleverWooco')) {
+            return false;
+        }
+
+        if (!apply_filters('adp_wpc_composite_full_price', false)) {
+            return false;
+        }
+
+        $settingsHideComponents = WPCleverWooco()::get_setting( 'hide_component', 'no' );
+
+        return strpos($settingsHideComponents, 'yes') !== false;
     }
 }

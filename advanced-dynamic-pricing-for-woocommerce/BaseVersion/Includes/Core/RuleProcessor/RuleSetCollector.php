@@ -408,7 +408,9 @@ class RuleSetCollector
                             foreach ($setItems as $tmpFilterSetItems) {
                                 foreach ($tmpFilterSetItems as $setItem) {
                                     if (
-                                        $setItem->getWcItem()->getVariationId() == $cartItem->getWcItem()->getVariationId()
+                                        ( apply_filters('adp_only_variation_parent', false) 
+                                            || $setItem->getWcItem()->getVariationId() == $cartItem->getWcItem()->getVariationId()
+                                        )
                                         && $setItem->getWcItem()->getProductId() == $cartItem->getWcItem()->getProductId()
                                     ) {
                                         $atLeastOneInTheSet = true;

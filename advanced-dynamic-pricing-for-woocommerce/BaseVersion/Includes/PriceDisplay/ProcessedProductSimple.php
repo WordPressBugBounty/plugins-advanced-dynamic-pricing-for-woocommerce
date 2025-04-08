@@ -209,7 +209,11 @@ class ProcessedProductSimple
             return false;
         }
 
-        return !!count($item->getHistory());
+        $totalAdjustments = array_sum(array_map(function ($amounts) {
+            return array_sum($amounts);
+        }, $item->getHistory()));
+
+        return ! $this->compareStrategy->floatsAreEqual($totalAdjustments, 0);
     }
 
     /**

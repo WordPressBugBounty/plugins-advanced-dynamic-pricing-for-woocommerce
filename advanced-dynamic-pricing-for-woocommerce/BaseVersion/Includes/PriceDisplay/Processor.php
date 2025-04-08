@@ -184,9 +184,10 @@ class Processor implements IWcProductProcessor
             $children = $product->get_visible_children();
 
             // try optimize calculations at Shop/Category/Tag pages only
+            $context = $this->context;
             $req_variations = $this->context->getOption('req_variations_for_optimization_at_shop');
             if( $req_variations AND count($children) >= $req_variations AND
-                ( is_shop() OR is_product_category() OR is_product_tag() ) ) {
+                ( is_shop() OR is_product_category() OR is_product_tag() OR $context->is($context::PRODUCT_LOOP) ) ) {
                 $children = $this->getMinMaxCostChilds($children,$product);
             }
 
@@ -245,7 +246,7 @@ class Processor implements IWcProductProcessor
 
     protected function getMinMaxCostChilds($variations,$product){
         $price_mode = $this->context->getOption('discount_for_onsale');
-
+        $maxDiscountRate = $maxDiscountAmount = 0;
         if($price_mode == "compare_discounted_and_sale")
             $this->calc->findPossibleMaxDiscountsForProducts($maxDiscountRate,$maxDiscountAmount);
 

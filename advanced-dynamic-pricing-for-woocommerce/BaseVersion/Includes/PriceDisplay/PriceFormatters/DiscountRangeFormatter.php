@@ -74,9 +74,16 @@ class DiscountRangeFormatter
         }
 
         $isHavingMinDiscountRangePrice = (
-            ($processedProduct instanceof ProcessedProductSimple && $processedProduct->getMinDiscountRangePrice() !== null &&
-            $processedProduct->getMinDiscountRangePrice() > $processedProduct->getProduct()->get_sale_price() )
-            || ($processedProduct instanceof ProcessedVariableProduct && $processedProduct->getLowestRangeDiscountPriceProduct() !== null)
+            (
+                $processedProduct instanceof ProcessedProductSimple 
+                && $processedProduct->getMinDiscountRangePrice() !== null 
+                // && $processedProduct->getMinDiscountRangePrice() > $processedProduct->getProduct()->get_sale_price() 
+            )
+            || 
+            (
+                $processedProduct instanceof ProcessedVariableProduct 
+                && $processedProduct->getLowestRangeDiscountPriceProduct() !== null
+            )
         );
 
         return $this->context->isCatalog() && $isHavingMinDiscountRangePrice;

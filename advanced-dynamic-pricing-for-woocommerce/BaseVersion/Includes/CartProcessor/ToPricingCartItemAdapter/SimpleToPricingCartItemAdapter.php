@@ -76,6 +76,12 @@ class SimpleToPricingCartItemAdapter implements IToPricingCartItemAdapter
             $item->addAttr(CartItemAttributeEnum::IMMUTABLE());
         }
 
+        $addonsAdapter->adaptAddonsFromFacadeAndPutIntoPricingCartItem(
+            $origPriceCalc,
+            $facade,
+            $item
+        );
+
         return $item;
     }
 
@@ -166,6 +172,13 @@ class SimpleToPricingCartItemAdapter implements IToPricingCartItemAdapter
             $item->addAttr(CartItemAttributeEnum::IMMUTABLE());
         }
 
+        (new ToPricingAddonsAdapter())->adaptAddonsFromFacadeAndPutIntoPricingCartItem(
+            $origPriceCalc,
+            $facade,
+            $item
+        );
+
+        
         return $item;
     }
 }

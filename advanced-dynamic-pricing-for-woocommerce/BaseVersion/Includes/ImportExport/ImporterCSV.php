@@ -200,7 +200,7 @@ class ImporterCSV {
         return array();
     }
 
-    protected static function setRuleTitle(&$rule, $filter_name,$pos){
+    protected static function setRuleTitle(&$rule, $filter_name, $pos){
         $rule['title'] = array();
         if($filter_name)
             $rule['title'][] = $filter_name;
@@ -210,18 +210,27 @@ class ImporterCSV {
             $rule['title'][] = __('Bulk', 'advanced-dynamic-pricing-for-woocommerce');
         }
         if ( ! empty($rule['conditions'])) {
-            $rule['title'][] .= __('for Roles', 'advanced-dynamic-pricing-for-woocommerce');
+            $rule['title'][] = __('for Roles', 'advanced-dynamic-pricing-for-woocommerce');
         }
         if ( ! empty($rule['role_discounts'])) {
-            if( $filter_name )
-                $rule['title'][] = "-";
-            $rule['title'][] .= __('Roles', 'advanced-dynamic-pricing-for-woocommerce');
+            if( $filter_name ) {
+                $rule['title'][] = "-" . __('Roles', 'advanced-dynamic-pricing-for-woocommerce');
+            } else {
+                $rule['title'][] = __('Roles', 'advanced-dynamic-pricing-for-woocommerce');
+            }
         }
         if (empty($rule['role_discounts']) && empty($rule['bulk_adjustments'])) {
             //nothing!just product/sku $rule['title'][] = __('Discount', 'advanced-dynamic-pricing-for-woocommerce');
         }
         if( empty($rule['title']) )
             $rule['title'][] = __('Imported Rule', 'advanced-dynamic-pricing-for-woocommerce') . ' #' . $pos;
+
+        $char = array_sum(array_map(fn($str) => mb_strlen($str, 'UTF-8'), $rule['title'])) + count($rule['title']) - 1;
+        if ($char > 20) {
+            $excess = $char - 20;
+            $rule['title'][0] = mb_substr($rule['title'][0], 0, -$excess, 'UTF-8');
+        }
+
         $rule['title'] = join(" ", $rule['title']);
         $rule['title'] = apply_filters("adp_import_rules_rule_title", $rule['title'], $rule, $pos);
     }

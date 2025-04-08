@@ -9,6 +9,7 @@ use ADP\BaseVersion\Includes\PriceDisplay\ProcessedGroupedProduct;
 use ADP\BaseVersion\Includes\PriceDisplay\ProcessedProductSimple;
 use ADP\BaseVersion\Includes\PriceDisplay\ProcessedVariableProduct;
 use ADP\BaseVersion\Includes\WC\PriceFunctions;
+use ADP\Factory;
 
 defined('ABSPATH') or exit;
 
@@ -23,6 +24,11 @@ class StructuredData
      * @var Engine
      */
     protected $globalEngine;
+
+    /**
+     * @var DiscountRangeFormatter
+     */
+    protected $discountRangeFormatter;
 
     /**
      * @param Context|Engine $contextOrEngine
@@ -42,6 +48,7 @@ class StructuredData
     public function install()
     {
         add_filter('woocommerce_structured_data_product_offer', array($this, 'structuredProductData'), 10, 2);
+        $this->discountRangeFormatter = Factory::get("PriceDisplay_PriceFormatters_DiscountRangeFormatter");
     }
 
     /**
@@ -72,15 +79,24 @@ class StructuredData
             }
 
             if ($processedProduct instanceof ProcessedVariableProduct || $processedProduct instanceof ProcessedGroupedProduct) {
-                if ($processedProduct->getLowestPrice() === $processedProduct->getHighestPrice()) {
+                $lowestPrice = $processedProduct->getLowestPrice();
+                $highestPrice = $processedProduct->getHighestPrice();
+
+                if($this->discountRangeFormatter->isNeeded($processedProduct)) {
+                    if ($discountRangeProcessed = $processedProduct->getLowestRangeDiscountPriceProduct()) {
+                        $lowestPrice = $discountRangeProcessed->getMinDiscountRangePrice();
+                    }
+                }
+
+                if ($lowestPrice === $highestPrice) {
                     unset($data['lowPrice']);
                     unset($data['highPrice']);
                     $data['@type'] = 'Offer';
-                    $data['price'] = wc_format_decimal($processedProduct->getLowestPrice(), $decimals);
+                    $data['price'] = wc_format_decimal($lowestPrice, $decimals);
                     // Assume prices will be valid until the end of next year, unless on sale and there is an end date.
                     $data['priceValidUntil']    = gmdate('Y-12-31', time() + YEAR_IN_SECONDS);
                     $priceSpecification = [
-                        'price'                 => wc_format_decimal($processedProduct->getLowestPrice(), $decimals),
+                        'price'                 => wc_format_decimal($lowestPrice, $decimals),
                         'priceCurrency'         => $this->context->getCurrencyCode(),
                         'valueAddedTaxIncluded' => $this->context->getIsPricesIncludeTax() ? 'true' : 'false',
                     ];
@@ -89,14 +105,19 @@ class StructuredData
                     unset($data['priceValidUntil']);
                     unset($data['priceSpecification']);
                     $data['@type'] = 'AggregateOffer';
-                    $data['lowPrice']  = wc_format_decimal($processedProduct->getLowestPrice(), $decimals);
-                    $data['highPrice'] = wc_format_decimal($processedProduct->getHighestPrice(), $decimals);
+                    $data['lowPrice']  = wc_format_decimal($lowestPrice, $decimals);
+                    $data['highPrice'] = wc_format_decimal($highestPrice, $decimals);
                     $data['offerCount'] = count( $product->get_children() );
                 }
             } elseif ($processedProduct instanceof ProcessedProductSimple) {
-                $data['price']              = wc_format_decimal($processedProduct->getPrice(), $decimals);
+                $price = $processedProduct->getPrice();
+                if($this->discountRangeFormatter->isNeeded($processedProduct)) {
+                    $price = $processedProduct->getMinDiscountRangePrice();
+                }
+
+                $data['price']              = wc_format_decimal($price, $decimals);
                 $priceSpecification = [
-                    'price'                 => wc_format_decimal($processedProduct->getPrice(), $decimals),
+                    'price'                 => wc_format_decimal($price, $decimals),
                     'priceCurrency'         => $this->context->getCurrencyCode(),
                     'valueAddedTaxIncluded' => $this->context->getIsPricesIncludeTax() ? 'true' : 'false',
                 ];

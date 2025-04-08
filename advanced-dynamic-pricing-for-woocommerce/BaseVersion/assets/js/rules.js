@@ -1105,6 +1105,27 @@ jQuery(document).ready(function ($) {
       add_role_discount(new_rule.find('.wdp-btn-add-role-discount'));
     }
 
+    function show_buy_three_for_x(rule_type_selector, new_rule) {
+      let linkOnExample = $(rule_type_selector).parent().find('a');
+      linkOnExample.attr('href', 'https://docs.algolplus.com/algol_pricing/cart-discount-help/').show();
+
+      var filter_data = {
+        qty: 3,
+        type: "any",
+        limitation: "product"
+      };
+
+      var adjustment_data = {
+        type: 'total',
+        total: {
+          type: 'price__fixed',
+        }
+      };
+
+      add_product_filter(new_rule.find('.wdp-filter-block'), filter_data);
+      add_product_adjustment(new_rule.find('.wdp-product-adjustments'), adjustment_data);
+    }
+
     function show_cart_discount_type(rule_type_selector, new_rule){
       let linkOnExample = $(rule_type_selector).parent().find('a');
       linkOnExample.attr('href', 'https://docs.algolplus.com/algol_pricing/cart-discount-help/').show();
@@ -1173,6 +1194,9 @@ jQuery(document).ready(function ($) {
 				break;
 			  case 'cart_discount':
 				show_cart_discount_type(this, new_rule);
+        break;
+        case 'buy_three_for_x':
+        show_buy_three_for_x(this, new_rule);
 				break;
 
 			  case '':
@@ -1195,6 +1219,7 @@ jQuery(document).ready(function ($) {
 				}
 				break;
 			}
+      new_rule.find('.wdp-title').focus();
 			new_rule.find('.wdp-add-condition, .replace-adjustments').show();
 		});
 

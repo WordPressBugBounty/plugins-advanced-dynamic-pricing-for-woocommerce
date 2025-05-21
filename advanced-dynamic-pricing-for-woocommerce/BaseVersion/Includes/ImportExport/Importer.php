@@ -40,7 +40,7 @@ class Importer
             }
 
             if ( $rulesCol->getRules() ) {
-                $ruleObjects[] = $rulesCol->getRules()[0];
+                $ruleObjects[] = $rulesCol->getFirst();
             }
         }
 
@@ -127,7 +127,7 @@ class Importer
             }
 
             if ( $rulesCol->getRules() ) {
-                $ruleObjects[] = $rulesCol->getRules()[0];
+                $ruleObjects[] = $rulesCol->getFirst();
             }
         }
 

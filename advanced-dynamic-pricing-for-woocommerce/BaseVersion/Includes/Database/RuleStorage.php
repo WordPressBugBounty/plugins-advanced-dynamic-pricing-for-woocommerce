@@ -100,6 +100,8 @@ class RuleStorage
             $this->wpmlCmp->replaceVariationDataStore();
             $this->wpmlCmp->addFilterPreloadedListLanguages();
             $this->wpmlCmp->modifyContext($this->context);
+        } else if ( $this->wpmlCmp->isActiveWcWpml()) {
+            $this->wpmlCmp->setCurrency($this->context);
         }
         $this->priceBasedOnCountryCmp = new PriceBasedOnCountryCmp();
 
@@ -190,7 +192,7 @@ class RuleStorage
 
             $rule->setBlocks($row->additional['blocks'] ?? []);
 
-            $rules[] = apply_filters('adp_rule_loaded', $rule, $row->getData());
+            $rules[$rule->getId()] = apply_filters('adp_rule_loaded', $rule, $row->getData());
         }
 
         return new RulesCollection($rules);

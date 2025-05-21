@@ -12,6 +12,7 @@ use ADP\BaseVersion\Includes\Compatibility\ShoptimizerCmp;
 use ADP\BaseVersion\Includes\Compatibility\Addons\TmExtraOptionsCmp;
 use ADP\BaseVersion\Includes\Compatibility\WcDepositsCmp;
 use ADP\BaseVersion\Includes\Compatibility\WcChainedProductsCmp;
+use ADP\BaseVersion\Includes\Compatibility\WcPaymentPlanSuiteCmp;
 use ADP\BaseVersion\Includes\Compatibility\WcsAttCmp;
 use ADP\BaseVersion\Includes\Compatibility\WcSubscriptionsCmp;
 use ADP\BaseVersion\Includes\Compatibility\YoastSEOCmp;
@@ -132,6 +133,11 @@ class CartProcessor
     protected $wcDepositsCmp;
 
     /**
+     * @var WcPaymentPlanSuiteCmp
+     */
+    protected $wcPaymentPlanSuiteCmp;
+
+    /**
      * @var GiftCardsSomewhereWarmCmp
      */
     protected $giftCart;
@@ -217,6 +223,7 @@ class CartProcessor
         $this->wcsAttCmp             = new WcsAttCmp();
         $this->vouchers              = new PDFProductVouchersCmp();
         $this->wcDepositsCmp         = new WcDepositsCmp();
+        $this->wcPaymentPlanSuiteCmp = new WcPaymentPlanSuiteCmp();
         $this->yithGiftCardsCmp      = new YithGiftCardsCmp();
         $this->giftCart              = new GiftCardsSomewhereWarmCmp();
         $this->yoastSEOCmp              = new YoastSEOCmp();
@@ -238,6 +245,9 @@ class CartProcessor
         if ($this->shoptimizerCmp->isActive()) {
             $this->shoptimizerCmp->applyCompatibility();
         }
+        if ($this->wcPaymentPlanSuiteCmp->isActive()) {
+            $this->wcPaymentPlanSuiteCmp->applyCompatibility();
+        }
         if ($this->avataxCmp->isActive()) {
             $this->avataxCmp->applyCompatibility();
         }
@@ -255,6 +265,11 @@ class CartProcessor
         $this->cartItemConverter = new CartItemConverter();
     }
 
+    public function withCart($wcCart)
+    {
+        $this->wcCart = $wcCart;
+    }
+
     public function withContext(Context $context)
     {
         $this->context = $context;
@@ -265,14 +280,16 @@ class CartProcessor
         $this->wcsAttCmp->withContext($context);
         $this->vouchers->withContext($context);
         $this->wcDepositsCmp->withContext($context);
+        $this->wcPaymentPlanSuiteCmp->withContext($context);
         $this->giftCart->withContext($context);
         $this->facebookCommerce->withContext($context);
         $this->wcchainprCmp->withContext($context);
     }
 
-    public function installActionFirstProcess()
+    public function installActionFirstProcess($skip_cartCouponsProcessor=false)
     {
-        $this->cartCouponsProcessor->installActions();
+        if($skip_cartCouponsProcessor)
+            $this->cartCouponsProcessor->installActions();
         $this->cartFeeProcessor->setFilterToCalculateFees();
         $this->shippingProcessor->setFilterToEditPackageRates();
         $this->shippingProcessor->setFilterToEditShippingMethodLabel();
@@ -714,6 +731,7 @@ class CartProcessor
 
     protected function replaceCouponSuccessNotices($initialCoupons) {
         $newNotices = [];
+        //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
         $appliedSuccessfullyText = __('Coupon code applied successfully.', 'woocommerce');
         foreach (wc_get_notices() as $type => $notices) {
             if ($type === "success") {
@@ -736,6 +754,8 @@ class CartProcessor
         foreach ( $initialCoupons as $initialCoupon ) {
             wc_add_notice(
                 sprintf(
+                    /* translators: invalid coupon message*/
+                    //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch, WordPress.WP.I18n.MissingTranslatorsComment
                     __( 'Sorry, it seems the coupon "%s" is invalid - it has now been removed from your order.', 'woocommerce' ),
                     esc_html( $initialCoupon )
                 ),
@@ -1036,8 +1056,8 @@ class CartProcessor
     protected function addNoticeAddedFreeProduct($product, $qty)
     {
         $template = $this->context->getOption('message_template_after_add_free_product');
-        $template = _x(
-            $template,
+        //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+        $template = _x( $template,
             "Show message after adding free product|Output template",
             "advanced-dynamic-pricing-for-woocommerce"
         );

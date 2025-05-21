@@ -1126,6 +1126,66 @@ jQuery(document).ready(function ($) {
       add_product_adjustment(new_rule.find('.wdp-product-adjustments'), adjustment_data);
     }
 
+    function show_disc_cheapest_fifty_perc(rule_type_selector, new_rule){
+      let linkOnExample = $(rule_type_selector).parent().find('a');
+      linkOnExample.attr('href', 'https://docs.algolplus.com/algol_pricing/cart-discount-help/').show();
+
+      if(!wdp_data.options.filter_priority) {
+        let params = {
+          action: 'wdp_ajax',
+          method: 'check_filter_priority',
+        };
+        params[wdp_data.security_query_arg] = wdp_data.security;
+        $.post(
+          ajaxurl,
+          params,
+          function (response) {
+            if (!response.success) {
+              console.error(response.data);
+              return;
+            }
+          },
+          'json'
+        );
+      }
+
+      var filter_data_1 = {
+        qty: 1,
+        type: "products",
+        limitation: "product",
+        select_priority: "expensive",
+      };
+
+      var filter_data_2 = {
+        qty: 1,
+        type: "products",
+        limitation: "product",
+        select_priority: "cheap",
+      };
+
+      var adjustment_data = {
+        type: 'split',
+        total: {
+          type: 'discount__percentage',
+          value: 50
+        },
+        split: [
+          {
+            type: 'discount__amount',
+          },
+          {
+            type: 'discount__percentage',
+            value: 50
+          }
+        ]
+      };
+
+      add_product_filter(new_rule.find('.wdp-filter-block'), filter_data_1);
+      add_product_filter(new_rule.find('.wdp-filter-block'), filter_data_2);
+
+      add_product_adjustment(new_rule.find('.wdp-product-adjustments'), adjustment_data);
+    }
+
     function show_cart_discount_type(rule_type_selector, new_rule){
       let linkOnExample = $(rule_type_selector).parent().find('a');
       linkOnExample.attr('href', 'https://docs.algolplus.com/algol_pricing/cart-discount-help/').show();
@@ -1198,6 +1258,9 @@ jQuery(document).ready(function ($) {
         case 'buy_three_for_x':
         show_buy_three_for_x(this, new_rule);
 				break;
+        case 'disc_cheapest_fifty_perc':
+          show_disc_cheapest_fifty_perc(this, new_rule);
+        break;
 
 			  case '':
 				var skip = new_rule.find('[name="discount_type_skip"]:checked').val();
@@ -3583,7 +3646,7 @@ jQuery(document).ready(function ($) {
 		remove_get_parameter('disable_all_rules_coupon_applied');
 		remove_get_parameter('paged');
 
-		window.location.href += '&disable_all_rules_coupon_applied=' + result;
+    window.location.href += `&disable_all_rules_coupon_applied=${result}&${wdp_data.security_query_arg}=${wdp_data.security}`;
 	});
 
     function remove_get_parameter(parameterName) {

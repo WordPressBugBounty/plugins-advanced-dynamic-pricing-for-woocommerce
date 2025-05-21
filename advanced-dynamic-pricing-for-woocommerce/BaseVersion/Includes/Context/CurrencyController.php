@@ -69,7 +69,7 @@ class CurrencyController
      */
     public function setCurrentCurrency($currency)
     {
-        if ($currency instanceof Currency) {
+        if ($currency instanceof Currency AND $this->defaultCurrency->getRate()) {
             $this->currentCurrency = $currency;
             $this->rate            = floatval($this->currentCurrency->getRate() / $this->defaultCurrency->getRate());
         }

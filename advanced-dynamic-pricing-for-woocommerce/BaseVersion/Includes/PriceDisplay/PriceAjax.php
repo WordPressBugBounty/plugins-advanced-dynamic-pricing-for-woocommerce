@@ -81,9 +81,10 @@ class PriceAjax
 
     protected function checkNonceOrDie()
     {
+        //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
         if (wp_verify_nonce($_REQUEST[$this->nonceParam] ?? null, $this->nonceName) === false) {
-            wp_die(__('Invalid nonce specified', 'advanced-dynamic-pricing-for-woocommerce'),
-                __('Error', 'advanced-dynamic-pricing-for-woocommerce'), ['response' => 403]);
+            wp_die(esc_html__('Invalid nonce specified', 'advanced-dynamic-pricing-for-woocommerce'),
+                esc_html__('Error', 'advanced-dynamic-pricing-for-woocommerce'), ['response' => 403]);
         }
     }
 
@@ -118,6 +119,7 @@ class PriceAjax
         $this->checkNonceOrDie();
 
         try {
+            //phpcs:ignore WordPress.Security.NonceVerification.Recommended
             $request = CalculateProductPriceRequest::fromArray($_REQUEST);
         } catch (\Exception $e) {
             wp_send_json_error($e->getMessage());
@@ -153,6 +155,7 @@ class PriceAjax
         $this->checkNonceOrDie();
 
         try {
+            //phpcs:ignore WordPress.Security.NonceVerification.Recommended
             $request = CalculateSeveralProductPriceRequest::fromArray($_REQUEST);
         } catch (\Exception $e) {
             wp_send_json_error($e->getMessage());
@@ -368,7 +371,7 @@ class PriceAjax
                 );
             }
         }
-
+        //phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         throw new \Exception("Unsupported type of processed product: " . get_class($prodPriceDisplay));
     }
 }

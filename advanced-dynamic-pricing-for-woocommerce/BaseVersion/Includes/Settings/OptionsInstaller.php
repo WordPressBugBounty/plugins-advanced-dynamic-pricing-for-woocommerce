@@ -470,6 +470,16 @@ class OptionsInstaller
                 'readonly_price_for_free_products',
                 true,
                 __('Read-only quantity for free products', 'advanced-dynamic-pricing-for-woocommerce')
+            ),
+            $builder::boolean(
+                'hide_parent_bulk_table',
+                true,
+                __('Hide bulk table for parent product', 'advanced-dynamic-pricing-for-woocommerce')
+            ),
+            $builder::boolean(
+                'highlight_range_qty_changed',
+                false,
+                __('Highlight selected range when qty changed', 'advanced-dynamic-pricing-for-woocommerce')
             )
         );
 

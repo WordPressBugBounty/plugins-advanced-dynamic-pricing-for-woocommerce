@@ -242,9 +242,10 @@ class AdminPageFilterTitles
         foreach ($filtersByType['products'] as $id) {
             $result['products'][$id] = '#' . $id . ' ' . Helpers::getProductTitle($id);
         }
-
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if (isset($_GET['product'])) {
-            $id                      = $_GET['product'];
+            //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            $id                      = sanitize_key(wp_unslash($_GET['product']));
             $result['products'][$id] = '#' . $id . ' ' . Helpers::getProductTitle($id);
         }
 

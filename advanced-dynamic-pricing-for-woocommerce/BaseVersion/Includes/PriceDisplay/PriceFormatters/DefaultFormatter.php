@@ -34,10 +34,8 @@ class DefaultFormatter
         $this->context   = adp_context();
         $this->formatter = new Formatter();
 
-        $template = _x(
-            htmlspecialchars_decode(
-                $this->context->getOption("price_html_template","{{price_html}}")
-            ),
+        //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+        $template = _x( htmlspecialchars_decode( $this->context->getOption("price_html_template","{{price_html}}")),
             "Product price html template|Output template",
             "advanced-dynamic-pricing-for-woocommerce"
         );

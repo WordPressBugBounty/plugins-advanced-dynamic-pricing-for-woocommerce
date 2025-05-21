@@ -256,7 +256,7 @@ class SomewhereWarmBundlesCmp extends AbstractContainerCompatibility
         WcCartItemFacade $parentFacade
     ): ContainerPartCartItem {
         if ($subContainerItem->isPricedIndividually()){
-            $subContainerItem->setQty($subContainerItem->getQty() / $parentFacade->getQty());
+            $subContainerItem->setQty($subContainerItem->getQty());
         }
 
         return $subContainerItem;

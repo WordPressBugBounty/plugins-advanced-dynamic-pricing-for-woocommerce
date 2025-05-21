@@ -51,8 +51,8 @@ class DiscountRangeFormatter
 
     protected function getFormatterTemplate()
     {
-        return _x(
-            $this->context->getOption('replace_price_with_min_bulk_price_category_template'),
+        //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+        return _x( $this->context->getOption('replace_price_with_min_bulk_price_category_template'),
             "Replace price with lowest bulk price on the category page|Output template",
             "advanced-dynamic-pricing-for-woocommerce"
         );
@@ -75,13 +75,13 @@ class DiscountRangeFormatter
 
         $isHavingMinDiscountRangePrice = (
             (
-                $processedProduct instanceof ProcessedProductSimple 
-                && $processedProduct->getMinDiscountRangePrice() !== null 
-                // && $processedProduct->getMinDiscountRangePrice() > $processedProduct->getProduct()->get_sale_price() 
+                $processedProduct instanceof ProcessedProductSimple
+                && $processedProduct->getMinDiscountRangePrice() !== null
+                // && $processedProduct->getMinDiscountRangePrice() > $processedProduct->getProduct()->get_sale_price()
             )
-            || 
+            ||
             (
-                $processedProduct instanceof ProcessedVariableProduct 
+                $processedProduct instanceof ProcessedVariableProduct
                 && $processedProduct->getLowestRangeDiscountPriceProduct() !== null
             )
         );

@@ -380,6 +380,13 @@ class PriceDisplay
         // 	return $cartSubtotalHtml;
         // }
 
+        // Compatible with GP Premium (GeneratePress theme)
+        if ( defined('GP_PREMIUM_VERSION') ) {
+            if (generatepress_wc_get_setting( 'cart_menu_item' )) {
+                return $cartSubtotalHtml;
+            }
+        }
+
         if ($compound || $wcCart->is_empty()) {
             return $cartSubtotalHtml;
         }

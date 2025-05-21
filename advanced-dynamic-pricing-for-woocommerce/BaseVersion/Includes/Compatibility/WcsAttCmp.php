@@ -43,11 +43,17 @@ class WcsAttCmp
     public function loadRequirements()
     {
         if ( ! did_action('plugins_loaded')) {
-            _doing_it_wrong(__FUNCTION__, sprintf(__('%1$s should not be called earlier the %2$s action.',
-                'advanced-dynamic-pricing-for-woocommerce'), 'loadRequirements', 'plugins_loaded'), WC_ADP_VERSION);
+            /* translators: Message about the load order*/
+            _doing_it_wrong(__FUNCTION__, sprintf(esc_html__('%1$s should not be called earlier the %2$s action.',
+                'advanced-dynamic-pricing-for-woocommerce'), 'loadRequirements', 'plugins_loaded'), esc_html(WC_ADP_VERSION));
         }
 
         $this->wcsAtt = class_exists("\WCS_ATT") ? \WCS_ATT::instance() : null;
+
+        if ($this->isActive() && class_exists('\WCS_ATT_Display_Cart')) {
+            remove_filter('woocommerce_cart_item_price', array('\WCS_ATT_Display_Cart', 'show_cart_item_subscription_options'), 1000);
+            add_filter('woocommerce_cart_item_price', array('\WCS_ATT_Display_Cart', 'show_cart_item_subscription_options'), 10001, 3);
+        }
     }
 
     /**

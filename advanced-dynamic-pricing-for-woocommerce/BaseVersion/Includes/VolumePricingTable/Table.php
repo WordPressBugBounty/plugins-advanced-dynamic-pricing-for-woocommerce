@@ -79,6 +79,7 @@ class Table
         );
 
         ob_start();
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo TemplateLoader::wdpGetTemplate("bulk-table.php", $args);
 
         return ob_get_clean();

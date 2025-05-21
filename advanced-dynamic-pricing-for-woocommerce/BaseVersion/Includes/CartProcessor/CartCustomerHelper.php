@@ -277,9 +277,9 @@ class CartCustomerHelper
         } elseif ('this week' == $time) {
             $time = 'last monday';
         } elseif ('this month' == $time) {
-            $time = 'first day of ' . date('F Y', current_time('timestamp'));
+            $time = 'first day of ' . gmdate('F Y', current_time('timestamp'));
         } elseif ('this year' == $time) {
-            $time = 'first day of January ' . date('Y', current_time('timestamp'));
+            $time = 'first day of January ' . gmdate('Y', current_time('timestamp'));
         } elseif ('last week' == $time) {
             $time = ['last week monday 00:00:00', 'last week sunday 23:59:59'];
         } elseif ('last month' == $time) {

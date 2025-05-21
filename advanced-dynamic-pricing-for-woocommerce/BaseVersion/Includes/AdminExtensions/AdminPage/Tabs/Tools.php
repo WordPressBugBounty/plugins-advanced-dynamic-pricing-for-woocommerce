@@ -70,9 +70,10 @@ class Tools implements AdminTabInterface
 
     protected function checkNonceOrDie()
     {
+        //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
         if (wp_verify_nonce($_REQUEST[$this->nonceParam] ?? null, $this->nonceName) === false) {
-            wp_die(__('Invalid nonce specified', 'advanced-dynamic-pricing-for-woocommerce'),
-                __('Error', 'advanced-dynamic-pricing-for-woocommerce'), ['response' => 403]);
+            wp_die(esc_html__('Invalid nonce specified', 'advanced-dynamic-pricing-for-woocommerce'),
+                esc_html__('Error', 'advanced-dynamic-pricing-for-woocommerce'), ['response' => 403]);
         }
     }
 
@@ -88,12 +89,14 @@ class Tools implements AdminTabInterface
         foreach ($els as $el) {
             fputcsv($fp, (array)$el);
         }
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
         fclose($fp);
         die();
     }
 
     public function exportJsonSettings()
     {
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput
         $export = $_REQUEST['export_select'] ?? false;
 
         if($export === false) {
@@ -154,35 +157,43 @@ class Tools implements AdminTabInterface
 
     public function handleSubmitAction()
     {
+        //phpcs:ignore WordPress.Security.ValidatedSanitizedInput, WordPress.Security.NonceVerification.Missing
         if(isset($_POST['wdp-import-data-optimize-import'])) {
             add_filter("adp_import_merge_rules","__return_false");
         }
+        //phpcs:ignore WordPress.Security.ValidatedSanitizedInput, WordPress.Security.NonceVerification.Missing
         if (isset($_POST['wdp-import']) && ! empty($_POST['wdp-import-data']) && ! empty($_POST['wdp-import-type'])) {
             $this->checkNonceOrDie();
 
             $data = json_decode(
                 str_replace('\\', '',
+                    //phpcs:ignore WordPress.Security.ValidatedSanitizedInput, WordPress.Security.NonceVerification.Missing
                     str_replace('\\"', '', wp_unslash($_POST['wdp-import-data']))
                 ),
                 true
             );
+            //phpcs:ignore WordPress.Security.ValidatedSanitizedInput, WordPress.Security.NonceVerification.Missing
             $import_data_type = $_POST['wdp-import-type'];
             set_transient(
                 'import-result',
                 $this->actionGroups($data, $import_data_type) ? 'The operation completed successfully.' : 'The operation is failed.'
             );
+            //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
             wp_redirect($_SERVER['HTTP_REFERER']);
             exit();
+            //phpcs:ignore WordPress.Security.NonceVerification.Missing
         } else if (isset($_POST['wdp-import-bulk-ranges'])) {
             $this->checkNonceOrDie();
-
+            //phpcs:ignore WordPress.Security.ValidatedSanitizedInput, WordPress.Security.NonceVerification.Missing
             $csvFilePath = $_FILES['rules-to-import']['tmp_name'];
             $elements = $this->prepareCSV($csvFilePath);
             $this->actionReimportRulesWithBulkRanges($elements);
+            //phpcs:ignore WordPress.Security.NonceVerification.Missing
         } else if(isset($_POST['wdp-import-csv']) && !empty($_FILES['rules-to-import'])){
             $this->checkNonceOrDie();
-
+            //phpcs:ignore WordPress.Security.ValidatedSanitizedInput, WordPress.Security.NonceVerification.Missing
             $data = ImporterCSV::prepareCSV($_FILES['rules-to-import']['tmp_name']);
+            //phpcs:ignore WordPress.Security.ValidatedSanitizedInput, WordPress.Security.NonceVerification.Missing
             ImporterCSV::importRules($data, $_POST['wdp-import-data-rule-import']);
         }
     }
@@ -301,7 +312,7 @@ class Tools implements AdminTabInterface
         if ($importDataType !== self::IMPORT_TYPE_RULES) {
             return false;
         }
-
+        //phpcs:ignore WordPress.Security.ValidatedSanitizedInput, WordPress.Security.NonceVerification.Missing
         return count(Importer::importRules($data, $_POST['wdp-import-data-reset-rules'])) > 0;
     }
 

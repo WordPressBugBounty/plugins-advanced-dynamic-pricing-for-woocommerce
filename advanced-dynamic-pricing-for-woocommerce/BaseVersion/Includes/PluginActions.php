@@ -94,6 +94,7 @@ class PluginActions
         global $wpdb;
 
         if (is_multisite() && $networkWide) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $blog_ids = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
             foreach ($blog_ids as $blog_id) {
                 switch_to_blog($blog_id);

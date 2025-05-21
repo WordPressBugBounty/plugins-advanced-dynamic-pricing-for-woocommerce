@@ -169,6 +169,7 @@ class SqlGeneratorPersistent
         }
 
         $sql = $this->getSql();
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
         $products = $wpdb->get_results($sql);
 
         if($mode == 'on_sale' || $mode == 'bogo') {
@@ -315,6 +316,7 @@ class SqlGeneratorPersistent
         $lookupTable     = $data_store->get_lookup_table_name();
 
         $where = $this->compareToSql("term_id", ComparisonMethods::IN_LIST, $termIds);
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
         $taxanomies = $wpdb->get_results("SELECT DISTINCT term_id, taxonomy FROM {$lookupTable} WHERE {$where} ");
 
         $termIdsByTaxanomy = [];
@@ -329,6 +331,7 @@ class SqlGeneratorPersistent
         $productIds = [];
         foreach ($termIdsByTaxanomy as $taxanomy => $termIds) {
             $where = $this->compareToSql("term_id", ComparisonMethods::IN_LIST, $termIds);
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
             $products = $wpdb->get_results("SELECT product_id, product_or_parent_id FROM {$lookupTable} WHERE {$where} ");
 
             $productIds[] = wp_parse_id_list(array_merge(

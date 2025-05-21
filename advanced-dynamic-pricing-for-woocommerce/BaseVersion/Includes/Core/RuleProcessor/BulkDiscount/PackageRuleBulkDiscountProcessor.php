@@ -63,6 +63,7 @@ class PackageRuleBulkDiscountProcessor
                 } else {
                     $calculationCallback = function ($item) {return 0.0;};
                     $this->context->handleError(
+                        // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
                         new \Exception("Unknown measurement value: " . var_export($measurement, true))
                     );
                 }

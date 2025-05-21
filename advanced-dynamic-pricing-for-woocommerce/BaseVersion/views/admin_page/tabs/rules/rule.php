@@ -52,64 +52,64 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
         </h2>
 
         <div class="rule-date-from-to">
-            <span><?php _e('From', 'advanced-dynamic-pricing-for-woocommerce') ?></span>
+            <span><?php esc_html_e('From', 'advanced-dynamic-pricing-for-woocommerce') ?></span>
             <input style="max-width: 100px;" class="datepicker" name="rule[additional][date_from]" type="text">
-            <span><?php _e('To', 'advanced-dynamic-pricing-for-woocommerce') ?></span>
-            <input style="max-width: 100px;" class="datepicker" name="rule[additional][date_to]" type="text" placeholder="<?php _e('include', 'advanced-dynamic-pricing-for-woocommerce') ?>">
+            <span><?php esc_html_e('To', 'advanced-dynamic-pricing-for-woocommerce') ?></span>
+            <input style="max-width: 100px;" class="datepicker" name="rule[additional][date_to]" type="text" placeholder="<?php esc_attr_e('include', 'advanced-dynamic-pricing-for-woocommerce') ?>">
         </div>
 
         <div class="rule-type">
-            <span><?php _e('Rule type', 'advanced-dynamic-pricing-for-woocommerce') ?></span>
+            <span><?php esc_html_e('Rule type', 'advanced-dynamic-pricing-for-woocommerce') ?></span>
             <select name="rule[rule_type]">
                 <?php if ( $options->getOption("support_persistence_rules") ):?>
-                    <option style="background-color: #c8f7d5a6;" value="<?php echo RuleTypeEnum::PERSISTENT()->getValue() ?>">
-                        <?php _e('Product only', 'advanced-dynamic-pricing-for-woocommerce') ?>
+                    <option style="background-color: #c8f7d5a6;" value="<?php echo esc_attr(RuleTypeEnum::PERSISTENT()->getValue()) ?>">
+                        <?php esc_html_e('Product only', 'advanced-dynamic-pricing-for-woocommerce') ?>
                     </option>
                 <?php endif;?>
-                <option style="background-color: #f3f33f33;" value="<?php echo RuleTypeEnum::COMMON()->getValue() ?>">
-                    <?php _e('Common', 'advanced-dynamic-pricing-for-woocommerce') ?>
+                <option style="background-color: #f3f33f33;" value="<?php echo esc_attr(RuleTypeEnum::COMMON()->getValue()) ?>">
+                    <?php esc_html_e('Common', 'advanced-dynamic-pricing-for-woocommerce') ?>
                 </option>
             </select>
         </div>
 
         <div class="rule-id-badge wdp-list-item-id-badge">
-            <label><?php _e('#', 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
+            <label><?php esc_html_e('#', 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
             <label class="rule-id"></label>
         </div>
 
         <button type="button" class="button-link wdp_remove_rule">
-            <span class="screen-reader-text"><?php _e('Delete', 'advanced-dynamic-pricing-for-woocommerce') ?>
+            <span class="screen-reader-text"><?php esc_html_e('Delete', 'advanced-dynamic-pricing-for-woocommerce') ?>
                 </span>
             <span class="dashicons dashicons-no-alt"
-                  title="<?php _e('Delete', 'advanced-dynamic-pricing-for-woocommerce') ?>"></span>
+                  title="<?php esc_attr_e('Delete', 'advanced-dynamic-pricing-for-woocommerce') ?>"></span>
         </button>
 
         <button type="button" class="button-link wdp_copy_rule">
-            <span class="screen-reader-text"><?php _e('Clone', 'advanced-dynamic-pricing-for-woocommerce') ?>
+            <span class="screen-reader-text"><?php esc_html_e('Clone', 'advanced-dynamic-pricing-for-woocommerce') ?>
                 </span>
             <span class="dashicons dashicons-admin-page"
-                  title="<?php _e('Clone', 'advanced-dynamic-pricing-for-woocommerce') ?>"></span>
+                  title="<?php esc_attr_e('Clone', 'advanced-dynamic-pricing-for-woocommerce') ?>"></span>
         </button>
 
         <button type="button" class="handlediv" aria-expanded="false">
-            <span class="screen-reader-text"><?php _e('Expand', 'advanced-dynamic-pricing-for-woocommerce') ?></span>
+            <span class="screen-reader-text"><?php esc_html_e('Expand', 'advanced-dynamic-pricing-for-woocommerce') ?></span>
             <span class="toggle-indicator" aria-hidden="true"
-                title="<?php _e('Expand', 'advanced-dynamic-pricing-for-woocommerce') ?>"></span>
+                title="<?php esc_attr_e('Expand', 'advanced-dynamic-pricing-for-woocommerce') ?>"></span>
         </button>
     </div>
     <!-- <div style="clear: both;"></div> -->
     <div class="inside">
         <div class="wdp-row wdp-options">
             <div class="wdp-row wdp-column wdp-field-title">
-                <label><?php _e('Title', 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
+                <label><?php esc_html_e('Title', 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
                 <input class="wdp-column wdp-title" type="text" name="rule[title]">
             </div>
 
             <div class="wdp-row wdp-column wdp-repeat">
-                <label><?php _e('Can be applied', 'advanced-dynamic-pricing-for-woocommerce') ?>
+                <label><?php esc_html_e('Can be applied', 'advanced-dynamic-pricing-for-woocommerce') ?>
                     <select name="rule[options][repeat]">
-                        <option value="-1"><?php _e('Unlimited', 'advanced-dynamic-pricing-for-woocommerce') ?></option>
-                        <option value="1"><?php _e('Once', 'advanced-dynamic-pricing-for-woocommerce') ?></option>
+                        <option value="-1"><?php esc_html_e('Unlimited', 'advanced-dynamic-pricing-for-woocommerce') ?></option>
+                        <option value="1"><?php esc_html_e('Once', 'advanced-dynamic-pricing-for-woocommerce') ?></option>
                         <option value="2">2</option>
                         <option value="3">3</option>
                         <option value="4">4</option>
@@ -124,13 +124,13 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
             </div>
 
             <div class="wdp-row wdp-column wdp-apply-to">
-                <label><?php _e('Apply at first to:', 'advanced-dynamic-pricing-for-woocommerce') ?>
+                <label><?php esc_html_e('Apply at first to:', 'advanced-dynamic-pricing-for-woocommerce') ?>
                     <select name="rule[options][apply_to]">
-                        <option value="expensive"><?php _e('Expensive products',
+                        <option value="expensive"><?php esc_html_e('Expensive products',
                                 'advanced-dynamic-pricing-for-woocommerce') ?></option>
-                        <option value="cheap"><?php _e('Cheap products',
+                        <option value="cheap"><?php esc_html_e('Cheap products',
                                 'advanced-dynamic-pricing-for-woocommerce') ?></option>
-                        <option value="appeared"><?php _e('As appears in the cart',
+                        <option value="appeared"><?php esc_html_e('As appears in the cart',
                                 'advanced-dynamic-pricing-for-woocommerce') ?></option>
                     </select>
                 </label>
@@ -140,15 +140,17 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
         <div class="wdp-row wdp-options">
             <div class="buffer"></div>
             <div class="replace-adjustments">
-                <div style="float: right" <?php echo $isCouponEnabled ? "" : "title='{$pleaseEnableText}'"; ?>>
+                <div style="float: right" <?php
+                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                    echo $isCouponEnabled ? "" : "title='{$pleaseEnableText}'"; ?>>
                     <label>
                         <input type="checkbox"
                                name="rule[additional][is_replace]">
-                        <?php _e("Don't change product price and show discount as coupon",
+                        <?php esc_html_e("Don't change product price and show discount as coupon",
                             'advanced-dynamic-pricing-for-woocommerce') ?>
                     </label>
                     <input type="text" name="rule[additional][replace_name]" style="width: 110px"
-                           placeholder="<?php _e("coupon_name", 'advanced-dynamic-pricing-for-woocommerce') ?>"
+                           placeholder="<?php esc_attr_e("coupon_name", 'advanced-dynamic-pricing-for-woocommerce') ?>"
                     >
 
                 </div>
@@ -196,17 +198,17 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
         <?php if(!$options->getOption("create_blank_rule")) { ?>
             <div class="wdp-row wdp-options wdp-discount-type"  style="display: none;">
                 <div class="wdp-discount-type-title">
-                    <h3><?php _e('Select discount type', 'advanced-dynamic-pricing-for-woocommerce'); ?></h3>
+                    <h3><?php esc_html_e('Select discount type', 'advanced-dynamic-pricing-for-woocommerce'); ?></h3>
                 </div>
                 <div class="wdp-discount-type-list">
                     <?php foreach($discount_types as $type => $item) { ?>
-                        <div class="wdp-discount-type-item" data-discount-type="<?php echo $type ?>">
+                        <div class="wdp-discount-type-item" data-discount-type="<?php echo esc_attr($type) ?>">
                             <div class="wdp-discount-type-item_title" >
                                 <?php include(WC_ADP_PLUGIN_PATH."/BaseVersion/assets/images/discount_types/".$type.".svg") ?>
-                                <h4><?php echo $item['title'] ?></h4>
+                                <h4><?php echo esc_html($item['title']) ?></h4>
                             </div>
                             <div class="wdp-discount-type-item_description">
-                                <?php echo $item['description'] ?>
+                                <?php echo esc_html($item['description']) ?>
                             </div>
                         </div>
                     <?php } ?>
@@ -215,9 +217,9 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                 <div class="wdp-discount-type-skip">
                     <label>
                         <input type="checkbox" name="discount_type_skip" value="1">
-                        <?php _e('Skip and create a blank rule next time', 'advanced-dynamic-pricing-for-woocommerce');?>
+                        <?php esc_html_e('Skip and create a blank rule next time', 'advanced-dynamic-pricing-for-woocommerce');?>
                     </label>
-                    <button type="submit" class="button button-primary" data-discount-type=""><?php _e('Create rule', 'advanced-dynamic-pricing-for-woocommerce');?></button>
+                    <button type="submit" class="button button-primary" data-discount-type=""><?php esc_html_e('Create rule', 'advanced-dynamic-pricing-for-woocommerce');?></button>
                 </div>
             </div>
         <?php } ?>
@@ -225,7 +227,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
         <div class="wdp-block wdp-filter-block wdp-row" style="display: none;">
             <div class="wdp-column wdp-column-help">
                 <label><?php Helpers::ruleFilterLabel('Filter by products', 'advanced-dynamic-pricing-for-woocommerce'); ?></label><br>
-                <label class="wdp-filter-warning" style="color:red"><?php _e('If you add many lines to this section – you will create product bundle',
+                <label class="wdp-filter-warning" style="color:red"><?php esc_html_e('If you add many lines to this section – you will create product bundle',
                 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
                 <p class="wdp-rule-help">
                 <?php
@@ -244,7 +246,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
             <div class="wdp-wrapper wdp_product_filter wdp-column">
                 <div class="wdp-product-filter-container"></div>
                 <div class="wdp-add-condition">
-                    <button type="button" class="button add-product-filter"><?php _e('Add product filter',
+                    <button type="button" class="button add-product-filter"><?php esc_html_e('Add product filter',
                             'advanced-dynamic-pricing-for-woocommerce'); ?></button>
                 </div>
             </div>
@@ -273,7 +275,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                             <input type="radio" name="rule[product_adjustments][type]"
                                 class="adjustment-mode adjustment-mode-total"
                                 data-readonly="1"
-                                value="total"/><?php _e('Total', 'advanced-dynamic-pricing-for-woocommerce') ?>
+                                value="total"/><?php esc_html_e('Total', 'advanced-dynamic-pricing-for-woocommerce') ?>
                         </label>
                         <label>
                             <input type="radio" name="rule[product_adjustments][type]"
@@ -281,7 +283,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                                 data-readonly="1"
                                 value="split"
                                 disabled
-                            /><?php _e('Split', 'advanced-dynamic-pricing-for-woocommerce') ?>
+                            /><?php esc_html_e('Split', 'advanced-dynamic-pricing-for-woocommerce') ?>
                         </label>
                     </div>
 
@@ -295,11 +297,11 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                 <div class="wdp-row" data-show-if="total">
                     <div class="wdp-column">
                         <select name="rule[product_adjustments][total][type]" class="adjustment-total-type">
-                            <option value="discount__amount"><?php _e('Fixed discount',
+                            <option value="discount__amount"><?php esc_html_e('Fixed discount',
                                     'advanced-dynamic-pricing-for-woocommerce') ?></option>
-                            <option value="discount__percentage"><?php _e('Percentage discount',
+                            <option value="discount__percentage"><?php esc_html_e('Percentage discount',
                                     'advanced-dynamic-pricing-for-woocommerce') ?></option>
-                            <option value="price__fixed"><?php _e('Fixed price',
+                            <option value="price__fixed"><?php esc_html_e('Fixed price',
                                     'advanced-dynamic-pricing-for-woocommerce') ?></option>
                         </select>
                     </div>
@@ -308,7 +310,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                         <input name="rule[product_adjustments][total][value]" class="adjustment-total-value"
                             type="number" placeholder="0.00" min="0" step="any">
                         <span class="wdp-product-adjustments-total-value-note">
-                            <?php _e('To increase the price, make a negative discount', 'advanced-dynamic-pricing-for-woocommerce') ?>
+                            <?php esc_html_e('To increase the price, make a negative discount', 'advanced-dynamic-pricing-for-woocommerce') ?>
                         </span>
                     </div>
                 </div>
@@ -319,7 +321,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                     <div>
                         <div style="display: inline-block;margin: 0 10px 0 0;">
                             <label>
-                                <?php _e('Limit discount to amount:', 'advanced-dynamic-pricing-for-woocommerce') ?>
+                                <?php esc_html_e('Limit discount to amount:', 'advanced-dynamic-pricing-for-woocommerce') ?>
                                 <input style="display: inline-block; width: 200px;" name="rule[product_adjustments][max_discount_sum]" type="number" class="product-adjustments-max-discount" placeholder="0.00" min="0" step="any"/>
                             </label>
                         </div>
@@ -327,9 +329,9 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                         <div style="display: none;margin: 0 10px;width: 20rem;">
                             <div class="split-discount-controls">
                                 <label>
-                                    <?php _e('Split discount by:', 'advanced-dynamic-pricing-for-woocommerce') ?>
+                                    <?php esc_html_e('Split discount by:', 'advanced-dynamic-pricing-for-woocommerce') ?>
                                     <select name="rule[product_adjustments][split_discount_by]" style="display: inline-block; width: 200px;" class="adjustment-split-discount-type">
-                                        <option class="split-discount-by-cost" value="cost"><?php _e('Item price', 'advanced-dynamic-pricing-for-woocommerce'); ?></option>
+                                        <option class="split-discount-by-cost" value="cost"><?php esc_html_e('Item price', 'advanced-dynamic-pricing-for-woocommerce'); ?></option>
                                     </select>
                                 </label>
                             </div>
@@ -346,15 +348,15 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                 <div class="wdp-column" style="flex:20">
                     <div style="width:400px">
                         <label>
-                            <?php _e('Role discounts and bulk discounts applied',
+                            <?php esc_html_e('Role discounts and bulk discounts applied',
                                 'advanced-dynamic-pricing-for-woocommerce'); ?>
                             <select class="sortable-apply-mode" name="rule[additional][sortable_apply_mode]"
                                     style="width:150px; display: inline-block">
-                                <option value="consistently"><?php _e('Sequentially',
+                                <option value="consistently"><?php esc_html_e('Sequentially',
                                         'advanced-dynamic-pricing-for-woocommerce'); ?></option>
-                                <option value="min_price_between"><?php _e('Use min price',
+                                <option value="min_price_between"><?php esc_html_e('Use min price',
                                         'advanced-dynamic-pricing-for-woocommerce'); ?></option>
-                                <option value="max_price_between"><?php _e('Use max price',
+                                <option value="max_price_between"><?php esc_html_e('Use max price',
                                         'advanced-dynamic-pricing-for-woocommerce'); ?></option>
                             </select>
                         </label>
@@ -387,13 +389,13 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                     <div class="wdp-wrapper wdp-column">
                         <div class="wdp-role-discounts-container"></div>
                         <div class="wdp-add-condition">
-                            <button type="button" class="button add-role-discount"><?php _e('Add role discount',
+                            <button type="button" class="button add-role-discount"><?php esc_html_e('Add role discount',
                                     'advanced-dynamic-pricing-for-woocommerce'); ?></button>
                             <div>
                                 <label class="dont-apply-bulk-if-roles-matched-check">
                                     <input type="checkbox" name="rule[role_discounts][dont_apply_bulk_if_roles_matched]"
                                         value="1">
-                                    <?php _e('Skip bulk rules if role rule was applied',
+                                    <?php esc_html_e('Skip bulk rules if role rule was applied',
                                         'advanced-dynamic-pricing-for-woocommerce'); ?>
                                 </label>
                             </div>
@@ -443,9 +445,9 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                             <div class="smaller-width">
                                 <div class="wdp-column">
                                     <select name="rule[bulk_adjustments][type]" class="bulk-adjustment-type">
-                                        <option value="bulk"><?php _e('Bulk',
+                                        <option value="bulk"><?php esc_html_e('Bulk',
                                                 'advanced-dynamic-pricing-for-woocommerce') ?></option>
-                                        <option value="tier"><?php _e('Tier',
+                                        <option value="tier"><?php esc_html_e('Tier',
                                                 'advanced-dynamic-pricing-for-woocommerce') ?></option>
                                     </select>
                                 </div>
@@ -465,7 +467,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                                 <select multiple
                                         data-list="product_categories"
                                         data-field="autocomplete"
-                                        data-placeholder="<?php _e("Select values",
+                                        data-placeholder="<?php esc_attr_e("Select values",
                                             "advanced-dynamic-pricing-for-woocommerce") ?>"
                                         name="rule[bulk_adjustments][selected_categories][]">
                                 </select>
@@ -475,7 +477,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                                 <select multiple
                                         data-list="products"
                                         data-field="autocomplete"
-                                        data-placeholder="<?php _e("Select values",
+                                        data-placeholder="<?php esc_attr_e("Select values",
                                             "advanced-dynamic-pricing-for-woocommerce") ?>"
                                         name="rule[bulk_adjustments][selected_products][]">
                                 </select>
@@ -495,12 +497,12 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
 
                         <div class="wdp-adjustment-ranges">
                             <div class="wdp-ranges wdp-sortable">
-                                <div class="wdp-ranges-empty"><?php _e('No ranges',
+                                <div class="wdp-ranges-empty"><?php esc_html_e('No ranges',
                                         'advanced-dynamic-pricing-for-woocommerce') ?></div>
                             </div>
 
                             <div class="wdp-add-condition">
-                                <button type="button" class="button add-range"><?php _e('Add range',
+                                <button type="button" class="button add-range"><?php esc_html_e('Add range',
                                         'advanced-dynamic-pricing-for-woocommerce'); ?></button>
                             </div>
                         </div>
@@ -508,10 +510,10 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                         <div class="wdp-bulk-adjustment-options">
                             <div class="wdp-column">
                                 <label>
-                                    <?php _e('Bulk table message', 'advanced-dynamic-pricing-for-woocommerce') ?>
+                                    <?php esc_html_e('Bulk table message', 'advanced-dynamic-pricing-for-woocommerce') ?>
                                     <input type="text" name="rule[bulk_adjustments][table_message]"
                                             class="bulk-table-message"
-                                            placeholder="<?php _e('If you leave this field empty, we will show default bulk description',
+                                            placeholder="<?php esc_attr_e('If you leave this field empty, we will show default bulk description',
                                                 'advanced-dynamic-pricing-for-woocommerce') ?>"/>
                                 </label>
                             </div>
@@ -541,12 +543,12 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
             <div class="wdp-wrapper wdp-column">
                 <div class="wdp-row wdp-get-products-repeat">
                     <div>
-                        <label><?php _e('Can be applied', 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
+                        <label><?php esc_html_e('Can be applied', 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
                         <select name="rule[get_products][repeat]">
-                            <optgroup label="<?php _e('Can be applied', 'advanced-dynamic-pricing-for-woocommerce') ?>">
-                                <option value="-1"><?php _e('Unlimited',
+                            <optgroup label="<?php esc_attr_e('Can be applied', 'advanced-dynamic-pricing-for-woocommerce') ?>">
+                                <option value="-1"><?php esc_html_e('Unlimited',
                                         'advanced-dynamic-pricing-for-woocommerce') ?></option>
-                                <option value="1"><?php _e('Once', 'advanced-dynamic-pricing-for-woocommerce') ?></option>
+                                <option value="1"><?php esc_html_e('Once', 'advanced-dynamic-pricing-for-woocommerce') ?></option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
                                 <option value="4">4</option>
@@ -557,19 +559,19 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                                 <option value="9">9</option>
                                 <option value="10">10</option>
                             </optgroup>
-                            <optgroup label="<?php _e('Based on', 'advanced-dynamic-pricing-for-woocommerce') ?>">
-                                <option value="based_on_subtotal"><?php _e('Subtotal (exc. VAT)',
+                            <optgroup label="<?php esc_attr_e('Based on', 'advanced-dynamic-pricing-for-woocommerce') ?>">
+                                <option value="based_on_subtotal"><?php esc_html_e('Subtotal (exc. VAT)',
                                         'advanced-dynamic-pricing-for-woocommerce') ?></option>
-                                <option value="based_on_subtotal_inc"><?php _e('Subtotal (inc. VAT)',
+                                <option value="based_on_subtotal_inc"><?php esc_html_e('Subtotal (inc. VAT)',
                                         'advanced-dynamic-pricing-for-woocommerce') ?></option>
                             </optgroup>
                         </select>
 
                         <div class="repeat-subtotal" style="display: none">
-                            <label><?php _e('Repeat counter = subtotal amount divided by',
+                            <label><?php esc_html_e('Repeat counter = subtotal amount divided by',
                                     'advanced-dynamic-pricing-for-woocommerce'); ?>
                                 <input class="repeat-subtotal-value" name="rule[get_products][repeat_subtotal]"
-                                    placeholder="<?php _e("amount", 'advanced-dynamic-pricing-for-woocommerce') ?>">
+                                    placeholder="<?php esc_attr_e("amount", 'advanced-dynamic-pricing-for-woocommerce') ?>">
                             </label>
                         </div>
                     </div>
@@ -579,13 +581,13 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                             <label>
                                 <input <?php echo $isCouponEnabled ? "" : "disabled"; ?> type="checkbox"
                                                                                         name="rule[additional][is_replace_free_products_with_discount]">
-                                <?php _e("Add free items at regular price and show discount as coupon",
+                                <?php esc_html_e("Add free items at regular price and show discount as coupon",
                                     'advanced-dynamic-pricing-for-woocommerce') ?>
                             </label>
                             <input <?php echo $isCouponEnabled ? "" : "disabled"; ?> type="text"
                                                                                     name="rule[additional][free_products_replace_name]"
                                                                                     style="width: 110px; display: inline-block;"
-                                                                                    placeholder="<?php _e("coupon_name",
+                                                                                    placeholder="<?php esc_attr_e("coupon_name",
                                                                                         'advanced-dynamic-pricing-for-woocommerce') ?>"
                             >
                         </div>
@@ -595,7 +597,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                 <div class="wdp-get-products"></div>
 
                 <div class="wdp-add-condition">
-                    <button type="button" class="button add-filter-get-product"><?php _e('Add product',
+                    <button type="button" class="button add-filter-get-product"><?php esc_html_e('Add product',
                             'advanced-dynamic-pricing-for-woocommerce'); ?></button>
                 </div>
             </div>
@@ -620,7 +622,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
             <div class="wdp-wrapper wdp-column">
                 <div class="wdp-cart-adjustments-container"></div>
                 <div class="add-cart-adjustment">
-                    <button type="button" class="button"><?php _e('Add cart adjustment',
+                    <button type="button" class="button"><?php esc_html_e('Add cart adjustment',
                             'advanced-dynamic-pricing-for-woocommerce'); ?></button>
                 </div>
             </div>
@@ -640,7 +642,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                         esc_url('https://docs.algolplus.com/algol_pricing/rules/rules-sections/cart-conditions/')
                     );
                 ?>
-                <h4 style="margin-bottom: 0px;"><?php _e('Popular conditions:',
+                <h4 style="margin-bottom: 0px;"><?php esc_html_e('Popular conditions:',
                             'advanced-dynamic-pricing-for-woocommerce'); ?></h4>
                 <div class="wdp-description ">
                     <div class="wdp-description-content">
@@ -670,20 +672,20 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                             foreach($mostPopularConditions as $impl => $name) {?>
                                 <li>
                                     <span class="wdp-add-popular-condition wdp-link"
-                                        data-condition-type="<?php echo $impl::getType() ?>"
+                                        data-condition-type="<?php echo esc_attr($impl::getType()) ?>"
                                         <?php if($impl === \ADP\BaseVersion\Includes\Core\Rule\CartCondition\Impl\CustomerOrderCount::class) {?>
                                             data-condition-value="1"
                                         <?php } ?>
                                     >
-                                        <?php echo $name ?>
+                                        <?php echo esc_html($name) ?>
                                 </span>
                                 </li>
                             <?php } ?>
                         </ul>
                     </div>
                     <div class="wdp-description-cut">
-                        <span class="wdp-description-cut-more wdp-link"><?php _e('More', 'advanced-dynamic-pricing-for-woocommerce')?></span>
-                        <span class="wdp-description-cut-less wdp-link"><?php _e('Less', 'advanced-dynamic-pricing-for-woocommerce')?></span>
+                        <span class="wdp-description-cut-more wdp-link"><?php esc_html_e('More', 'advanced-dynamic-pricing-for-woocommerce')?></span>
+                        <span class="wdp-description-cut-less wdp-link"><?php esc_html_e('Less', 'advanced-dynamic-pricing-for-woocommerce')?></span>
                     </div>
                 </div>
                 <p class="wdp-rule-help">
@@ -700,19 +702,19 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                 </p>
 
                 <a href="https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/?currency=USD"
-                   target=_blank><?php _e('Need more conditions?', 'advanced-dynamic-pricing-for-woocommerce') ?></a>
+                   target=_blank><?php esc_html_e('Need more conditions?', 'advanced-dynamic-pricing-for-woocommerce') ?></a>
             </div>
             <div class="wdp-wrapper wdp-column">
                 <div class="wdp-conditions-relationship">
-                    <label><?php _e('Conditions relationship', 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
+                    <label><?php esc_html_e('Conditions relationship', 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
                     <label><input type="radio" name="rule[additional][conditions_relationship]" value="and"
-                                    checked><?php _e('Match All', 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
+                                    checked><?php esc_html_e('Match All', 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
                     <label><input type="radio" name="rule[additional][conditions_relationship]"
-                                    value="or"><?php _e('Match Any', 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
+                                    value="or"><?php esc_html_e('Match Any', 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
                 </div>
                 <div class="wdp-conditions-container"></div>
                 <div class="add-condition">
-                    <button type="button" class="button"><?php _e('Add condition',
+                    <button type="button" class="button"><?php esc_html_e('Add condition',
                             'advanced-dynamic-pricing-for-woocommerce'); ?></button>
                 </div>
             </div>
@@ -737,30 +739,30 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
             <div class="wdp-wrapper wdp-column">
                 <div class="wdp-limits-container"></div>
                 <div class="add-limit">
-                    <button type="button" class="button"><?php _e('Add limit',
+                    <button type="button" class="button"><?php esc_html_e('Add limit',
                             'advanced-dynamic-pricing-for-woocommerce'); ?></button>
                 </div>
             </div>
         </div>
 
         <div class="wdp-add-condition">
-            <button type="button" class="button wdp-btn-add-product-filter"><?php _e('Product filters',
+            <button type="button" class="button wdp-btn-add-product-filter"><?php esc_html_e('Product filters',
                     'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="button" class="button wdp-btn-add-product-adjustment"><?php _e('Product discounts',
+            <button type="button" class="button wdp-btn-add-product-adjustment"><?php esc_html_e('Product discounts',
                     'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="button" class="button wdp-btn-add-role-discount"><?php _e('Role discounts',
+            <button type="button" class="button wdp-btn-add-role-discount"><?php esc_html_e('Role discounts',
                     'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="button" class="button wdp-btn-add-bulk"><?php _e('Bulk rules',
+            <button type="button" class="button wdp-btn-add-bulk"><?php esc_html_e('Bulk rules',
                     'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="button" class="button wdp-btn-add-getproduct"><?php _e('Free products',
+            <button type="button" class="button wdp-btn-add-getproduct"><?php esc_html_e('Free products',
                     'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="button" class="button wdp-btn-add-cart-adjustment"><?php _e('Cart adjustments',
+            <button type="button" class="button wdp-btn-add-cart-adjustment"><?php esc_html_e('Cart adjustments',
                     'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="button" class="button wdp-btn-add-condition"><?php _e('Cart conditions',
+            <button type="button" class="button wdp-btn-add-condition"><?php esc_html_e('Cart conditions',
                     'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="button" class="button wdp-btn-add-limit"><?php _e('Limits',
+            <button type="button" class="button wdp-btn-add-limit"><?php esc_html_e('Limits',
                     'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="submit" class="button button-primary save-rule"><?php _e('Save changes',
+            <button type="submit" class="button button-primary save-rule"><?php esc_html_e('Save changes',
                     'advanced-dynamic-pricing-for-woocommerce') ?></button>
         </div>
     </div>

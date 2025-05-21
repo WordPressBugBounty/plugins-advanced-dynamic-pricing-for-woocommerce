@@ -66,7 +66,7 @@ class ImporterCSV {
             }
 
             if ($rulesCol->getRules()) {
-                $ruleObjects[] = $rulesCol->getRules()[0];
+                $ruleObjects[] = $rulesCol->getFirst();
             }
         }
 
@@ -74,6 +74,7 @@ class ImporterCSV {
             return;
         }
         self::$warnings[] = sprintf(
+            /* translators: Message about the imported rule*/
             _n(
                 '%s rule were imported',
                 '%s  rules were imported',
@@ -123,6 +124,7 @@ class ImporterCSV {
 
     public static function prepareCSV($file){
         $separator = apply_filters("adp_import_rules_separator",",");
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
         if (($handle = fopen($file, "r")) !== false) {
             $filterType = '';
             if (($data = fgetcsv($handle, null, $separator)) !== false && is_array($data)) {
@@ -191,6 +193,7 @@ class ImporterCSV {
                 }
             }
             $rules[] = $newRule;
+            // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
             fclose($handle);
 
             return $rules;

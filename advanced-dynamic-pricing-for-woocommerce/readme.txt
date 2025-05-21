@@ -5,9 +5,9 @@ Tags: woocommerce, dynamic pricing, discount, pricing rule, bulk discount
 Requires PHP: 7.1
 Requires at least: 4.8
 Tested up to: 6.8
-Stable tag: 4.9.5
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Stable tag: 4.9.6
+License: GNU General Public License v3.0
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 All discount types - flexible and feature rich plugin.
 
@@ -105,6 +105,20 @@ You should be PHP programmer to do it. [Please, review sample addon and adapt it
 
 
 == Changelog ==
+
+= 4.9.6 - 2025-05-21 =
+* Fixed bugs detected by [PCP plugin](https://wordpress.org/plugins/plugin-check/)
+* Fixed bug - some cached values never expired
+* Fixed bug - bulk table displayed "-" prices when attributes passed via url
+* Fixed bug - mode "After matching condition" didn't work for variable products
+* Fixed bug - negative or zero "Amount saved" in invoices/emails
+* Fixed bug - cart condition "Percentage discount" displayed zero discount
+* Fixed bug - wrong calculations for REST api requests
+* Added compatibility with "WooCommerce All Products for Subscriptions", by WooCommerce
+* Added compatibility with "Payment Plan Suite", by Flintop
+* Updated compatibility with "TM Extra product options"
+* Updated compatibility with "Woocommerce Product Bundles"
+* Updated compatibility with "WooCommerce Multilingual & Multicurrency"
 
 = 4.9.5 - 2025-04-09 =
 * Fixed critical bug - caching plugins were throwing fatal error when running on PHP 8.1+

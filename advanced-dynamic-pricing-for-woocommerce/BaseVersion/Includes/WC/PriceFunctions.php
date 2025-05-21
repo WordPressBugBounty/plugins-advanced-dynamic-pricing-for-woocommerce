@@ -295,7 +295,7 @@ class PriceFunctions
         }
 
         /* translators: 1: price from 2: price to */
-
+        //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch, WordPress.WP.I18n.MissingTranslatorsComment
         return sprintf(_x('%1$s &ndash; %2$s', 'Price range: from-to', 'woocommerce'),
             is_numeric($from) ? wc_price($from) : $from, is_numeric($to) ? wc_price($to) : $to);
     }

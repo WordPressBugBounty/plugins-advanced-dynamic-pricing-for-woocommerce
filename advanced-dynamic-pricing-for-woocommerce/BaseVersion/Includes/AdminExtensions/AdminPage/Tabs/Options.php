@@ -51,10 +51,11 @@ class Options implements AdminTabInterface
 	public function handleSubmitAction()
 	{
 		if (isset($_POST['save-options'])) {
+            //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
             if (wp_verify_nonce($_POST[$this->nonceParam] ?? null, $this->nonceName) === false) {
                 wp_die(
-                    __('Invalid nonce specified', 'advanced-dynamic-pricing-for-woocommerce'),
-                    __('Error', 'advanced-dynamic-pricing-for-woocommerce'),
+                    esc_html__('Invalid nonce specified', 'advanced-dynamic-pricing-for-woocommerce'),
+                    esc_html__('Error', 'advanced-dynamic-pricing-for-woocommerce'),
                     array('response' => 403,)
                 );
             }
@@ -87,13 +88,14 @@ class Options implements AdminTabInterface
 			}
 
 			$settings->save();
-
+            //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
 			wp_redirect($_SERVER['HTTP_REFERER']);
 		} else if(isset($_POST['reset-options'])) {
+            //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
             if (wp_verify_nonce($_POST[$this->nonceParam] ?? null, $this->nonceName) === false) {
                 wp_die(
-                    __('Invalid nonce specified', 'advanced-dynamic-pricing-for-woocommerce'),
-                    __('Error', 'advanced-dynamic-pricing-for-woocommerce'),
+                    esc_html__('Invalid nonce specified', 'advanced-dynamic-pricing-for-woocommerce'),
+                    esc_html__('Error', 'advanced-dynamic-pricing-for-woocommerce'),
                     array('response' => 403,)
                 );
             }
@@ -101,7 +103,7 @@ class Options implements AdminTabInterface
 			$settings = $this->context->getSettings();
 
 			$settings->drop();
-
+            //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
 			wp_redirect($_SERVER['HTTP_REFERER']);
 		}
 	}
@@ -115,6 +117,7 @@ class Options implements AdminTabInterface
 		list($product, $category) = $this->calculateCustomizerUrls();
 		$data['product_bulk_table_customizer_url']  = $product;
 		$data['category_bulk_table_customizer_url'] = $category;
+		$data['highlight_bulk_table_customizer_url'] = $this->makeCustomerUrl('product', 'table_columns');
 		$data['amount_saved_customer_url']          = $this->makeCustomerUrl('discount_message');
 
 		$data['sections'] = $this->getSections();
@@ -161,7 +164,7 @@ class Options implements AdminTabInterface
 	{
 		$baseVersionUrl = WC_ADP_PLUGIN_URL . "/BaseVersion/";
 		wp_enqueue_script('wdp_options-scripts', $baseVersionUrl . 'assets/js/options.js', array('jquery'),
-			WC_ADP_VERSION);
+			WC_ADP_VERSION, true);
 
 		$defaultOptions = $this->context->getSettings()->getOptions(true);
 		wp_add_inline_script('wdp_options-scripts', 'var wdp_default_options = '. wp_json_encode($defaultOptions) .';', 'before');
@@ -412,7 +415,14 @@ class Options implements AdminTabInterface
         }
 
         if(!empty($section)) {
-            $query_args['autofocus[section]'] = "{$panel}-{$section}";
+            if($panel === 'wdp_product_bulk_table') {
+                $query_args = array(
+                    'return'           => admin_url('themes.php'),
+                    'autofocus[section]' => "{$panel}-{$section}",
+                );
+            } else {
+                $query_args['autofocus[section]'] = "{$panel}-{$section}";
+            }
         }
 
 		return add_query_arg($query_args, admin_url('customize.php'));

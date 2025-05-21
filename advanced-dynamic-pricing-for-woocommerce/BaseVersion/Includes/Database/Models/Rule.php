@@ -328,7 +328,7 @@ class Rule
             return "";
         }
 
-        $rule = $rulesCol->getRules()[0];
+        $rule = $rulesCol->getFirst();
 
         $pieces = [];
         if ($rule->getTitle()) {
@@ -482,6 +482,7 @@ class Rule
         global $wpdb;
 
         $tableName = $wpdb->prefix . self::TABLE_NAME;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
         $wpdb->query("DROP TABLE IF EXISTS $tableName");
     }
 

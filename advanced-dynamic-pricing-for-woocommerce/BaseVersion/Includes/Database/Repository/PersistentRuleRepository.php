@@ -84,10 +84,12 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
 
         global $wpdb;
         $table = $wpdb->prefix . PersistentRuleModel::TABLE_NAME;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery
         $wpdb->query('START TRANSACTION');
 
         if ( ! empty($ruleId)) {
             $where  = array('rule_id' => $ruleId);
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $result = $wpdb->delete($table, $where);
         }
 
@@ -95,9 +97,10 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
          * @var PersistentRuleCache $cache
          */
         foreach ($rows as $cache) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $result = $wpdb->insert($table, $cache->getData());
         }
-
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery
         $wpdb->query('COMMIT');
     }
 
@@ -162,6 +165,7 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
         $table = $wpdb->prefix .  PersistentRuleModel::TABLE_NAME;
 
         $where = array('rule_id' => $ruleId);
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery
         $wpdb->delete($table, $where);
     }
 
@@ -176,6 +180,7 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
 
         global $wpdb;
         $tableCache = $wpdb->prefix . PersistentRuleModel::TABLE_NAME;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery
         $wpdb->query('START TRANSACTION');
 
         foreach ( $objects as $object ) {
@@ -186,6 +191,7 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
             $rule = $object->rule;
             $hash = $this->calculateDbHashWithProduct($product);
             $where  = array('rule_id' => $rule->getId(), 'product' => $hash);
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $result = $wpdb->delete($tableCache, $where);
 
             $cartCalculator   = new CartCalculatorPersistent($context, $rule);
@@ -194,10 +200,11 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
             $cart             = $cartBuilder->create(WC()->customer, WC()->session);
             $productProcessor->withCart($cart);
             foreach ($this->calculateCacheForProductWithRule($context, $productProcessor, $rule, $product, $cartItemData) as $data) {
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $result = $wpdb->insert($tableCache, $data);
             }
         }
-
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery
         $wpdb->query('COMMIT');
     }
 
@@ -238,6 +245,7 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
     public function truncate() {
         global $wpdb;
         $tableCache = $wpdb->prefix . PersistentRuleModel::TABLE_NAME;
+        //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
         $wpdb->query("TRUNCATE TABLE $tableCache");
     }
 
@@ -339,14 +347,14 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
         global $wpdb;
 
         $tableCache = $wpdb->prefix . PersistentRuleModel::TABLE_NAME;
-
-        $query = $wpdb->prepare("SELECT persistent_rules_cache.rule_id, persistent_rules_cache.price
-            FROM {$tableCache} AS persistent_rules_cache
+        //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $query = $wpdb->prepare("SELECT persistent_rules_cache.rule_id, persistent_rules_cache.price FROM {$tableCache} AS persistent_rules_cache
             WHERE persistent_rules_cache.product = %s
             AND persistent_rules_cache.qty_start <= %s
             AND (persistent_rules_cache.qty_finish IS NULL OR persistent_rules_cache.qty_finish >= %s)",
             array($hash, $qty, $qty)
         );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
         $rows  = $wpdb->get_results($query, ARRAY_A);
 
         if (count($rows) === 0) {

@@ -35,13 +35,8 @@ class TotalProductPriceFormatter
         $this->context   = adp_context();
         $this->formatter = new Formatter();
 
-        $template = _x(
-            htmlspecialchars_decode(
-                $this->context->getOption(
-                    "total_price_for_product_template",
-                    "Total price : {{striked_total}}"
-                )
-            ),
+        //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+        $template = _x( htmlspecialchars_decode( $this->context->getOption( "total_price_for_product_template",  "Total price : {{striked_total}}")),
             "Total price for product template",
             "advanced-dynamic-pricing-for-woocommerce"
         );

@@ -54,13 +54,14 @@ class Rules implements AdminTabInterface
         if ( $bulkAction = $this->getBulkAction() ) {
             if(wp_verify_nonce($_POST[Ajax::SECURITY_QUERY_ARG] ?? null, Ajax::SECURITY_ACTION) === false) {
                 wp_die(
-                    __('Invalid nonce specified', 'advanced-dynamic-pricing-for-woocommerce'),
-                    __('Error', 'advanced-dynamic-pricing-for-woocommerce'),
+                    esc_html__('Invalid nonce specified', 'advanced-dynamic-pricing-for-woocommerce'),
+                    esc_html__('Error', 'advanced-dynamic-pricing-for-woocommerce'),
                     array('response' => 403,)
                 );
             }
-            
+
             $ruleRepository = new RuleRepository();
+            //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
             $rulesList = array_map('intval', is_array($_POST['rules']) ? $_POST['rules'] : []);
 
             if ( $bulkAction === "enable" ) {
@@ -70,7 +71,7 @@ class Rules implements AdminTabInterface
             } elseif ( $bulkAction === "delete" ) {
                 array_map( [$ruleRepository, 'markRuleAsDeleted'], $rulesList );
             }
-
+            //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
             wp_redirect($_SERVER['HTTP_REFERER']);
             exit();
         }
@@ -256,75 +257,88 @@ class Rules implements AdminTabInterface
 
     protected function getIsHideInactive()
     {
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended
         return ! empty($_GET['hide_inactive']);
     }
 
     protected function getIsOnlyActive()
     {
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended
         return isset($_REQUEST['active']) && $_REQUEST['active'] === '1';
     }
 
     protected function getIsOnlyInactive()
     {
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended
         return isset($_REQUEST['active']) && $_REQUEST['active'] === '0';
     }
 
     protected function getActive()
     {
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput
         return $_REQUEST['active'] ?? "all";
     }
 
     protected function getSearchQueryIfExists()
     {
-        return isset($_GET['action']) && $_GET['action'] === 'search_rules' && isset($_GET['q']) ? esc_attr($_GET['q']) : "";
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        return isset($_GET['action']) && $_GET['action'] === 'search_rules' && isset($_GET['q']) ? esc_attr(sanitize_text_field(wp_unslash($_GET['q']))) : "";
     }
 
     protected function getBulkAction()
     {
-        return ! empty($_POST['bulk_action']) ? $_POST['bulk_action'] : "";
+        //phpcs:ignore WordPress.Security.NonceVerification.Missing
+        return ! empty($_POST['bulk_action']) ? sanitize_text_field(wp_unslash($_POST['bulk_action'])) : "";
     }
 
     protected function makeGetRulesArgs()
     {
         $args = array();
-
+        //phpcs:disable WordPress.Security.NonceVerification.Recommended
         if ( ! empty($_GET['product'])) {
             $args['product'] = (int)$_GET['product'];
             if ( ! empty($_GET['product_childs']) && is_array($_GET['product_childs'])) {
                 $args['product_childs'] = array_map(function ($value) {
                     return (int)$value;
+                    //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
                 }, $_GET['product_childs']);
             }
             if ( ! empty($_GET['product_categories']) && is_array($_GET['product_categories'])) {
                 $args['product_categories'] = array_map(function ($value) {
                     return (int)$value;
+                    //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
                 }, $_GET['product_categories']);
             }
             if ( ! empty($_GET['product_category_slug']) && is_array($_GET['product_category_slug'])) {
                 $args['product_category_slug'] = array_map(function ($value) {
                     return sanitize_text_field((string)$value);
+                    //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
                 }, $_GET['product_category_slug']);
             }
             if ( ! empty($_GET['product_attributes']) && is_array($_GET['product_attributes'])) {
                 $args['product_attributes'] = array_map(function ($value) {
                     return (int)$value;
+                    //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
                 }, $_GET['product_attributes']);
             }
             if ( ! empty($_GET['product_tags']) && is_array($_GET['product_tags'])) {
                 $args['product_tags'] = array_map(function ($value) {
                     return (int)$value;
+                    //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
                 }, $_GET['product_tags']);
             }
             if ( ! empty($_GET['product_sku'])) {
-                $args['product_sku'] = sanitize_text_field((string)$_GET['product_sku']);
+                $args['product_sku'] = sanitize_text_field(wp_unslash($_GET['product_sku']));
             }
 
             return $args;
         }
+        //phpcs:enable WordPress.Security.NonceVerification.Recommended
 
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if ( ! empty($_GET['rule_id'])) {
+            //phpcs:ignore WordPress.Security.NonceVerification.Recommended
             $args = array('id' => (int)$_GET['rule_id']);
-
             return $args;
         }
 
@@ -367,7 +381,7 @@ class Rules implements AdminTabInterface
             'wdp_select2',
             'wc-clipboard',
             'jquery-tiptip'
-        ), WC_ADP_VERSION);
+        ), WC_ADP_VERSION, true);
 
         wp_localize_script('wdp_settings-scripts', 'wdp_data', $this->getScriptData());
     }
@@ -405,7 +419,7 @@ class Rules implements AdminTabInterface
             $context,
             new RuleRepository()
         );
-
+        //phpcs:disable WordPress.Security.NonceVerification.Recommended
         return array(
             'page' => self::getKey(),
             'rules' => $rules,
@@ -417,11 +431,13 @@ class Rules implements AdminTabInterface
                     'select2 msg when results wasn\'t found',
                     'advanced-dynamic-pricing-for-woocommerce'
                 ),
+                /* translators: Short number of characters*/
                 'select2_input_too_short' => _x(
                     'Please enter %d or more characters',
                     'select2 msg when input is too short',
                     'advanced-dynamic-pricing-for-woocommerce'
                 ),
+                /* translators: Long number of characters*/
                 'select2_input_too_long' => _x(
                     'Please delete %d character',
                     'select2 msg when input is too long',
@@ -437,6 +453,7 @@ class Rules implements AdminTabInterface
                     'select2 msg when loading more',
                     'advanced-dynamic-pricing-for-woocommerce'
                 ),
+                /* translators: Max items selected*/
                 'select2_maximum_selected' => _x(
                     'You can only select %d item',
                     'select2 msg when max items selected',
@@ -467,19 +484,23 @@ class Rules implements AdminTabInterface
             'lists' => $preloaded_lists,
             'selected_rule' => isset($_GET['rule_id']) ? (int)$_GET['rule_id'] : -1,
             'product' => isset($_GET['product']) ? (int)$_GET['product'] : -1,
+            //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
             'product_title' => isset ($_GET['product']) ? CacheHelper::getWcProduct($_GET['product'])->get_title() : -1,
+            //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
             'action_rules' => isset($_GET['action_rules']) ? $_GET['action_rules'] : -1,
             'bulk_rule' => static::getAllAvailableTypes(),
             'persistence_bulk_rule' => static::getAllAvailablePersistenceTypes(),
             'options' => array(
                 'close_on_select' => defined("WC_ADP_PRO_VERSION_URL") ? false : true,
                 'rules_per_page' => $context->getOption('rules_per_page'),
+                'filter_priority' => $context->getOption('show_select_filter_priority'),
             ),
             'paged' => $paged,
             'security' => wp_create_nonce(Ajax::SECURITY_ACTION),
             'security_query_arg' => Ajax::SECURITY_QUERY_ARG,
             'activation_link_pattern' => ""
         );
+        //phpcs:enable WordPress.Security.NonceVerification.Recommended
     }
 
     public function registerAjax()

@@ -186,9 +186,6 @@ class RangeDiscountTable
                 'intval',
                 [$product->get_id()]
             );
-            if ( $this->context->getOption( 'hide_parent_bulk_table' ) ) {
-                $tableAttr .= 'style="display: none" ';
-            }
             $tableAttr .= 'data-available-ids="' . json_encode( $availableProductsIDs ) . '"';
         }
 
@@ -482,8 +479,8 @@ class RangeDiscountTable
         /** HEADER */
         $headerTitle = '';
         if ($contextOptions->isUseMessageAsTitle) {
-            $headerTitle = __(
-                apply_filters('wdp_format_bulk_table_message', $handler->getPromotionalMessage()),
+            //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+            $headerTitle = __( apply_filters('wdp_format_bulk_table_message', $handler->getPromotionalMessage()),
                 'advanced-dynamic-pricing-for-woocommerce'
             );
         } elseif ($handler::TYPE_BULK === $handler->getType()) {
@@ -694,8 +691,8 @@ class RangeDiscountTable
         }
 
         if ( ! $isFixedDiscount && $contextOptions->isShowDiscountedPrice) {
-            $columns['discount_value'] = _x(
-                $contextOptions->discountColumnTitle,
+            //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+            $columns['discount_value'] = _x( $contextOptions->discountColumnTitle,
                 'product bulk table discount value column title',
                 'advanced-dynamic-pricing-for-woocommerce'
             );
@@ -704,14 +701,14 @@ class RangeDiscountTable
 
         if ($contextOptions->isShowFixedDiscountColumn) {
             if ($isFixedDiscount) {
-                $columns['discounted_price'] = _x(
-                    $contextOptions->discountedPriceColumnTitleForFixedPriceRule,
+                //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                $columns['discounted_price'] = _x( $contextOptions->discountedPriceColumnTitleForFixedPriceRule,
                     'product bulk table discounted price column title for fixed discount',
                     'advanced-dynamic-pricing-for-woocommerce'
                 );
             } else {
-                $columns['discounted_price'] = _x(
-                    $contextOptions->discountedPriceColumnTitle,
+                //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                $columns['discounted_price'] = _x( $contextOptions->discountedPriceColumnTitle,
                     'product bulk table discounted price column title',
                     'advanced-dynamic-pricing-for-woocommerce'
                 );
@@ -733,8 +730,8 @@ class RangeDiscountTable
         $handler = $rule->getProductRangeAdjustmentHandler();
 
         if ($handler->getMeasurement()->equals(BulkMeasurementEnum::QTY())) {
-            $columns['qty'] = _x(
-                $contextOptions->quantityColumnTitle,
+            //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+            $columns['qty'] = _x( $contextOptions->quantityColumnTitle,
                 'product bulk table qty column title',
                 'advanced-dynamic-pricing-for-woocommerce'
             );
@@ -1095,8 +1092,8 @@ class RangeDiscountTable
         /** HEADER */
         $headerTitle = '';
         if ($contextOptions->isUseMessageAsTitle) {
-            $headerTitle = __(
-                apply_filters('wdp_format_bulk_table_message', $handler->getPromotionalMessage()),
+            //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+            $headerTitle = __( apply_filters('wdp_format_bulk_table_message', $handler->getPromotionalMessage()),
                 'advanced-dynamic-pricing-for-woocommerce'
             );
         } elseif ($handler::TYPE_BULK === $handler->getType()) {
@@ -1233,14 +1230,14 @@ class RangeDiscountTable
 
         if ($contextOptions->isShowFixedDiscountColumn) {
             if ($isFixedDiscount) {
-                $columns['discount_value'] = _x(
-                    $contextOptions->discountColumnTitleForFixedPriceRule,
+                //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                $columns['discount_value'] = _x( $contextOptions->discountColumnTitleForFixedPriceRule,
                     'category bulk table discount value column title',
                     'advanced-dynamic-pricing-for-woocommerce'
                 );
             } else {
-                $columns['discount_value'] = _x(
-                    $contextOptions->discountColumnTitle,
+                //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                $columns['discount_value'] = _x( $contextOptions->discountColumnTitle,
                     'category bulk table discount value column title',
                     'advanced-dynamic-pricing-for-woocommerce'
                 );
@@ -1323,6 +1320,7 @@ class RangeDiscountTable
         if ($isShowFooter) {
             if ($rule->getProductRangeAdjustmentHandler()->getPromotionalMessage()) {
                 if ( ! $themeOptions->isUseMessageAsTitle) {
+                    //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
                     $footerText = "<p>" . _x($rule->getProductRangeAdjustmentHandler()->getPromotionalMessage(),
                             "Bulk table promotional message",
                             'advanced-dynamic-pricing-for-woocommerce') . "</p>";

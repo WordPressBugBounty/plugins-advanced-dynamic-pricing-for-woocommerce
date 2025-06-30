@@ -146,6 +146,13 @@ class PriceAjax
         if ($result === null) {
             wp_send_json_error();
         } else {
+            $result['external_plugins'] = apply_filters(
+                'adp_price_qty_changed_external_plugins',
+                array(),
+                $result['discounted_price'],
+                wc_get_product($request->getProduct()->getProductId())
+            );
+
             wp_send_json_success($result);
         }
     }

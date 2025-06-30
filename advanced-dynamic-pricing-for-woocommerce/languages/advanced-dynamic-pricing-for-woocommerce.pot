@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Advanced Dynamic Pricing for WooCommerce (Pro)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-20 11:30+0000\n"
+"POT-Creation-Date: 2025-06-30 05:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -634,6 +634,10 @@ msgstr ""
 #: BaseVersion/Includes/Settings/OptionsInstaller.php:125
 #: BaseVersion/views/admin_page/tabs/options/bulk_table_calculation_mode.php:8
 msgid "Calculate price based on"
+msgstr ""
+
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:840
+msgid "Calculating the price using the expression"
 msgstr ""
 
 #: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Options.php:257
@@ -1468,17 +1472,13 @@ msgstr ""
 msgid "Hide \"Coupon\" word in cart totals"
 msgstr ""
 
-#: BaseVersion/Includes/Settings/OptionsInstaller.php:477
-msgid "Hide bulk table for parent product"
-msgstr ""
-
 #: BaseVersion/Includes/Settings/OptionsInstaller.php:245
 #: BaseVersion/views/admin_page/tabs/options/create_blank_rule.php:7
 #: BaseVersion/views/admin_page/tabs/options/create_blank_rule.php:12
 msgid "Hide rules wizard"
 msgstr ""
 
-#: BaseVersion/Includes/Settings/OptionsInstaller.php:482
+#: BaseVersion/Includes/Settings/OptionsInstaller.php:477
 msgid "Highlight selected range when qty changed"
 msgstr ""
 
@@ -2265,7 +2265,7 @@ msgstr ""
 msgid "Program your own custom condition"
 msgstr ""
 
-#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:840
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:848
 #: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductAttributesAll.php:42
 #: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductSKUAll.php:42
 #: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductsAll.php:42
@@ -2872,7 +2872,7 @@ msgstr ""
 msgid "Subtotal (inc. VAT)"
 msgstr ""
 
-#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:848
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:856
 msgid "Sum"
 msgstr ""
 
@@ -3136,7 +3136,7 @@ msgstr ""
 msgid "weeks"
 msgstr ""
 
-#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:856
+#: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:864
 msgid "Weight"
 msgstr ""
 

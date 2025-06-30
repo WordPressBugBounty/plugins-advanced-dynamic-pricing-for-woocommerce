@@ -9,12 +9,21 @@ jQuery(document).ready(function ($) {
         var init_events = function ($container, $rule, blocks) {
             $rule.find('.wdp_bulk_adjustment_remove').click(function () {
                 destroy($container, $rule, blocks);
+              if($rule.find('.wdp-role-discounts').css('display') === 'none' &&
+                 $rule.find('.wdp-product-adjustments').css('display') === 'none') {
+                $rule.find('.replace-adjustments').hide();
+                $rule.find('.replace-adjustments').find('input[type="checkbox"]').prop('checked', false);
+                $rule.find('.replace-adjustments').find('input[type="text"]').val('');
+              }
             });
             $container.find('.bulk-adjustment-type').on('change', function () {
                 update_selectors($container, $rule);
             });
+            $container.find('.bulk-discount-type').on('change', function () {
+                update_selectors_discount_type($container);
+            });
             $container.find('.bulk-qty_based-type').on('change', function () {
-                update_selectors($container, $rule);
+              update_selectors($container, $rule);
             });
             $container.find('.bulk-measurement-type').on('change', function () {
               update_selectors($container, $rule);
@@ -261,7 +270,25 @@ jQuery(document).ready(function ($) {
 
     });
 
+    function update_selectors_discount_type ($container) {
+    var $select = $container.find('.bulk-discount-type');
+    var selectedValue = $select.val();
+    var $rangeInputs = $container.find('.wdp-adjustment-ranges input.adjustment-value');
 
+    if(selectedValue === "discount__expression_price") {
+      $rangeInputs.each(function () {
+        if ($(this).attr('type') === 'number') {
+          $(this).attr('type', 'text');
+        }
+      });
+    } else {
+      $rangeInputs.each(function () {
+        if ($(this).attr('type') === 'text') {
+          $(this).attr('type', 'number');
+        }
+      });
+    }
+  };
 
     // make rule blocks collapsable and sortable
     wpc_postboxes.add_postbox_toggles( $('#rules-container') );
@@ -1283,7 +1310,7 @@ jQuery(document).ready(function ($) {
 				break;
 			}
       new_rule.find('.wdp-title').focus();
-			new_rule.find('.wdp-add-condition, .replace-adjustments').show();
+			new_rule.find('.wdp-add-condition').show();
 		});
 
         // Add discount message
@@ -1366,6 +1393,7 @@ jQuery(document).ready(function ($) {
 			    }
                 new_rule.find(".sortable-apply-mode-block").show();
 		    }
+        new_rule.find('.replace-adjustments').show();
 	    });
 
       // Add product filter for 'Get products' block
@@ -1661,6 +1689,14 @@ jQuery(document).ready(function ($) {
 
     if (blocks.isConditionMessageOpen()) {
       add_condition_message(new_rule.find('.wdp-condition-message'), data.condition_message, blocks)
+    }
+
+    if(new_rule.find('.wdp-role-discounts').css('display') === 'none' &&
+      new_rule.find('.wdp-bulk-adjustments').css('display') === 'none' &&
+      new_rule.find('.wdp-product-adjustments').css('display') === 'none') {
+      new_rule.find('.replace-adjustments').hide();
+      new_rule.find('.replace-adjustments').find('input[type="checkbox"]').prop('checked', false);
+      new_rule.find('.replace-adjustments').find('input[type="text"]').val('');
     }
   }
 
@@ -2494,7 +2530,8 @@ jQuery(document).ready(function ($) {
             $range.find('.adjustment-to').focus();
         } else {
             $range.find('.adjustment-from').focus();
-		}
+        }
+        update_selectors_discount_type($postbox);
 
         if (data) {
             $range.find('.adjustment-from').val(data.from);
@@ -2511,6 +2548,7 @@ jQuery(document).ready(function ($) {
                 $postbox.find('.wdp-ranges-empty').show();
             }
         });
+
     }
 
     function fill_get_products_options($container, data) {
@@ -2752,6 +2790,12 @@ jQuery(document).ready(function ($) {
 
         $rule.find('.wdp_product_adjustment_remove').click(function () {
             $rule.find('.wdp-btn-add-product-adjustment').show();
+            if($rule.find('.wdp-role-discounts').css('display') === 'none' &&
+              $rule.find('.wdp-bulk-adjustments').css('display') === 'none') {
+              $rule.find('.replace-adjustments').hide();
+              $rule.find('.replace-adjustments').find('input[type="checkbox"]').prop('checked', false);
+              $rule.find('.replace-adjustments').find('input[type="text"]').val('');
+            }
             blocks.setProductDiscountsOpen(false)
             blocks.updateView()
             flushInputs($container);
@@ -2801,6 +2845,7 @@ jQuery(document).ready(function ($) {
         updateElementsVisibilityDiscountSplit($(this).find('.wdp-product-adjustments'), $(this));
       })
       updateElementsVisibilityDiscountSplit($container, $rule);
+      $rule.find('.replace-adjustments').show();
     }
 
     function add_product_adjustment_split($container, adj_index, data) {
@@ -2847,6 +2892,8 @@ jQuery(document).ready(function ($) {
 
     function add_bulk_adjustment($container, data, blocks) {
         bulk_adjustment().add($container, data, blocks);
+        var $rule = $container.closest('.postbox');
+        $rule.find('.replace-adjustments').show();
     }
 
     function add_cart_adjustment($el, data, blocks) {
@@ -2985,6 +3032,13 @@ jQuery(document).ready(function ($) {
 		$role_discount.find( '.wdp_role_discount_remove' ).click( function () {
 			var $rule = $( this ).closest( '.postbox' );
 			$( this ).closest( '.wdp-role-discount' ).remove();
+
+      if($rule.find('.wdp-product-adjustments').css('display') === 'none' &&
+         $rule.find('.wdp-bulk-adjustments').css('display') === 'none') {
+        $rule.find('.replace-adjustments').hide();
+        $rule.find('.replace-adjustments').find('input[type="checkbox"]').prop('checked', false);
+        $rule.find('.replace-adjustments').find('input[type="text"]').val('');
+      }
 
 			var role_discounts_count = $rule.find( '.wdp-role-discounts .wdp-role-discount' ).length;
 			if ( role_discounts_count === 0 ) {

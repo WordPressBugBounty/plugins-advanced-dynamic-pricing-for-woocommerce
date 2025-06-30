@@ -5,6 +5,7 @@ namespace ADP\BaseVersion\Includes;
 use ADP\BaseVersion\Includes\CartProcessor\CartProcessor;
 use ADP\BaseVersion\Includes\CartProcessor\FreeAutoAddItemsController;
 use ADP\BaseVersion\Includes\Compatibility\CTXFeedCmp;
+use ADP\BaseVersion\Includes\Compatibility\GermanMarketCmp;
 use ADP\BaseVersion\Includes\Compatibility\KlarnaCmp;
 use ADP\BaseVersion\Includes\Compatibility\SmartCouponsCmp;
 use ADP\BaseVersion\Includes\Compatibility\WcSubscriptionsCmp;
@@ -101,6 +102,11 @@ class Engine
         $wcQuoteCmp = new WcQuoteCmp();
         if ($wcQuoteCmp->isActive()) {
             $wcQuoteCmp->prepareHooks();
+        }
+
+        $germanMarket = new GermanMarketCmp();
+        if ($germanMarket->isActive()) {
+            $germanMarket->prepareHooks();
         }
     }
 

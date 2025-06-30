@@ -559,7 +559,7 @@ class Helpers
             'Bulk mode'          => 'bulk',
             'Free products'     => 'free_product',
             'Auto add to cart'  => 'auto_add_to_cart',
-            'Cart adjustments'   => 'cart_adjustment',
+            'Cart/Shipping discounts'   => 'cart_adjustment',
             'Conditions'         => 'cart_condition',
             'Discount messages'  => 'advertising',
             'Offer to buy more'  => 'offer_to_buy_more',

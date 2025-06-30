@@ -605,7 +605,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
 
         <div class="wdp-block wdp-cart-adjustments wdp-sortable wdp-row" style="display: none;">
             <div class="wdp-column wdp-column-help">
-                <label><?php Helpers::ruleFilterLabel('Cart adjustments', 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
+                <label><?php Helpers::ruleFilterLabel('Cart/Shipping discounts', 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
                 <p class="wdp-rule-help">
                 <?php
                     echo sprintf(
@@ -756,7 +756,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                     'advanced-dynamic-pricing-for-woocommerce'); ?></button>
             <button type="button" class="button wdp-btn-add-getproduct"><?php esc_html_e('Free products',
                     'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="button" class="button wdp-btn-add-cart-adjustment"><?php esc_html_e('Cart adjustments',
+            <button type="button" class="button wdp-btn-add-cart-adjustment"><?php esc_html_e('Cart/Shipping discounts',
                     'advanced-dynamic-pricing-for-woocommerce'); ?></button>
             <button type="button" class="button wdp-btn-add-condition"><?php esc_html_e('Cart conditions',
                     'advanced-dynamic-pricing-for-woocommerce'); ?></button>

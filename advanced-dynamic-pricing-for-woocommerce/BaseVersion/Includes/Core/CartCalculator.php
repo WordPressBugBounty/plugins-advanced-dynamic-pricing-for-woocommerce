@@ -15,6 +15,7 @@ use ADP\BaseVersion\Includes\Database\Repository\PersistentRuleRepositoryInterfa
 use ADP\BaseVersion\Includes\Database\RulesCollection;
 use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Basic\BasicCartItem;
 use ADP\BaseVersion\Includes\SpecialStrategies\CompareStrategy;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\CartItemPriceAdjustment\CartItemPriceAdjustment;
 
 defined('ABSPATH') or exit;
 
@@ -187,14 +188,28 @@ class CartCalculator implements ICartCalculator
                 if (!is_null($wcSalePrice) && $wcSalePrice < $productPrice) {
                     $newItem = self::recreateItem($item, $wcSalePrice);
                     $item->copyAttributesTo($newItem);
-                    $newItem->setPriceAdjustments($item->getPriceAdjustments());
 
-                    if ($minDiscountRangePrice !== null) {
-                        $minDiscountRangePrice = min($minDiscountRangePrice, $wcSalePrice);
-                        $newItem->prices()->setMinDiscountRangePrice($minDiscountRangePrice);
-                    }
+                    $priceAdjustments = array_map(function($adj) use($wcSalePrice) {
+                        if($wcSalePrice > $adj->getNewPrice()) {
+                            return $adj;
+                        }
 
+                        return new CartItemPriceAdjustment(
+                            $adj->getType(),
+                            $adj->getSource(),
+                            $adj->getOriginalPrice(),
+                            0,
+                            $wcSalePrice,
+                            $adj->getRuleId()
+                        );
+                    }, $item->getPriceAdjustments());
+
+                    $newItem->setPriceAdjustments($priceAdjustments);
+
+                    $minPrice = min(array_filter([$minDiscountRangePrice, $wcSalePrice]));
+                    $newItem->prices()->setMinDiscountRangePrice($minPrice);
                     $item = $newItem;
+
                 }
 
                 $newItems[] = $item;

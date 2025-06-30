@@ -685,7 +685,7 @@ class RangeDiscountTable
         foreach ($ranges as $index => $range) {
             /** @var Discount $discount */
             $discount = $range->getData();
-            if ($discount->getType() === $discount::TYPE_FIXED_VALUE) {
+            if ($discount->getType() === $discount::TYPE_FIXED_VALUE || $discount->getType() === $discount::TYPE_EXPRESSION_PRICE) {
                 $isFixedDiscount = true;
             }
         }

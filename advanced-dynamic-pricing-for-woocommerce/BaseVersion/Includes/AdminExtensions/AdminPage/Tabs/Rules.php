@@ -200,7 +200,7 @@ class Rules implements AdminTabInterface
         $ruleRepository = new RuleRepository();
         $ruleArgs = $this->makeGetRulesArgs();
         unset($ruleArgs['q']); // ignore on purpose
-        $rulesCount = $ruleRepository->getRulesCount($ruleArgs);
+        $rulesCount = $ruleRepository->getRulesCount();
 
         $ruleArgs['active'] = true;
         $activeRulesCount = $ruleRepository->getRulesCount($ruleArgs);
@@ -830,6 +830,14 @@ class Rules implements AdminTabInterface
         return array(
             'key'   => 'range_price__fixed',
             'label' => __('Fixed price for the range', 'advanced-dynamic-pricing-for-woocommerce'),
+        );
+    }
+
+    protected static function discountCustomExpressionPrice()
+    {
+        return array(
+            'key'   => 'discount__expression_price',
+            'label' => __('Calculating the price using the expression', 'advanced-dynamic-pricing-for-woocommerce'),
         );
     }
 

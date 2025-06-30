@@ -5,7 +5,7 @@ Tags: woocommerce, dynamic pricing, discount, pricing rule, bulk discount
 Requires PHP: 7.1
 Requires at least: 4.8
 Tested up to: 6.8
-Stable tag: 4.9.6
+Stable tag: 4.9.7
 License: GNU General Public License v3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -105,6 +105,13 @@ You should be PHP programmer to do it. [Please, review sample addon and adapt it
 
 
 == Changelog ==
+
+= 4.9.7 - 2025-06-30 =
+* Fixed bug - bulk table disappeared for variable products
+* Fixed bug - wrong amounts shown in bulk table if product has sale price
+* Fixed bug - role discount disabled WooCommerce coupons for all roles
+* Fixed bug - fatal error for shipping discounts
+* Updated compatibility with WoodMart theme
 
 = 4.9.6 - 2025-05-21 =
 * Fixed bugs detected by [PCP plugin](https://wordpress.org/plugins/plugin-check/)

@@ -740,6 +740,8 @@ class RuleStorage
                             }
                         } elseif ($bulkData['discount_type'] === 'discount__amount') {
                             $discount = new Discount($this->context, Discount::TYPE_AMOUNT, $range['value']);
+                        } elseif ($bulkData['discount_type'] === 'discount__expression_price') {
+                            $discount = new Discount($this->context, Discount::TYPE_EXPRESSION_PRICE, $range['value']);
                         } else {
                             $discount = new Discount($this->context, Discount::TYPE_PERCENTAGE, $range['value']);
                         }

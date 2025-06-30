@@ -298,7 +298,7 @@ class Ajax
 
         foreach ($attributes as $attribute) {
             $pieces        = explode(":", $attribute);
-            $attributeName = sanitize_title( strtolower(trim(array_shift($pieces))) );
+            $attributeName = wc_clean(strtolower(trim(array_shift($pieces))));
             $option        = strtolower(implode(":", $pieces));
 
             $results[] = array(

@@ -55,7 +55,7 @@ class Discount
         }
 
         $this->type         = $type;
-        $this->value = is_string($value) ? esc_attr(trim($value)) : floatval($value);
+        $this->value = floatval($value);
         $this->currencyCode = $context->getCurrencyCode();
     }
 

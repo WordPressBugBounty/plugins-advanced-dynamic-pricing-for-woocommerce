@@ -5,7 +5,7 @@ Tags: woocommerce, dynamic pricing, discount, pricing rule, bulk discount
 Requires PHP: 7.1
 Requires at least: 4.8
 Tested up to: 6.8
-Stable tag: 4.9.7
+Stable tag: 4.9.8
 License: GNU General Public License v3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -105,6 +105,9 @@ You should be PHP programmer to do it. [Please, review sample addon and adapt it
 
 
 == Changelog ==
+
+= 4.9.8 - 2025-07-02 =
+* Fixed critical bug - negative product discount (price increase) caused fatal error
 
 = 4.9.7 - 2025-06-30 =
 * Fixed bug - bulk table disappeared for variable products

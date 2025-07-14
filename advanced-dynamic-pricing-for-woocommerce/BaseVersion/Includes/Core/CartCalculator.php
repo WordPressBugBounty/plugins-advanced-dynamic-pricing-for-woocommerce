@@ -206,8 +206,10 @@ class CartCalculator implements ICartCalculator
 
                     $newItem->setPriceAdjustments($priceAdjustments);
 
-                    $minPrice = min(array_filter([$minDiscountRangePrice, $wcSalePrice]));
-                    $newItem->prices()->setMinDiscountRangePrice($minPrice);
+                    if ($minDiscountRangePrice !== null) {
+                        $minPrice = min(array_filter([$minDiscountRangePrice, $wcSalePrice]));
+                        $newItem->prices()->setMinDiscountRangePrice($minPrice);
+                    }
                     $item = $newItem;
 
                 }

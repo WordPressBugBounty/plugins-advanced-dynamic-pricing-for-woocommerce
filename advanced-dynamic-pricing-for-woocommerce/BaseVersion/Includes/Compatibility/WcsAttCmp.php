@@ -49,11 +49,6 @@ class WcsAttCmp
         }
 
         $this->wcsAtt = class_exists("\WCS_ATT") ? \WCS_ATT::instance() : null;
-
-        if ($this->isActive() && class_exists('\WCS_ATT_Display_Cart')) {
-            remove_filter('woocommerce_cart_item_price', array('\WCS_ATT_Display_Cart', 'show_cart_item_subscription_options'), 1000);
-            add_filter('woocommerce_cart_item_price', array('\WCS_ATT_Display_Cart', 'show_cart_item_subscription_options'), 10001, 3);
-        }
     }
 
     /**

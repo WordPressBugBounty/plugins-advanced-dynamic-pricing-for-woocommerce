@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Advanced Dynamic Pricing for WooCommerce (Pro)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 05:08+0000\n"
+"POT-Creation-Date: 2025-07-14 09:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -672,7 +672,6 @@ msgid "Cart"
 msgstr ""
 
 #: BaseVersion/Includes/Helpers/Helpers.php:575
-#: BaseVersion/views/admin_page/tabs/rules/rule.php:759
 msgid "Cart adjustments"
 msgstr ""
 
@@ -695,6 +694,10 @@ msgstr ""
 
 #: BaseVersion/Includes/Core/Rule/CartCondition/ConditionsLoader.php:73
 msgid "Cart items"
+msgstr ""
+
+#: BaseVersion/views/admin_page/tabs/rules/rule.php:759
+msgid "Cart/Shipping discounts"
 msgstr ""
 
 #: BaseVersion/views/admin_page/tabs/rules/templates.php:162

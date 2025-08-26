@@ -401,13 +401,14 @@ class CartCalculator implements ICartCalculator
         $newItems = [];
 
         $initialItems = $cart->getItems();
+        $roles = $cart->getContext()->getCustomer()->getRoles();
 
         foreach ($cart->getItems() as $item) {
             $newItem = clone $item;
             $newItems[] = $newItem;
 
             $persistentQty = $mappingQty[$item->getHash()] ?? 1.0;
-            $objects = $this->persistentRuleRepository->getCache($item, $persistentQty);
+            $objects = $this->persistentRuleRepository->getCache($item, $persistentQty, $roles);
 
             $object = null;
             $processor = null;
@@ -420,7 +421,7 @@ class CartCalculator implements ICartCalculator
                 }
             }
 
-            if ( ! $object || ! $object->rule || ! $object->price ) {
+            if ( ! $object || ! $object->rule || ! $object->price) {
                 continue;
             }
 

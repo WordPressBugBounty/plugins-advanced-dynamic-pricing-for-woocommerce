@@ -6,10 +6,6 @@ defined('ABSPATH') or exit;
 <tr valign="top">
     <th scope="row" class="titledesc">
         <?php esc_html_e('Product price html template', 'advanced-dynamic-pricing-for-woocommerce') ?>
-        <div style="font-style: italic; font-weight: normal; margin: 10px 0;">
-            <label><?php esc_html_e('Only for products which are already in the cart',
-                    'advanced-dynamic-pricing-for-woocommerce') ?></label>
-        </div>
     </th>
     <td class="forminp forminp-checkbox">
         <fieldset>
@@ -20,16 +16,30 @@ defined('ABSPATH') or exit;
                     <?php esc_html_e('Enable', 'advanced-dynamic-pricing-for-woocommerce') ?>
                 </label>
             </div>
-            <div>
-                <label for="price_html_template">
+            <div class="wdp-settings-template-wrap">
+                <label for="price_html_template" class="wdp-settings-template-label">
                     <?php esc_html_e('Output template', 'advanced-dynamic-pricing-for-woocommerce') ?>
-                    <input style="min-width: 300px;" value="<?php echo esc_attr($options['price_html_template']) ?>"
-                           name="price_html_template" id="price_html_template" type="text">
+                    <textarea class="wdp-settings-template-textarea" name="price_html_template" id="price_html_template"><?php 
+                        echo esc_attr($options['price_html_template'])
+                    ?></textarea>                    
                 </label>
+            </div>
+            <div style="line-height: 1.5rem;">
+                <span>
+                    <?php esc_html_e('Available tags', 'advanced-dynamic-pricing-for-woocommerce') ?>
+                    : <?php esc_html_e('{{price_html}},  {{regular_price_striked}}, {{discounted_price_inclTax}}, {{discounted_price_exclTax}}, {{price_inclTax}}, {{price_exclTax}}', 
+                        'advanced-dynamic-pricing-for-woocommerce') ?>
+                </span>
                 <br>
-                <?php esc_html_e('Available tags', 'advanced-dynamic-pricing-for-woocommerce') ?>
-                : <?php esc_html_e('{{price_html}}, {{Nth_item}}, {{qty_already_in_cart}}, {{regular_price_striked}}',
-                    'advanced-dynamic-pricing-for-woocommerce') ?>
+                <span>
+                    <?php esc_html_e('Only for products which are already in the cart: {{Nth_item}}, {{qty_already_in_cart}}.',
+                        'advanced-dynamic-pricing-for-woocommerce') ?>
+
+                    <a href="https://docs.algolplus.com/algol_pricing/settings-algol_pricing/product-price-html-template-available-tags-and-examples/"
+                        target="_blank">
+                        <?php esc_html_e('More available tags', 'advanced-dynamic-pricing-for-woocommerce') ?>
+                    </a>
+                </span>
             </div>
         </fieldset>
     </td>

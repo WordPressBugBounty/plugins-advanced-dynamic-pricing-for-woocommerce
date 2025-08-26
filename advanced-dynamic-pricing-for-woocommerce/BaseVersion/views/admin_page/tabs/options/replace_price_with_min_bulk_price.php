@@ -22,7 +22,7 @@ defined('ABSPATH') or exit;
     </th>
     <td class="forminp forminp-checkbox">
         <fieldset>
-            <div style="display: inline-block; line-height: 2rem;">
+            <div style="display: inline-block; line-height: 2rem;" class="wdp-settings-template-wrap">
                 <label for="replace_price_with_min_bulk_price_category">
                     <input <?php checked($options['replace_price_with_min_bulk_price_category']) ?>
                         name="replace_price_with_min_bulk_price_category"
@@ -30,11 +30,14 @@ defined('ABSPATH') or exit;
                     <?php esc_html_e('Apply to category/tag pages', 'advanced-dynamic-pricing-for-woocommerce') ?>
                 </label>
                 <br/>
-                <label for="replace_price_with_min_bulk_price_category_template">
+                <label for="replace_price_with_min_bulk_price_category_template" class="wdp-settings-template-label">
                     <?php esc_html_e('Output template', 'advanced-dynamic-pricing-for-woocommerce') ?>
-                    <input value="<?php echo esc_attr($options['replace_price_with_min_bulk_price_category_template']) ?>"
-                           name="replace_price_with_min_bulk_price_category_template"
-                           id="replace_price_with_min_bulk_price_category_template" type="text">
+                    <textarea class="wdp-settings-template-textarea"
+                        name="replace_price_with_min_bulk_price_category_template"
+                        id="replace_price_with_min_bulk_price_category_template"
+                        ><?php 
+							echo esc_attr($options['replace_price_with_min_bulk_price_category_template']) 
+					?></textarea>
                 </label>
             </div>
             <div>

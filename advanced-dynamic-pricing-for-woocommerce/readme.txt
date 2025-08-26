@@ -3,9 +3,9 @@ Contributors: algolplus
 Donate link: https://paypal.me/ipprokaev/0usd
 Tags: woocommerce, dynamic pricing, discount, pricing rule, bulk discount
 Requires PHP: 7.1
-Requires at least: 4.8
+Requires at least: 6.1
 Tested up to: 6.8
-Stable tag: 4.9.9
+Stable tag: 4.10.0
 License: GNU General Public License v3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -105,6 +105,13 @@ You should be PHP programmer to do it. [Please, review sample addon and adapt it
 
 
 == Changelog ==
+
+= 4.10.0 - 2025-08-26 =
+* "Product only" (limited functionality, but optimized for speed) rules support role-based discounts
+* Added new tags for "Product price html template" (>Settings>Product price)
+* Fixed bug - cart items (modified by different pricing rules, but have same price) were shown in separate lines
+* Fixed bug - incorrect taxes when creating order in [Phone Orders](https://wordpress.org/plugins/phone-orders-for-woocommerce/)
+* Fixed bug - CURCY shown wrong shipping amount after switching currency in the cart
 
 = 4.9.9 - 2025-07-14 =
 * Fixed critical bug - bulk rule shown fatal error for product which has sale price

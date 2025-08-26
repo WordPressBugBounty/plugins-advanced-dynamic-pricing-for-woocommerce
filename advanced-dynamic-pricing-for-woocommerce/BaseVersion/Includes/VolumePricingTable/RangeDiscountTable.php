@@ -930,7 +930,8 @@ class RangeDiscountTable
                     $price,
                     $range,
                     $product,
-                    $priceProcessor
+                    $priceProcessor,
+                    $processedProd
                 );
                 break;
         }

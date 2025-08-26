@@ -41,18 +41,19 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
     /**
      * @param ICartItem $item
      * @param float|null $qty
+     * @param array|null $roles
      *
      * @return array<int, PersistentRuleCacheObject>
      * @throws \Exception
      */
-    public function getCache($item, $qty = null)
+    public function getCache($item, $qty = null, $roles = null)
     {
-        $cacheKey = $this->calculateCacheHash($item, $qty);
+        $cacheKey = $this->calculateCacheHash($item, $qty, $roles);
 
         $objects = CacheHelper::cacheGet($cacheKey, CacheHelper::GROUP_RULES_CACHE);
 
         if ( ! is_array($objects) ) {
-            $objects = $this->calculate($item, $qty);
+            $objects = $this->calculate($item, $qty, $roles);
             CacheHelper::cacheSet($cacheKey, $objects, CacheHelper::GROUP_RULES_CACHE);
         }
 
@@ -106,7 +107,6 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
 
     public function getAddRuleData($ruleId, Context $context)
     {
-
         global $wpdb;
 
         /** @var $sqlGenerator SqlGeneratorPersistent */
@@ -266,7 +266,48 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
         $data = array();
         $hash = $this->calculateDbHashWithProduct($product, $cartItemData);
 
-        if ($rule->hasProductRangeAdjustment()) {
+        if($rolesDiscounts = $rule->getRoleDiscounts()) {
+            $customer = $productProcessor->getCart()->getContext()->getCustomer();
+            $initialRoles = $customer->getRoles();
+
+            foreach ($rolesDiscounts as $rolesDiscount) {
+                foreach ($rolesDiscount->getRoles() as $role) {
+                    $customer->setRoles([$role]);
+
+                    $customHash = function($key) use($role) {
+                        $key[] = "C{$role}";
+                        return $key;
+                    };
+                    add_filter("adp_calculate_product_hash", $customHash);
+                    add_filter("adp_calculate_processed_product_hash", $customHash);
+                    add_filter("adp_calculate_persistent_rule_product_hash", $customHash);
+
+                    $hash = $this->calculateDbHashWithProduct($product, $cartItemData);
+
+                    $processedProduct = $productProcessor->calculateProduct($product, 1.0, $cartItemData);
+                    
+                    remove_filter("adp_calculate_product_hash", $customHash);
+                    remove_filter("adp_calculate_processed_product_hash", $customHash);
+                    remove_filter("adp_calculate_persistent_rule_product_hash", $customHash);
+                    $customer->setRoles($initialRoles);
+
+                    if ($processedProduct === null || $processedProduct instanceof ProcessedVariableProduct || $processedProduct instanceof ProcessedGroupedProduct) {
+                        continue;
+                    }
+
+                    $row = [
+                        'product'        => $hash,
+                        'rule_id'        => $rule->getId(),
+                        'qty_start'      => 1.0,
+                        'qty_finish'     => null,
+                        'original_price' => $processedProduct->getOriginalPrice(),
+                        'price'          => $processedProduct->getCalculatedPrice(),
+                    ];
+
+                    $data[] = $row;
+                }
+            }
+        } else if ($rule->hasProductRangeAdjustment()) {
             $handler = $rule->getProductRangeAdjustmentHandler();
             $ranges  = $handler->getRanges();
 
@@ -322,6 +363,29 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
         return $data;
     }
 
+    protected function calculateDbHashWithRoles($item, $roles)
+    {
+        $hash = [];
+        if(!$roles) {
+            return $hash;
+        }
+        foreach ($roles as $role) {
+            $customHash = function($key) use($role) {
+                $key[] = "C{$role}";
+                return $key;
+            };
+            add_filter("adp_calculate_product_hash", $customHash);
+            add_filter("adp_calculate_processed_product_hash", $customHash);
+            add_filter("adp_calculate_persistent_rule_product_hash", $customHash);
+
+            $hash[] = $this->calculateDbHash($item);
+
+            remove_filter("adp_calculate_product_hash", $customHash);
+            remove_filter("adp_calculate_processed_product_hash", $customHash);
+            remove_filter("adp_calculate_persistent_rule_product_hash", $customHash);
+        }
+        return $hash;
+    }
 
     /**
      * @param ICartItem|\WC_Product $item
@@ -330,29 +394,35 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
      * @return array<int, PersistentRuleCacheObject>
      * @throws \Exception
      */
-    protected function calculate($item, $qty = null)
+    protected function calculate($item, $qty = null, $roles=null)
     {
         $context = $this->context;
 
         if ($item instanceof ICartItem) {
-            $hash = $this->calculateDbHash($item);
+            $hash[] = $this->calculateDbHash($item);
+            $hash = \array_merge($hash, $this->calculateDbHashWithRoles($item, $roles));
             $qty  = ($qty !== null ? (float)$qty : $item->getQty());
         } elseif ($item instanceof \WC_Product) {
-            $hash = $this->calculateDbHashWithProduct($item);
+            $hash[] = $this->calculateDbHashWithProduct($item);
+            $hash = \array_merge($hash, $this->calculateDbHashWithRoles($item, $roles));
             $qty  = ($qty !== null ? (float)$qty : 1.0);
         } else {
             return array();
         }
 
+        $hash = implode(',', array_map(function($v) {
+            return "'" . esc_sql($v) . "'";
+        }, $hash));
+        
         global $wpdb;
 
         $tableCache = $wpdb->prefix . PersistentRuleModel::TABLE_NAME;
         //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
         $query = $wpdb->prepare("SELECT persistent_rules_cache.rule_id, persistent_rules_cache.price FROM {$tableCache} AS persistent_rules_cache
-            WHERE persistent_rules_cache.product = %s
+            WHERE persistent_rules_cache.product IN ({$hash})
             AND persistent_rules_cache.qty_start <= %s
             AND (persistent_rules_cache.qty_finish IS NULL OR persistent_rules_cache.qty_finish >= %s)",
-            array($hash, $qty, $qty)
+            array($qty, $qty)
         );
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
         $rows  = $wpdb->get_results($query, ARRAY_A);
@@ -423,10 +493,15 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
     /**
      * @param ICartItem $item
      * @param float|null $qty
+     * @param array|null $roles
      */
-    protected function calculateCacheHash($item, $qty = null)
+    protected function calculateCacheHash($item, $qty = null, $roles = null)
     {
-        return $this->calculateDbHash($item) . '_' . ($qty !== null ? (float) $qty : $item->getQty());
+        return join('_', array_filter([
+            $this->calculateDbHash($item),
+            $qty !== null ? (float) $qty : $item->getQty(),
+            $roles !== null ? join(',', $roles) : ''
+        ]));
     }
 
     /**

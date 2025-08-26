@@ -360,6 +360,8 @@ class CacheHelper
             $parts[] = md5(serialize($rule));
         }
 
+        $parts = apply_filters("adp_calculate_processed_product_hash", $parts);
+
         return md5(implode('_', $parts));
     }
 
@@ -450,6 +452,8 @@ class CacheHelper
             }
             $parts[] = $cartItemDataKey;
         }
+
+        $parts = apply_filters("adp_calculate_persistent_rule_product_hash", $parts);
 
         return md5(implode('_', $parts));
     }

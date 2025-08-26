@@ -320,6 +320,23 @@ class PriceFunctions
     }
 
     /**
+     * @param string $price Regular price.
+     *
+     * @return string
+     * @see wc_format_sale_price()
+     */
+    function formatStrikedPrice($regularPrice, $salePrice = null)
+    {
+        $del = is_numeric($regularPrice) ? $this->format($regularPrice) : $regularPrice;
+
+        if($salePrice < $regularPrice) {
+            return '<del>' . $del . '</del>';
+        }
+
+        return "";
+    }
+
+    /**
      * @param ProcessedProductSimple $prod
      * @param float|null $price
      *

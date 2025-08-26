@@ -128,6 +128,9 @@ class Processor implements IWcProductProcessor
         foreach ($this->calc->getRulesCollection()->getRules() as $rule) {
             $key[] = "R".$rule->getId();
         }
+
+        $key = apply_filters("adp_calculate_product_hash", $key);
+
         $key = md5(implode('_', $key));
         if( $key == $last_product_key )
             return $last_product_result;

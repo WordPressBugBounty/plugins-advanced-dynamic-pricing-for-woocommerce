@@ -612,7 +612,7 @@ class Ajax
         $sql = "SELECT COUNT(*) FROM $table WHERE (rule_type = 'persistent' ) AND enabled = 1 AND deleted = 0";
         // phpcs:ignore WordPress.DB
         $totalCount = (int)($wpdb->get_var($sql));
-
+        CacheHelper::flushRulesCache();
         wp_send_json_success(
             [
                 'count' => $totalCount,

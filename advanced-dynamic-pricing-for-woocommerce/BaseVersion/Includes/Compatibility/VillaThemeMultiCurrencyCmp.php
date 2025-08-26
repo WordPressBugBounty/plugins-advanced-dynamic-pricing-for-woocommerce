@@ -57,7 +57,8 @@ class VillaThemeMultiCurrencyCmp
             HighLanderShortcuts::removeFilters(
                 [
                     'woocommerce_package_rates' => [
-                        ["WOOMULTI_CURRENCY_Frontend_Shipping", "woocommerce_package_rates"]
+                        ["WOOMULTI_CURRENCY_Frontend_Shipping", "woocommerce_package_rates"],
+                        ["WOOMULTI_CURRENCY_F_Frontend_Shipping", "woocommerce_package_rates"]
                     ],
                 ]
             );

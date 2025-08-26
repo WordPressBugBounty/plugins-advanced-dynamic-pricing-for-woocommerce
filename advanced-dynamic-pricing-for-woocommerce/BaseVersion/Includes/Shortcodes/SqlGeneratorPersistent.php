@@ -182,7 +182,7 @@ class SqlGeneratorPersistent
         return $productIds;
     }
 
-    protected function generateFilterSqlByType($type, $value, $comparisonMethod = ComparisonMethods::IN_LIST, $prop=null)
+    protected function generateFilterSqlByType($type, $value, $comparisonMethod = ComparisonMethods::IN_LIST, $prop=null, $filter=null)
     {
         if (in_array($type, $this->customTaxonomies)) {
             return $this->genSqlCustomTaxonomy($type, $value, $comparisonMethod);
@@ -190,7 +190,7 @@ class SqlGeneratorPersistent
 
         $method_name = "genSql" . ucfirst($type);
 
-        return method_exists($this, $method_name) ? call_user_func([$this, $method_name], $value, $comparisonMethod, $prop) : false;
+        return method_exists($this, $method_name) ? call_user_func([$this, $method_name], $value, $comparisonMethod, $prop, $filter) : false;
     }
 
     protected function genSqlProducts($productIds, $comparisonMethod = ComparisonMethods::IN_LIST)

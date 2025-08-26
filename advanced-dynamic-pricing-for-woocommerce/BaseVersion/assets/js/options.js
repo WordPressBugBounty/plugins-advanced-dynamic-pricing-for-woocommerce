@@ -122,4 +122,20 @@ jQuery(document).ready(function ($) {
         }
     });
 
+    $('.wdp-settings-template-textarea').on('click', function(e) {
+        let $parent = $(this).closest('.wdp-settings-template-wrap');
+        if(!$parent.hasClass('wdp-settings-template-active')) {
+            $('.wdp-settings-template-wrap').removeClass('wdp-settings-template-active');
+            $('.wdp-settings-template-textarea').css('height', '');
+            $parent.addClass('wdp-settings-template-active');
+        }
+    });
+
+    $(document).on('click', function(e) {
+        if(!$(e.target).closest('.wdp-settings-template-wrap').length) {
+            $('.wdp-settings-template-wrap').removeClass('wdp-settings-template-active');
+            $('.wdp-settings-template-textarea').css('height', '');
+        }
+    });
+
 });

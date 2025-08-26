@@ -51,6 +51,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.", 'adv
             <input style="max-width: 100px;" class="datepicker" name="rule[additional][date_from]" type="text">
             <span><?php esc_html_e('To', 'advanced-dynamic-pricing-for-woocommerce') ?></span>
             <input style="max-width: 100px;" class="datepicker" name="rule[additional][date_to]" type="text" placeholder="<?php esc_html_e('include', 'advanced-dynamic-pricing-for-woocommerce') ?>">
+            <span class="wdp-help-tip" data-tip='<?php esc_attr_e( "The sale will start at 00:00:00 of \"From\" date and end at 23:59:59 of \"To\" date.", "advanced-dynamic-pricing-for-woocommerce" ); ?>'></span>
         </div>
 
         <div class="rule-type">
@@ -230,121 +231,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.", 'adv
             </div>
         </div>
 
-        <div style="">
-            <div class="wdp-block wdp-bulk-adjustments" style="display: none;">
-                <input data-readonly="1" type="hidden" class="priority_block_name"
-                       name="rule[sortable_blocks_priority][]" value="bulk-adjustments">
-                <div class="wdp-row">
-                    <div class="wdp-column wdp-column-help">
-                        <label><?php Helpers::ruleFilterLabel('Bulk mode', 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
-                        <p class="wdp-rule-help">
-                        <?php
-                            echo sprintf(
-                                wp_kses(
-                                        __('Enter the discount amount based on the number of items in the cart. Put the product quantity in the range  and choose the type of bulk and discount.', 'advanced-dynamic-pricing-for-woocommerce')
-                                        .'<br><a href="%s">' .__('Read docs', 'advanced-dynamic-pricing-for-woocommerce') .'</a>',
-                                    array('br' => array(), 'a' =>array('href' => array()), )
-                                ),
-                                esc_url('https://docs.algolplus.com/algol_pricing/rules/rules-sections/bulk-discount/')
-                            );
-                            ?>
-                        </p>
-                    </div>
-                    <div class="wdp-wrapper wdp-column">
-                        <div class="wdp-row">
-                            <span class="wdp-product-adjustments-type-value-note">
-                                <?php
-                                    echo sprintf(
-                                        wp_kses(
-                                            '<a href="%s" target="_blank">' .__('Please, read about difference between Tier and Bulk modes',
-                                                'advanced-dynamic-pricing-for-woocommerce') .'</a>',
-                                            array('a' => array('href' => array(), 'target' => array()), 'br' => array())
-                                        ),
-                                        esc_url('https://docs.algolplus.com/algol_pricing/rules/rules-sections/bulk-discount/#bulk-tier')
-                                    );
-                                ?>
-                            </span>
-                        </div>
-                        <div class="wdp-row">
-                            <div class="smaller-width">
-                                <div class="wdp-column">
-                                    <select name="rule[bulk_adjustments][type]" class="bulk-adjustment-type">
-                                        <option value="bulk"><?php esc_html_e('Bulk',
-                                                'advanced-dynamic-pricing-for-woocommerce') ?></option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="smaller-width-column">
-                                <div class="wdp-column">
-                                    <select name="rule[bulk_adjustments][measurement]" class="bulk-measurement-type"></select>
-                                </div>
-                            </div>
-
-                            <div class="wdp-column">
-                                <select name="rule[bulk_adjustments][qty_based]" class="bulk-qty_based-type"></select>
-                            </div>
-
-                            <div class="wdp-column bulk-selected_categories-type">
-                                <select multiple
-                                        data-list="product_categories"
-                                        data-field="autocomplete"
-                                        data-placeholder="<?php esc_html_e("Select values",
-                                            "advanced-dynamic-pricing-for-woocommerce") ?>"
-                                        name="rule[bulk_adjustments][selected_categories][]">
-                                </select>
-                            </div>
-
-                            <div class="wdp-column bulk-selected_products-type">
-                                <select multiple
-                                        data-list="products"
-                                        data-field="autocomplete"
-                                        data-placeholder="<?php esc_attr_e("Select values",
-                                            "advanced-dynamic-pricing-for-woocommerce") ?>"
-                                        name="rule[bulk_adjustments][selected_products][]">
-                                </select>
-                            </div>
-
-                            <div class="wdp-column">
-                                <select name="rule[bulk_adjustments][discount_type]"
-                                        class="bulk-discount-type"></select>
-                            </div>
-
-                            <div class="wdp-column wdp-btn-remove wdp_bulk_adjustment_remove">
-                                <div class="wdp-btn-remove-handle">
-                                    <span class="dashicons dashicons-no-alt"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="wdp-adjustment-ranges">
-                            <div class="wdp-ranges wdp-sortable">
-                                <div class="wdp-ranges-empty"><?php esc_html_e('No ranges',
-                                        'advanced-dynamic-pricing-for-woocommerce') ?></div>
-                            </div>
-
-                            <div class="wdp-add-condition">
-                                <button type="button" class="button add-range"><?php esc_html_e('Add range',
-                                        'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-                            </div>
-                        </div>
-
-                        <div class="wdp-bulk-adjustment-options">
-                            <div class="wdp-column">
-                                <label>
-                                    <?php esc_html_e('Bulk table message', 'advanced-dynamic-pricing-for-woocommerce') ?>
-                                    <input type="text" name="rule[bulk_adjustments][table_message]"
-                                           class="bulk-table-message"
-                                           placeholder="<?php esc_attr_e('If you leave this field empty, we will show default bulk description',
-                                               'advanced-dynamic-pricing-for-woocommerce') ?>"/>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
+        <?php include WC_ADP_PLUGIN_VIEWS_PATH."/admin_page/tabs/rules/templates/wdp-sortable-blocks.php" ?>
 
         <div class="wdp-block wdp-get-products-block wdp-get-products-options wdp-row" style="display: none;">
             <div class="wdp-column wdp-column-help">
@@ -690,6 +577,8 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.", 'adv
             <button type="button" class="button wdp-btn-add-product-filter"><?php esc_html_e('Product filters',
                     'advanced-dynamic-pricing-for-woocommerce'); ?></button>
             <button type="button" class="button wdp-btn-add-product-adjustment"><?php esc_html_e('Product discounts',
+                    'advanced-dynamic-pricing-for-woocommerce'); ?></button>
+            <button type="button" class="button wdp-btn-add-role-discount"><?php esc_html_e('Role discounts',
                     'advanced-dynamic-pricing-for-woocommerce'); ?></button>
             <button type="button" class="button wdp-btn-add-bulk"><?php esc_html_e('Bulk rules',
                     'advanced-dynamic-pricing-for-woocommerce'); ?></button>

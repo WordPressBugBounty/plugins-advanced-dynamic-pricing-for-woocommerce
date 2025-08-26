@@ -365,7 +365,38 @@ jQuery(document).ready(function ($) {
     new_rule.find('.rule-date-from-to input[name="rule[additional][date_to]"]').datepicker( "option", "disabled", true ).css("background-color", "#f0f0f1");
 	};
 
-	// create new rule when click 'Add rule' button
+  function initWdpTooltips() {
+    $('.wdp-help-tip').off('hover');
+
+    $('.wdp-help-tip').hover(
+      function() {
+        var tipText = $(this).data('tip');
+        if (!tipText) return;
+
+        var $tooltip = $('<div class="wdp-tooltip-box"></div>').text(tipText).appendTo('body');
+
+        var offset = $(this).offset();
+        var tooltipWidth = $tooltip.outerWidth();
+        var tooltipHeight = $tooltip.outerHeight();
+        var windowWidth = $(window).width();
+
+        var left = offset.left + $(this).outerWidth() / 2 - tooltipWidth / 2;
+        if (left < 5) left = 5;
+        if (left + tooltipWidth > windowWidth - 5) left = windowWidth - tooltipWidth - 5;
+
+        $tooltip.css({
+          top: offset.top - tooltipHeight - 12,
+          left: left,
+          display: 'none'
+        }).fadeIn(200);
+      },
+      function() {
+        $('.wdp-tooltip-box').remove();
+      }
+    );
+  }
+
+  // create new rule when click 'Add rule' button
 	$('.add-rule').click(function (e) {
 		e.preventDefault();
 		// $('.wdp-count-all-rules').text(Number($('.wdp-count-all-rules').text()) + 1);
@@ -389,6 +420,7 @@ jQuery(document).ready(function ($) {
 	    wdp_data.rules.forEach( function ( data ) {
 		    promises.push( add_rule( data ) );
 	    } );
+      initWdpTooltips();
 	    Promise.all( promises ).then( function ( responses ) {
 		    $( "#rules-container" ).removeClass( "loading" );
 		    $( '#no-rules' ).removeClass( "loading" );
@@ -469,7 +501,7 @@ jQuery(document).ready(function ($) {
           new_rule.closest('.postbox').find('.rule-type select').val('common');
         }
         set_type_label_color(new_rule);
-
+        initWdpTooltips();
         return new_rule;
     }
 

@@ -333,6 +333,7 @@ class RuleStorage
         }
 
         $this->installProductAdjustment($rule, $ruleData);
+        $this->installRoleDiscounts($rule, $ruleData);
 
         $this->installFreeItems($rule, $ruleData);
 

@@ -203,8 +203,7 @@ class ConditionCartItemsAmount implements ListComparisonCondition, ValueComparis
      */
     public function isValid()
     {
-        return ! is_null($this->inListMode)
-               && ! is_null($this->comparisonList)
+        return !is_null($this->comparisonList)
                && ! is_null($this->comparisonMethod)
                && ! is_null($this->comparisonAmount);
     }

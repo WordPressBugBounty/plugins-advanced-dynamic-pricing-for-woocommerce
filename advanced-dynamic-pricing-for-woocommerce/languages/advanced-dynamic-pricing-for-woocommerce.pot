@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Advanced Dynamic Pricing for WooCommerce (Pro)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-25 08:15+0000\n"
+"POT-Creation-Date: 2025-08-28 05:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -449,7 +449,7 @@ msgstr ""
 msgid "Auto add to cart"
 msgstr ""
 
-#: BaseVersion/views/admin_page/tabs/options/replace_price_with_min_bulk_price.php:41
+#: BaseVersion/views/admin_page/tabs/options/replace_price_with_min_bulk_price.php:44
 #: BaseVersion/views/admin_page/tabs/options/message_after_add_free_product.php:28
 #: BaseVersion/views/admin_page/tabs/options/product_price_html.php:29
 msgid "Available tags"
@@ -3226,11 +3226,11 @@ msgstr ""
 
 #: BaseVersion/views/admin_page/tabs/options/product_price_html.php:30
 msgid ""
-"{{price_html}},  {{regular_price_striked}}, {{discounted_price_incTax}}, "
-"{{discounted_price_exclTax}}, {{price_incTax}}, {{price_exclTax}}"
+"{{price_html}},  {{regular_price_striked}}, {{discounted_price_inclTax}}, "
+"{{discounted_price_exclTax}}, {{price_inclTax}}, {{price_exclTax}}"
 msgstr ""
 
-#: BaseVersion/views/admin_page/tabs/options/replace_price_with_min_bulk_price.php:42
+#: BaseVersion/views/admin_page/tabs/options/replace_price_with_min_bulk_price.php:45
 msgid ""
 "{{price}}, {{price_suffix}}, {{price_striked}}, {{initial_price}}, "
 "{{regular_price_striked}}"

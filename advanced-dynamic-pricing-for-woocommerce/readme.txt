@@ -5,7 +5,7 @@ Tags: woocommerce, dynamic pricing, discount, pricing rule, bulk discount
 Requires PHP: 7.1
 Requires at least: 6.1
 Tested up to: 6.8
-Stable tag: 4.10.0
+Stable tag: 4.10.1
 License: GNU General Public License v3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -105,6 +105,10 @@ You should be PHP programmer to do it. [Please, review sample addon and adapt it
 
 
 == Changelog ==
+
+= 4.10.1 - 2025-08-28 =
+* Fixed bug - fatal error when press button "Update"  at edit order screen (since WooCommerce 10.1)
+* Fixed bug - wrong amounts shown if rule used mode "Don't change product price and show discount as coupon"
 
 = 4.10.0 - 2025-08-26 =
 * "Product only" (limited functionality, but optimized for speed) rules support role-based discounts

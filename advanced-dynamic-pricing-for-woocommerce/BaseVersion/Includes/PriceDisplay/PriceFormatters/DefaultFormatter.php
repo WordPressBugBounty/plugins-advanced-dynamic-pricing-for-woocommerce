@@ -97,11 +97,11 @@ class DefaultFormatter
             'Nth_item'              => $this->addSuffixOf($index),
             'qty_already_in_cart'   => $processedProduct->getQtyAlreadyInCart(),
             'price_suffix'          => get_option('woocommerce_price_display_suffix'),
-            'regular_price_striked' => '<del>' . $this->priceFunctions->format(
+            'regular_price_striked' => $calcPrice < $origPrice ? '<del>' . $this->priceFunctions->format(
                     $this->priceFunctions->getPriceToDisplay(
                         $product,
                         array("price" => $product->get_regular_price())
-                    )) . '</del>',
+                    )) . '</del>' : '',
 
             'discounted_price_inclTax'  => $this->priceFunctions->format(
                 $this->priceFunctions->getPriceIncludingTax($product, ['price' => $calcPrice])

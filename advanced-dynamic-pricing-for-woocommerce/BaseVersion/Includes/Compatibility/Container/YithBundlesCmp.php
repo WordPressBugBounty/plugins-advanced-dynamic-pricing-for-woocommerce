@@ -2,11 +2,10 @@
 
 namespace ADP\BaseVersion\Includes\Compatibility\Container;
 
-use ADP\BaseVersion\Includes\CartProcessor\CartProcessor;
 use ADP\BaseVersion\Includes\Context;
-use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Container\ContainerCartItem;
 use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Container\ContainerPriceTypeEnum;
 use ADP\BaseVersion\Includes\WC\WcCartItemFacade;
+use YITH_WCPB_Frontend_Premium;
 
 defined('ABSPATH') or exit;
 
@@ -23,9 +22,17 @@ class YithBundlesCmp extends AbstractContainerCompatibility
      */
     private $context;
 
+    /**
+     * @var YITH_WCPB_Frontend_Premium
+     */
+    private $yithWcpbFrontendPremium = null;
+
     public function __construct(Context $context)
     {
         $this->context = $context;
+        if(class_exists('YITH_WCPB_Frontend_Premium')){
+            $this->yithWcpbFrontendPremium = yith_wcpb_frontend();
+        }
     }
 
     protected function getContext(): Context
@@ -119,6 +126,16 @@ class YithBundlesCmp extends AbstractContainerCompatibility
      */
     public function calculateContainerPrice(WcCartItemFacade $facade, array $children): float
     {
+
+        if (!is_null($this->yithWcpbFrontendPremium) && $this->yithWcpbFrontendPremium->show_item_prices_in_cart_and_checkout) {
+            $containerPrice = 0.0;
+
+            foreach ($children as $child) {
+                $containerPrice += floatval($child->getProduct()->get_price());
+            }
+            return $containerPrice;
+        }
+
         return floatval($facade->getProduct()->get_price());
     }
 
@@ -129,17 +146,35 @@ class YithBundlesCmp extends AbstractContainerCompatibility
      */
     public function calculateContainerBasePrice(WcCartItemFacade $facade, array $children): float
     {
-        return floatval(CartProcessor::getProductPriceDependsOnPriceMode($facade->getProduct()));
+        if (!is_null($this->yithWcpbFrontendPremium) && $this->yithWcpbFrontendPremium->show_item_prices_in_cart_and_checkout) {
+            return 0.0;
+        }
+
+        return floatval($facade->getProduct()->get_regular_price());
     }
 
     public function getContainerPriceTypeByParentFacade(WcCartItemFacade $facade): ?ContainerPriceTypeEnum
     {
-        return ContainerPriceTypeEnum::FIXED();
+        $product = $facade->getProduct();
+
+        if (!($product instanceof \WC_Product_Yith_Bundle)) {
+            return null;
+        }
+
+        if (!is_null($this->yithWcpbFrontendPremium) && !$this->yithWcpbFrontendPremium->show_item_prices_in_cart_and_checkout) {
+            return ContainerPriceTypeEnum::FIXED();
+        } else {
+            return ContainerPriceTypeEnum::BASE_PLUS_SUM_OF_SUB_ITEMS();
+        }
     }
 
     public function isPartOfContainerFacadePricedIndividually(WcCartItemFacade $facade): ?bool
     {
-        return false;
+        if (!is_null($this->yithWcpbFrontendPremium) && $this->yithWcpbFrontendPremium->show_item_prices_in_cart_and_checkout) {
+            return true;
+        }else {
+            return false;
+        }
     }
 
     public function overrideContainerReferenceForPartOfContainerFacadeAfterPossibleDuplicates(

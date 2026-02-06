@@ -19,6 +19,8 @@ use ADP\BaseVersion\Includes\WC\PriceFunctions;
 use ADP\BaseVersion\Includes\WC\WcCartItemFacade;
 use WC_Coupon;
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 class MergeDiscountsCalculator
 {
     /** @var Context */

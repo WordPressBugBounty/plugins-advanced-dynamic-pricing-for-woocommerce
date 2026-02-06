@@ -60,9 +60,6 @@ class AdminCommon implements LoadStrategy
         $orderPreview = new WcOrderPreviewExtensions();
         $orderPreview->register();
 
-        $engine = Factory::get("Engine", WC()->cart);
-        $engine->getCartProcessor()->installActionFirstProcess_Blocks(); //installs only cartCouponsProcessor
-
         /** @see Functions::install() */
         Factory::callStaticMethod("Functions", 'install');
 

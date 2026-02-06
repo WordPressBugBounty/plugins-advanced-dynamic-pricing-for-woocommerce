@@ -108,6 +108,12 @@ class AdminPageFilterTitles
                         $filtersByType['products'][] = $productId;
                     }
                 }
+
+                if (isset($filter['collections_exclude']['values'])) {
+                    foreach ($filter['collections_exclude']['values'] as $collId) {
+                        $filtersByType['product_collections'][] = $collId;
+                    }
+                }
             }
 
             if (isset($rule['get_products']['value'])) {
@@ -188,7 +194,7 @@ class AdminPageFilterTitles
                     } elseif ($condition['type'] === ProductsAll::getType() && isset($condition['options'][ListComparisonCondition::COMPARISON_LIST_KEY])) {
                         $value                     = $condition['options'][ListComparisonCondition::COMPARISON_LIST_KEY];
                         $filtersByType['products'] = array_merge($filtersByType['products'], (array)$value);
-                    } elseif ($condition['type'] === 'cart_was_rule_applied' && isset($condition['options'][ListComparisonCondition::COMPARISON_LIST_KEY])) {
+                    } elseif (($condition['type'] === 'cart_was_rule_applied' || $condition['type']  === 'customer_list_rules_aplied') && isset($condition['options'][ListComparisonCondition::COMPARISON_LIST_KEY])) {
                         $value                       = $condition['options'][ListComparisonCondition::COMPARISON_LIST_KEY];
                         $filtersByType['rules_list'] = array_merge($filtersByType['rules_list'], (array)$value);
                     } elseif ($condition['type'] === 'cart_coupons' && isset($condition['options'][ListComparisonCondition::COMPARISON_LIST_KEY])) {

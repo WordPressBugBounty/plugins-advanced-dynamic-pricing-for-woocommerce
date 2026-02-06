@@ -12,7 +12,6 @@ use ADP\BaseVersion\Includes\Helpers\Helpers;
 use ADP\BaseVersion\Includes\ImportExport\KeyKeeperDB;
 use ADP\BaseVersion\Includes\SpecialStrategies\CompareStrategy;
 use ADP\Factory;
-use ADP\ProVersion\Includes\Database\Repository\CollectionRepository;
 
 class Rule
 {
@@ -133,6 +132,16 @@ class Rule
      */
     public $summary;
 
+    /**
+     * @var string
+     */
+    public $hash;
+
+    /**
+     * @var string
+     */
+    public $date;
+
     public function __construct(
         $id,
         $deleted,
@@ -181,6 +190,8 @@ class Rule
         $this->conditionMessage       = $conditionMessage;
 
         $this->summary                = "";
+        $this->hash                   = "";
+        $this->date                   = null;
     }
 
     /**
@@ -219,7 +230,7 @@ class Rule
         $rule['cart_adjustments']  = stripslashes_deep($rule['cart_adjustments']);
         $rule['condition_message'] = stripslashes_deep($rule['condition_message']);
 
-        return new self(
+        return new static(
             $rule['id'],
             $rule['deleted'],
             (new CompareStrategy())->isStringBool($rule['enabled']),
@@ -306,15 +317,15 @@ class Rule
             return isset($value);
         });
 
+        $rule = $this->buildRule();
         $data['summary'] = $this->buildSummary();
+        $data['hash'] = $rule->getHash();
+        $data['date'] = date('Y-m-d H:i:s', time());
 
         return $data;
     }
 
-    /**
-     * @return string
-     */
-    protected function buildSummary() {
+    protected function buildRule() {
         /** @var RuleStorage $ruleStorage */
         $ruleStorage = Factory::get("Database_RuleStorage");
 
@@ -329,6 +340,15 @@ class Rule
         }
 
         $rule = $rulesCol->getFirst();
+
+        return $rule;
+    }
+
+    /**
+     * @return string
+     */
+    protected function buildSummary() {
+        $rule = $this->buildRule();
 
         $pieces = [];
         if ($rule->getTitle()) {
@@ -424,11 +444,6 @@ class Rule
                     array("ADP\\BaseVersion\\Includes\\Helpers\\Helpers", "getAttributeTitle"),
                     $filter->getValue()
                 );
-            } elseif ($filter::TYPE_COLLECTIONS === $filter->getType()) {
-                $collectionRepository = new CollectionRepository();
-                foreach ($collectionRepository::getProductCollectionsByIds($filter->getValue()) as $collection ) {
-                    $result[] = $collection->title;
-                }
             }
         }
 
@@ -470,6 +485,8 @@ class Rule
             auto_add_products TEXT,
             condition_message TEXT,
             summary TEXT,
+            hash VARCHAR(32),
+            date datetime,
             PRIMARY KEY  (id),
             KEY deleted (deleted),
             KEY enabled (enabled)

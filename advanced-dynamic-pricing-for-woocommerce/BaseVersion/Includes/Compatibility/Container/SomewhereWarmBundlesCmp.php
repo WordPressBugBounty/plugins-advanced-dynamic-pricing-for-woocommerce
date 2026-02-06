@@ -63,6 +63,19 @@ class SomewhereWarmBundlesCmp extends AbstractContainerCompatibility
                 return $price;
             }, 10, 6);
         }
+
+        add_filter('woocommerce_bundle_price_data', function($data, $product) {
+            $discountPrice = adp_functions()->getDiscountedProductPrice($product, 1, true);
+            if (!empty($discountPrice)) {
+                if( is_array($discountPrice) ) {
+                    $data['base_price'] = reset($discountPrice); //take min value
+                } else {
+                    $data['base_price'] = $discountPrice;
+                }
+            }
+
+            return $data;
+        }, 10, 2);
     }
 
     public function isActive(): bool
@@ -109,7 +122,7 @@ class SomewhereWarmBundlesCmp extends AbstractContainerCompatibility
                     $product,
                     $bundledProduct,
                     (float)$price,
-                    (float)$bundleItem->get_quantity("default"),
+                    (float)$bundleItem->get_quantity("min", array( 'check_optional' => true )),
                     $bundleItem->is_priced_individually()
                 );
             },
@@ -182,8 +195,7 @@ class SomewhereWarmBundlesCmp extends AbstractContainerCompatibility
 
     public function isPartOfContainerFacadePricedIndividually(WcCartItemFacade $facade): ?bool
     {
-        $plugin_version = defined('WC_PB_VERSION') ? WC_PB_VERSION : null;
-        if ($plugin_version && version_compare($plugin_version, '8.3', '>=')) {
+        if(apply_filters('adp_true_bundle_individ_price', false)){
             return true;
         }
 
@@ -193,7 +205,6 @@ class SomewhereWarmBundlesCmp extends AbstractContainerCompatibility
         if (!(isset($product->bundled_cart_item) && $product->bundled_cart_item instanceof \WC_Bundled_Item)) {
             return false;
         }
-
         $item = $product->bundled_cart_item;
 
         return $item->is_priced_individually();
@@ -256,7 +267,7 @@ class SomewhereWarmBundlesCmp extends AbstractContainerCompatibility
         WcCartItemFacade $parentFacade
     ): ContainerPartCartItem {
         if ($subContainerItem->isPricedIndividually()){
-            $subContainerItem->setQty($subContainerItem->getQty());
+            $subContainerItem->setQty($subContainerItem->getQty() / $parentFacade->getQty());
         }
 
         return $subContainerItem;

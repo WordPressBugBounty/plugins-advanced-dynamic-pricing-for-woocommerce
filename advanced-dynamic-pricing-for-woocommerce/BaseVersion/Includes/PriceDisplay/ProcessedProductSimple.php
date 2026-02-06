@@ -380,6 +380,22 @@ class ProcessedProductSimple
     /**
      * @param int|null $pos
      *
+     * @return float|null
+     */
+    public function getMaxDiscountRangePrice($pos = null)
+    {
+        $item = $this->getItemByPos($pos);
+
+        if ( ! isset($item)) {
+            return null;
+        }
+
+        return $item->prices()->getMaxDiscountRangePrice();
+    }
+
+    /**
+     * @param int|null $pos
+     *
      * @return BasicCartItem|null
      */
     protected function getItemByPos($pos = null)

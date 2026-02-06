@@ -199,6 +199,10 @@ class RuleRepository implements RuleRepositoryInterface {
             $sql .= ' AND deleted = 0';
         }
 
+        if(adp_context()->isBaseVersion()) {
+            $args['exclusive'] = 0;
+        }
+
         if (isset($args['exclusive'])) {
             $showExclusive = $args['exclusive'] ? 1 : 0;
             $sql           = "$sql AND exclusive = $showExclusive";
@@ -223,8 +227,13 @@ class RuleRepository implements RuleRepositoryInterface {
 
         if (isset($args['q'])) {
             $q = $args['q'];
-            //phpcs:ignore WordPress.DB
-            $sql = $wpdb->prepare("$sql AND (summary LIKE '%s')", "%$q%");
+
+            if (preg_replace("/\s+/", "", strtolower($q)) === 'noname') {
+                $sql .= " AND (title = '' OR summary LIKE '%no name%')";
+            } else {
+                //phpcs:ignore WordPress.DB
+                $sql = $wpdb->prepare("$sql AND (summary LIKE %s)", "%$q%");
+            }
         }
 
         $sql .= " ORDER BY rule_type DESC, exclusive DESC, priority";
@@ -601,10 +610,21 @@ class RuleRepository implements RuleRepositoryInterface {
         CacheHelper::flushRulesCache();
         $table = $wpdb->prefix . Rule::TABLE_NAME;
 
+        $rules = $this->getRules(['id' => $rule_id]);
+
+        if (isset($rules[0]) && $rules[0] instanceof Rule) {
+            $rule_data = $rules[0]->getDataForDB();
+            $rule_data['deleted'] = 1;
+        } else {
+            $rule_data = null;
+        }
+
         $data  = array('deleted' => 1);
         $where = array('id' => $rule_id);
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery
         $wpdb->update($table, $data, $where);
+
+        do_action("adp_rule_deleted", $rule_id, $rule_data);
     }
 
     public function storeRule($rule)
@@ -620,11 +640,13 @@ class RuleRepository implements RuleRepositoryInterface {
             $where  = array('id' => $id);
             // phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($table, $data, $where);
+            do_action("adp_rule_updated", $id, $data);
 
             return $id;
         } else {
             // phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($table, $data);
+            do_action("adp_rule_added", $wpdb->insert_id, $data);
 
             return $wpdb->insert_id;
         }

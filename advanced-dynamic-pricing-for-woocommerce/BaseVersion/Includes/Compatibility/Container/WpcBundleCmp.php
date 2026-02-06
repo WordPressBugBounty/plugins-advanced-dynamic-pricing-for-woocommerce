@@ -25,9 +25,12 @@ class WpcBundleCmp extends AbstractContainerCompatibility
      */
     protected $context;
 
+    protected $settings;
+
     public function __construct(Context $context)
     {
         $this->context = $context;
+        $this->settings = (array) get_option( 'woosb_settings', [] );
     }
 
     protected function getContext(): Context
@@ -86,11 +89,11 @@ class WpcBundleCmp extends AbstractContainerCompatibility
         $reflection = new \ReflectionClass($product);
         $property = $reflection->getProperty('data');
         $property->setAccessible(true);
-        $basePrice = (float)$property->getValue($product)['price'];
-        $thirdPartyData = $facade->getThirdPartyData();
-        if (!empty($thirdPartyData['woosb_discount'])) {
-            $basePrice *= (100 - (float)$thirdPartyData['woosb_discount']) / 100;
-            $basePrice = round($basePrice, (int)apply_filters('woosb_price_decimals', wc_get_price_decimals()));
+
+        if(isset($this->settings['bundled_price_from']) && $this->settings['bundled_price_from'] === 'regular_price') {
+            $basePrice = (float)$property->getValue($product)['regular_price'];
+        } else {
+            $basePrice = (float)$property->getValue($product)['price'];
         }
 
         return floatval($basePrice);

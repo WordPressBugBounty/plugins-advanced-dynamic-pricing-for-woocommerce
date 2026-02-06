@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit; ?>
 <tr valign="top">
     <th scope="row" class="titledesc">
         <button type="submit" class="button button-primary" name="reset-options" id="reset-options">

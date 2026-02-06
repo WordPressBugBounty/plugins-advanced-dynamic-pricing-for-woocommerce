@@ -144,6 +144,37 @@ class CartCustomerHelper
         return count($orderIds) > 0;
     }
 
+    public function getRulesAplied()
+    {
+        global $wpdb;
+        $orderIds = $this->getOrderIds(array(
+            'post_status' => $this->getPreparedIsPaidOrderStatuses(),
+        ));
+
+        if(!count($orderIds)) {
+            return [];
+        }
+
+        $tableStats = $wpdb->prefix . 'wdp_orders';
+        $orderIds = \implode(', ', $orderIds);
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $ids = $wpdb->get_col("SELECT DISTINCT rule_id FROM {$tableStats} WHERE order_id IN ({$orderIds})");
+
+        return $ids;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRulesAplied()
+    {
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
+        $ids = $this->getRulesAplied();
+
+        return count($ids) > 0;
+    }
+
     /**
      * @param string $time
      *

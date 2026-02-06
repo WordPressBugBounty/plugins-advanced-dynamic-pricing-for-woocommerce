@@ -638,5 +638,50 @@ class UpdateFunctions
             ), array('id' => $row['id']));
         }
     }
+
+    public static function migrateSummaryTo_4_10_4()
+    {
+        global $wpdb;
+
+        if(!class_exists('\ADP\ProVersion\Includes\Database\Models\Collection')) {
+            return;
+        }
+
+        $table = $wpdb->prefix . \ADP\ProVersion\Includes\Database\Models\Collection::TABLE_NAME;
+
+        //phpcs:disable WordPress.DB.DirectDatabaseQuery
+        $column_exists = $wpdb->get_results(
+            //phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+            $wpdb->prepare("SHOW COLUMNS FROM {$table} LIKE %s", 'conditions_relationship')
+        );
+
+        if (empty($column_exists)) {
+            //phpcs:disable WordPress.DB.PreparedSQL, WordPress.DB.DirectDatabaseQuery
+            $wpdb->query("ALTER TABLE {$table} ADD COLUMN conditions_relationship BOOLEAN DEFAULT TRUE");
+            //phpcs:disable WordPress.DB.PreparedSQL, WordPress.DB.DirectDatabaseQuery
+            $wpdb->query("UPDATE {$table} SET conditions_relationship = TRUE");
+        }
+
+        //phpcs:disable WordPress.DB.DirectDatabaseQuery
+        $column_exists = $wpdb->get_results(
+            //phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+            $wpdb->prepare("SHOW COLUMNS FROM {$table} LIKE %s", 'summary')
+        );
+
+        if (empty($column_exists)) {
+            //phpcs:disable WordPress.DB.PreparedSQL, WordPress.DB.DirectDatabaseQuery
+            $wpdb->query("ALTER TABLE {$table} ADD COLUMN summary TEXT DEFAULT NULL");
+        }
+
+        if (!class_exists("\ADP\ProVersion\Includes\Database\Repository\CollectionRepository")) {
+            return;
+        }
+
+        $productCollections = \ADP\ProVersion\Includes\Database\Repository\CollectionRepository::getProductCollections();
+
+        foreach ($productCollections as $collection) {
+            \ADP\ProVersion\Includes\Database\Repository\CollectionRepository::storeProductCollection($collection);
+        }
+    }
 }
 

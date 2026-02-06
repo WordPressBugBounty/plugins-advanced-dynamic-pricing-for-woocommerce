@@ -48,7 +48,7 @@ class PluginActions
                 __('Support', 'advanced-dynamic-pricing-for-woocommerce')
             ],
             [
-                'https://docs.algolplus.com/category/algol_pricingnew/',
+                'https://docs.algolplus.com/category/algol_pricing/',
                 __('Plugin documentation', 'advanced-dynamic-pricing-for-woocommerce'),
                 __('Docs', 'advanced-dynamic-pricing-for-woocommerce')
             ],

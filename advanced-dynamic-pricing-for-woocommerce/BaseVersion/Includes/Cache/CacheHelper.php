@@ -74,6 +74,23 @@ class CacheHelper
         }
     }
 
+    public static function flushRulesCache()
+    {
+        self::cacheDelete(self::KEY_ACTIVE_RULES_COLLECTION);
+        self::cacheFlushGroup(self::GROUP_RULES_CACHE);
+        self::cacheFlushGroup(self::GROUP_PROCESSED_PRODUCTS_TO_DISPLAY);
+
+        Factory::callStaticMethod('Shortcodes_OnSaleProducts', 'clearCache');
+        Factory::callStaticMethod('Shortcodes_BogoProducts', 'clearCache');
+    }
+
+    public static function flushCollectionsCache()
+    {
+        self::cacheFlushGroup(self::GROUP_COLLECTIONS);
+        self::flushRulesCache();
+    }
+
+
     /**
      * @param null $deprecated
      *
@@ -262,12 +279,6 @@ class CacheHelper
         return $product_data ? $product_data->meta : array();
     }
 
-    public static function flushRulesCache()
-    {
-        self::cacheDelete(self::KEY_ACTIVE_RULES_COLLECTION);
-        self::cacheFlushGroup(self::GROUP_RULES_CACHE);
-    }
-
     /**
      * @param int $productId
      * @param array $variationAttributes
@@ -326,14 +337,24 @@ class CacheHelper
      *
      * @return string
      */
-    protected static function calcHashProcessedProduct(
-        $productId,
+    public static function calcHashProcessedProduct(
+        $theProduct,
         $variationAttributes,
         $qty,
         $cartItemData,
         $cart,
         $calc
     ) {
+        if ($theProduct instanceof WC_Product) {
+            $productId = $theProduct->get_id();
+        } elseif (is_numeric($theProduct)) {
+            $productId = $theProduct;
+        } elseif ($theProduct instanceof \WP_Post) {
+            $productId = $theProduct->ID;
+        } else {
+            $productId = $theProduct;
+        }
+
         $parts = array($productId, $qty);
 
         foreach ($variationAttributes as $key => $value) {
@@ -360,9 +381,14 @@ class CacheHelper
             $parts[] = md5(serialize($rule));
         }
 
-        $parts = apply_filters("adp_calculate_processed_product_hash", $parts);
+        $parts[]= md5( json_encode( $cart->getContext()->getCustomer()->getJson() ) );
 
-        return md5(implode('_', $parts));
+        $parts = apply_filters("adp_calculate_processed_product_hash", $parts,
+                    $theProduct, $variationAttributes, $qty, $cartItemData, $cart, $calc);
+
+        $hash = md5(implode('_', $parts));
+
+        return $hash;
     }
 
     /**

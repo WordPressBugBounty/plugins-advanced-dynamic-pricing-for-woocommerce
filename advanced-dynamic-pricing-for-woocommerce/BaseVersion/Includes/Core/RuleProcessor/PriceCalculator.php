@@ -23,6 +23,7 @@ use ADP\BaseVersion\Includes\Core\Rule\Structures\SetDiscount;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\Structures\CartItemsCollection;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\Structures\CartSet;
 use ADP\BaseVersion\Includes\SpecialStrategies\CompareStrategy;
+use Exception;
 
 defined('ABSPATH') or exit;
 
@@ -128,11 +129,7 @@ class PriceCalculator
             $newPrice = $this->calculateSinglePrice($price, $item);
         }
 
-        if ($item->getAddonsAmount() > 0) {
-            if ($discount::TYPE_FIXED_VALUE === $discount->getType()) {
-                $newPrice += $item->getAddonsAmount();
-            }
-        } else {
+        if (!$item->getAddonsAmount()) {
             if ($globalContext->isToCompensateTrdPartAdjustmentForFixedPrice()) {
                 if ($discount::TYPE_FIXED_VALUE === $discount->getType()) {
                     $newPrice += $item->prices()->getTrdPartyAdjustmentsTotal();
@@ -379,7 +376,11 @@ class PriceCalculator
         $third_party_adjustments = 0.0;
         foreach ($items as $item) {
             if ($item->getAddonsAmount() > 0) {
-                $third_party_adjustments += $item->getAddonsAmount();
+                $compatibilitySettings = $globalContext->getCompatibilitySettings();
+                $dontApplyDiscountToAddons = $compatibilitySettings->getOption('dont_apply_discount_to_addons');
+                if ($dontApplyDiscountToAddons) {
+                    $third_party_adjustments += $item->getAddonsAmount() * $item->getQty();
+                }
             } elseif ($globalContext->isToCompensateTrdPartAdjustmentForFixedPrice()) {
                 $third_party_adjustments += $item->prices()->getTrdPartyAdjustmentsTotal();
             }
@@ -405,6 +406,8 @@ class PriceCalculator
                     $adjustments_left = $this->discount->getValue();
                 }
             }
+        } else if(Discount::TYPE_FIXED_VALUE_PER_ITEM === $discountType) {
+            $adjustments_left = $third_party_adjustments;
         }
 
         return $adjustments_left;
@@ -787,7 +790,6 @@ class PriceCalculator
 
         $variables = [
             'price' => (float) $price,
-            'regular_price' => $product && method_exists($product, 'get_regular_price') ? (float) $product->get_regular_price() : $price,
         ];
 
         if ($product && method_exists($product, 'get_meta')) {
@@ -795,67 +797,89 @@ class PriceCalculator
             foreach ($matches[1] as $var) {
                 if (!isset($variables[$var])) {
                     $metaValue = $product->get_meta($var, true);
+                    if(empty($metaValue)) return $price;
                     $variables[$var] = is_numeric($metaValue) ? (float)$metaValue : 1;
                 }
             }
         }
 
-        $preparedExpr = preg_replace_callback('/\{([a-zA-Z0-9_]+)\}/', function($m) use ($variables) {
+        $preparedExpr = preg_replace_callback('/\{([a-zA-Z0-9_]+)\}/', function ($m) use ($variables) {
             return isset($variables[$m[1]]) ? $variables[$m[1]] : 0;
         }, $expression);
 
         $preparedExpr = str_replace(' ', '', $preparedExpr);
 
         try {
-            $result = $this->evaluateExpression($preparedExpr);
-        } catch (\Exception $e) {
+            $rpn = $this->toRpn($preparedExpr);
+            $result = $this->evalRpn($rpn);
+        } catch (Exception $e) {
             return $price;
         }
 
         return $result;
     }
 
-    /**
-     *
-     * @param string $expr
-     * @return float
-     * @throws Exception
-     */
-    protected function evaluateExpression(string $expr): float
+    protected function toRpn(string $expr): array
     {
-        while (preg_match('/\(([^()]+)\)/', $expr, $matches)) {
-            $innerValue = $this->evaluateExpression($matches[1]);
-            $expr = str_replace($matches[0], $innerValue, $expr);
-        }
+        $output = [];
+        $stack = [];
+        $tokens = preg_split('/([+\-*\/\(\)])/u', $expr, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
 
-        $patternMD = '#(-?\d+(\.\d+)?)([*/])(-?\d+(\.\d+)?)#';
-        while (preg_match($patternMD, $expr, $matches)) {
-            $a = (float)$matches[1];
-            $op = $matches[3];
-            $b = (float)$matches[4];
-            if ($op === '*') {
-                $res = $a * $b;
-            } else {
-                if ($b == 0) throw new \Exception("Division by zero");
-                $res = $a / $b;
+        $precedence = ['+' => 1, '-' => 1, '*' => 2, '/' => 2];
+
+        foreach ($tokens as $token) {
+            if (is_numeric($token)) {
+                $output[] = $token;
+            } elseif (isset($precedence[$token])) {
+                while (!empty($stack) && end($stack) != '(' &&
+                    $precedence[end($stack)] >= $precedence[$token]) {
+                    $output[] = array_pop($stack);
+                }
+                $stack[] = $token;
+            } elseif ($token === '(') {
+                $stack[] = $token;
+            } elseif ($token === ')') {
+                while (!empty($stack) && end($stack) !== '(') {
+                    $output[] = array_pop($stack);
+                }
+                array_pop($stack);
             }
-            $expr = substr_replace($expr, $res, strpos($expr, $matches[0]), strlen($matches[0]));
         }
 
-        if ($expr[0] !== '+' && $expr[0] !== '-') {
-            $expr = '+' . $expr;
+        while (!empty($stack)) {
+            $output[] = array_pop($stack);
         }
 
-        preg_match_all('/([+-])(\d+(\.\d+)?)/', $expr, $matches, PREG_SET_ORDER);
+        return $output;
+    }
 
-        $result = 0.0;
-        foreach ($matches as $m) {
-            $sign = $m[1];
-            $num = (float)$m[2];
-            $result += ($sign === '+') ? $num : -$num;
+    protected function evalRpn(array $tokens): float
+    {
+        $stack = [];
+
+        foreach ($tokens as $token) {
+            if (is_numeric($token)) {
+                $stack[] = (float)$token;
+            } else {
+                $b = array_pop($stack);
+                $a = array_pop($stack);
+
+                switch ($token) {
+                    case '+': $stack[] = $a + $b; break;
+                    case '-': $stack[] = $a - $b; break;
+                    case '*': $stack[] = $a * $b; break;
+                    case '/':
+                        if ($b == 0) {
+                            throw new Exception("Division by zero");
+                        }
+                        $stack[] = $a / $b;
+                        break;
+                    default: throw new Exception("Unknown operator ". esc_html($token) );
+                }
+            }
         }
 
-        return $result;
+        return array_pop($stack);
     }
 
     /**

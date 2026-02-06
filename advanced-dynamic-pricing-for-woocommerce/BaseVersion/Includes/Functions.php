@@ -450,6 +450,7 @@ class Functions
         return $this->productProcessor;
     }
 
+    //TODO: delete unused function
     public function getProductsWithSalePriceAdp() {
         global $wpdb;
 
@@ -462,5 +463,29 @@ class Functions
         $ids = $wpdb->get_col($query);
 
         return array_map('intval', $ids);
+    }
+
+    public function getOnSaleProducts($include_wc_onsale = false, $ruleIds = null){
+        $productIds = [];
+
+        // get rules list
+        if( $ruleIds AND !is_array($ruleIds) ){
+            $ruleIds = [$ruleIds];
+        }
+        if( !$ruleIds ){
+            $ruleIds = \ADP\BaseVersion\Includes\Shortcodes\OnSaleProducts::getActiveRules();
+        }
+
+        //gather products
+        foreach($ruleIds as $ruleId) {
+            $productIds = array_merge( $productIds, \ADP\BaseVersion\Includes\Shortcodes\OnSaleProducts::getProductIdsByRuleId($ruleId) );
+        }
+
+        //include WC onsale ?
+        if( $include_wc_onsale ) {
+            $productIds = array_merge( $productIds, wc_get_product_ids_on_sale());
+        }
+
+        return array_unique($productIds);
     }
 }

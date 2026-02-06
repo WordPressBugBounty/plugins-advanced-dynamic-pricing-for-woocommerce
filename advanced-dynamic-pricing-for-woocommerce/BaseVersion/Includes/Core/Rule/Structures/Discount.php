@@ -55,7 +55,12 @@ class Discount
         }
 
         $this->type         = $type;
-        $this->value = floatval($value);
+        if($type === self::TYPE_EXPRESSION_PRICE) {
+            $this->value = !empty($value) ? esc_attr(trim($value)) : floatval($value);
+        } else {
+            $this->value = floatval($value);
+        }
+
         $this->currencyCode = $context->getCurrencyCode();
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 defined('ABSPATH') or exit;
 
 /**
@@ -7,8 +8,9 @@ defined('ABSPATH') or exit;
  * @var array $rows
  * @var array $data_rows
  * @var string $footer_html
+ * @var string $measurement
+ * @var string $layout
  */
-
 
 ?>
 <div class='clear'></div>
@@ -17,7 +19,7 @@ defined('ABSPATH') or exit;
     <div class="wdp_pricing_table_caption"><?php
         //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText, WordPress.Security.EscapeOutput.OutputNotEscaped
         echo _x($header_html, 'bulk table header title', 'advanced-dynamic-pricing-for-woocommerce'); ?></div>
-    <table class="wdp_pricing_table">
+    <table class="wdp_pricing_table" data-measurement="<?php echo esc_attr($measurement)?>" data-layout="<?php echo esc_attr($layout) ?>">
         <thead>
         <tr>
             <?php foreach ($table_header as $label): ?>
@@ -30,8 +32,8 @@ defined('ABSPATH') or exit;
         </thead>
 
         <tbody>
-        <?php foreach ($rows as $row): ?>
-            <tr>
+        <?php foreach ($rows as $index => $row): ?>
+            <tr data-min="<?php echo $data_rows ? esc_attr($data_rows[$index]['range']['from']) : '';?>">
                 <?php foreach ($row as $html): ?>
                     <td><?php
                         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

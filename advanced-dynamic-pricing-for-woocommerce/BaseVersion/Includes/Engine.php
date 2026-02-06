@@ -108,6 +108,12 @@ class Engine
         if ($germanMarket->isActive()) {
             $germanMarket->prepareHooks();
         }
+        if ($this->context->getOption("support_persistence_rules") ) {
+            //must refill min_price when run >WooCommerce>Status>Tools>Product lookup tables, Regenerate
+            $persistentRuleRepository = new PersistentRuleRepository();
+            $persistentRuleRepository->installHooksForProductLookupTable();
+        }
+
     }
 
     public function withContext(Context $context)

@@ -71,6 +71,7 @@ class CartShippingProcessor
     {
         add_filter('woocommerce_package_rates', array($this, 'packageRates'), PHP_INT_MAX - 1, 2);
         add_filter('woocommerce_package_rates', array($this, 'currencyPackageRates'), PHP_INT_MAX - 2, 2);
+        add_filter('woocommerce_cart_shipping_packages', array($this, 'filterDataPackages'), 10, 1);
     }
 
     public function unsetFilterToEditPackageRates()
@@ -286,5 +287,17 @@ class CartShippingProcessor
     public function hookShippingChosenMethod($default, $rates, $chosenMethod)
     {
         return isset($rates[$chosenMethod]) ? $chosenMethod : $default;
+    }
+
+    public function filterDataPackages($packages)
+    {
+        $newPackages = [];
+        foreach ( $packages as $package_key => $package ) {
+            $newPackages[$package_key] = $package;
+            foreach ( $newPackages[$package_key]['contents'] as $item_id => $item ) {
+                unset( $newPackages[$package_key]['contents'][ $item_id ]['adp'] );
+            }
+		}
+        return $newPackages;
     }
 }

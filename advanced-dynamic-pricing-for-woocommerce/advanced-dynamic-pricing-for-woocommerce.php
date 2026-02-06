@@ -1,13 +1,13 @@
 <?php
 /**
- * Plugin Name: Advanced Dynamic Pricing for WooCommerce
+ * Plugin Name: Advanced Dynamic Pricing and Discount Rules for WooCommerce
  * Plugin URI:
  * Description: Manage WooCommerce discounts
- * Version: 4.10.1
+ * Version: 4.11.0
  * Author: AlgolPlus
  * Author URI: https://algolplus.com/
  * WC requires at least: 3.6
- * WC tested up to: 10.1
+ * WC tested up to: 10.4
  *
  * Text Domain: advanced-dynamic-pricing-for-woocommerce
  * Domain Path: /languages
@@ -43,7 +43,9 @@ define('WC_ADP_PLUGIN_PATH', plugin_dir_path(__FILE__));
 define('WC_ADP_PLUGIN_URL', plugins_url('', __FILE__));
 define('WC_ADP_MIN_PHP_VERSION', '7.0.0');
 define('WC_ADP_MIN_WC_VERSION', '3.6');
-define('WC_ADP_VERSION', '4.10.1');
+define('WC_ADP_VERSION', '4.11.0');
+define('WC_ADP_WC_TIPTIP_SINCE_VERSION', '10.3');
+
 
 include_once "AutoLoader.php";
 include_once "Factory.php";

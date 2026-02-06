@@ -475,6 +475,11 @@ class OptionsInstaller
                 'highlight_range_qty_changed',
                 false,
                 __('Highlight selected range when qty changed', 'advanced-dynamic-pricing-for-woocommerce')
+            ),
+            $builder::boolean(
+                'clickable_bulk_rows',
+                false,
+                __('Highlight rows (on hover) and set qty on click', 'advanced-dynamic-pricing-for-woocommerce')
             )
         );
 

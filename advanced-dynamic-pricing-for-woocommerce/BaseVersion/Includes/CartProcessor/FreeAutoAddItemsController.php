@@ -90,8 +90,8 @@ class FreeAutoAddItemsController
             $wcSessionFacade->push();
         }
 
-        wp_redirect(wc_get_page_permalink('cart'));
-        die();
+        wp_safe_redirect(wc_get_page_permalink('cart'));
+        exit();
     }
 
 

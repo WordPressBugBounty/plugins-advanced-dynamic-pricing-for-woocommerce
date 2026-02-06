@@ -240,53 +240,61 @@ class WcCartItemDisplayExtensions
                     if ($useRegularPriceForOriginalPrice) {
                         $originalPrice = $facade->getRegularPriceWithoutTax() + $facade->getRegularPriceTax();
 
-                        $originalPrice += array_sum(
-                            array_map(function ($child) use ($facade) {
-                                if ($child->isContaineredPricedIndividually()) {
-                                    return ($child->getRegularPriceWithoutTax() + $child->getRegularPriceTax()) * $child->getQty() / $facade->getQty();
-                                } else {
-                                    return 0.0;
-                                }
-                            }, $children)
-                        );
+                        if(!apply_filters('adp_true_bundle_individ_price', false)) {
+                            $originalPrice += array_sum(
+                                array_map(function ($child) use ($facade) {
+                                    if ($child->isContaineredPricedIndividually()) {
+                                        return ($child->getRegularPriceWithoutTax() + $child->getRegularPriceTax()) * $child->getQty() / $facade->getQty();
+                                    } else {
+                                        return 0.0;
+                                    }
+                                }, $children)
+                            );
+                        }
                     } else {
                         $originalPrice = $facade->getOriginalPriceWithoutTax() + $facade->getOriginalPriceTax();
 
-                        $originalPrice += array_sum(
-                            array_map(function ($child) use ($facade) {
-                                if ($child->isContaineredPricedIndividually()) {
-                                    return ($child->getOriginalPriceWithoutTax() + $child->getOriginalPriceTax()) * $child->getQty() / $facade->getQty();
-                                } else {
-                                    return 0.0;
-                                }
-                            }, $children)
-                        );
+                        if(!apply_filters('adp_true_bundle_individ_price', false)) {
+                            $originalPrice += array_sum(
+                                array_map(function ($child) use ($facade) {
+                                    if ($child->isContaineredPricedIndividually()) {
+                                        return ($child->getOriginalPriceWithoutTax() + $child->getOriginalPriceTax()) * $child->getQty() / $facade->getQty();
+                                    } else {
+                                        return 0.0;
+                                    }
+                                }, $children)
+                            );
+                        }
                     }
                 } else {
                     if ($useRegularPriceForOriginalPrice) {
                         $originalPrice = $facade->getRegularPriceWithoutTax();
 
-                        $originalPrice += array_sum(
-                            array_map(function ($child) use ($facade) {
-                                if ($child->isContaineredPricedIndividually()) {
-                                    return $child->getRegularPriceWithoutTax() * $child->getQty() / $facade->getQty();
-                                } else {
-                                    return 0.0;
-                                }
-                            }, $children)
-                        );
+                        if(!apply_filters('adp_true_bundle_individ_price', false)) {
+                            $originalPrice += array_sum(
+                                array_map(function ($child) use ($facade) {
+                                    if ($child->isContaineredPricedIndividually()) {
+                                        return $child->getRegularPriceWithoutTax() * $child->getQty() / $facade->getQty();
+                                    } else {
+                                        return 0.0;
+                                    }
+                                }, $children)
+                            );
+                        }
                     } else {
                         $originalPrice = $facade->getOriginalPriceWithoutTax();
 
-                        $originalPrice += array_sum(
-                            array_map(function ($child) use ($facade) {
-                                if ($child->isContaineredPricedIndividually()) {
-                                    return $child->getOriginalPriceWithoutTax() * $child->getQty() / $facade->getQty();
-                                } else {
-                                    return 0.0;
-                                }
-                            }, $children)
-                        );
+                        if(!apply_filters('adp_true_bundle_individ_price', false)) {
+                            $originalPrice += array_sum(
+                                array_map(function ($child) use ($facade) {
+                                    if ($child->isContaineredPricedIndividually()) {
+                                        return $child->getOriginalPriceWithoutTax() * $child->getQty() / $facade->getQty();
+                                    } else {
+                                        return 0.0;
+                                    }
+                                }, $children)
+                            );
+                        }
                     }
                 }
             } else {

@@ -28,6 +28,7 @@ class WcAdpMergedCouponHelper
 
     public static function loadOfCouponCode($couponCode)
     {
+        global $wp_filter;
         if (is_numeric($couponCode)) {
             $couponCode = (string)$couponCode;
         }
@@ -46,7 +47,11 @@ class WcAdpMergedCouponHelper
         if ($coupon === null) {
             $coupon = new WcAdpMergedCoupon($couponCode);
 
+            $oldHooks = $wp_filter['woocommerce_get_shop_coupon_data'];
+            unset($wp_filter['woocommerce_get_shop_coupon_data']);
             $wcCoupon = new \WC_Coupon();
+            $wp_filter['woocommerce_get_shop_coupon_data'] = $oldHooks;
+
             $wcCoupon->set_code($couponCode);
             if ($id = self::getCouponIdByCode($couponCode)) {
                 $wcCoupon->set_id($id);
@@ -55,6 +60,7 @@ class WcAdpMergedCouponHelper
             }
 
             $coupon->setParts([new ExternalWcCoupon($wcCoupon, [])]);
+            self::store($coupon);
         }
 
         return $coupon;
@@ -74,11 +80,8 @@ class WcAdpMergedCouponHelper
         $id = wc_get_coupon_id_by_code($couponCode);
 
         if ($id === 0) {
-            wp_cache_set(
-                \WC_Cache_Helper::get_cache_prefix('coupons') . 'coupon_id_from_code_' . $couponCode,
-                [],
-                'coupons'
-            );
+            $cacheKey = \WC_Cache_Helper::get_cache_prefix('coupons') . 'coupon_id_from_code_' . md5($couponCode);
+            wp_cache_set($cacheKey, [], 'coupons');
         }
 
         return $id;

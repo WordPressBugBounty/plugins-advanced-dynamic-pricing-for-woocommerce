@@ -365,7 +365,7 @@ class Helpers
 
         /** @var WC_Product[] $posts */
         $posts = wc_get_products(array(
-            'title' => $name,
+            'name' => $name,
             'type' => array_merge(array_keys(wc_get_product_types()), array('variation'))
         ));
 

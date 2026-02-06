@@ -42,7 +42,7 @@ defined('ABSPATH') or exit;
             </div>
             <div>
                 <?php esc_html_e('Available tags', 'advanced-dynamic-pricing-for-woocommerce') ?>
-                : <?php esc_html_e('{{price}}, {{price_suffix}}, {{price_striked}}, {{initial_price}}, {{regular_price_striked}}',
+                : <?php esc_html_e('{{price}}, {{price_suffix}}, {{price_striked}}, {{initial_price}}, {{regular_price_striked}}, {{min_max_range}}',
                     'advanced-dynamic-pricing-for-woocommerce') ?>
             </div>
         </fieldset>

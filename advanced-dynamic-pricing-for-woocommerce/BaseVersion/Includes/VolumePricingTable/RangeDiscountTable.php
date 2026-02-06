@@ -17,7 +17,6 @@ use ADP\BaseVersion\Includes\Core\Rule\Structures\RangeDiscount;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\BulkDiscount\BulkMeasurementEnum;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\PersistentRuleProcessor;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\SingleItemRuleProcessor;
-use ADP\BaseVersion\Includes\CustomizerExtensions\CategoryBulkTableThemeProperties;
 use ADP\BaseVersion\Includes\CustomizerExtensions\CustomizerExtensions;
 use ADP\BaseVersion\Includes\CustomizerExtensions\ProductBulkTableThemeProperties;
 use ADP\BaseVersion\Includes\Database\Repository\PersistentRuleRepository;
@@ -81,7 +80,7 @@ class RangeDiscountTable
     protected $productContextOptions;
 
     /**
-     * @var CategoryBulkTableThemeProperties
+     * @var CategoryVolumePricingTableProperties
      */
     protected $categoryContextOptions;
 
@@ -100,7 +99,7 @@ class RangeDiscountTable
         $this->priceFunctions           = new PriceFunctions();
 
         $this->productContextOptions  = new ProductVolumePricingTableProperties();
-        $this->categoryContextOptions = new CategoryBulkTableThemeProperties();
+        $this->categoryContextOptions = new CategoryVolumePricingTableProperties();
     }
 
     public function withContext(Context $context)
@@ -470,6 +469,8 @@ class RangeDiscountTable
         }
 
         $table = new Table($context);
+        $table->setMeasurement($rule->getProductRangeAdjustmentHandler()->getMeasurement());
+        $table->setLayout($contextOptions->tableLayout);
 
         $handler = $rule->getProductRangeAdjustmentHandler();
         if ( ! $handler) {
@@ -1069,7 +1070,6 @@ class RangeDiscountTable
                     $termId = $wp_query->queried_object->term_id;
                 }
             }
-
             if ( ! $termId) {
                 return null;
             }

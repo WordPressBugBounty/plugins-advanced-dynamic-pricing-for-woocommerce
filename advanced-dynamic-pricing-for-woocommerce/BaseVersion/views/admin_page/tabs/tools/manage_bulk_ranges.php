@@ -6,6 +6,8 @@
 
 use ADP\BaseVersion\Includes\Database\Repository\RuleRepository;
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 $repo = new RuleRepository();
 $items = $repo->getRulesWithBulk();
 ?>

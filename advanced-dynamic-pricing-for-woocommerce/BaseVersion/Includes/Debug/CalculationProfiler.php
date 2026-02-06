@@ -126,6 +126,7 @@ class CalculationProfiler
             'active_hooks'       => (new Collectors\ActiveHooks())->collect(),
 
             'rules' => $activeRulesAsDict,
+            'product_collections' => (Factory::get("Debug_Collectors_Collections"))->collect()
         );
 
         foreach ($reports as $report_key => $report) {

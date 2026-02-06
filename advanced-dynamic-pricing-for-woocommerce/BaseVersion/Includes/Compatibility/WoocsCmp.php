@@ -66,7 +66,7 @@ class WoocsCmp
             );
             foreach ($hooks as $hook) {
                 add_filter($hook, function ($price, $product) {
-                    if ($product->get_meta('adp_price_converted')) {
+                    if ($product AND $product->get_meta('adp_price_converted')) {
                         $_REQUEST['woocs_block_price_hook'] = true;
                     }
                     return $price;

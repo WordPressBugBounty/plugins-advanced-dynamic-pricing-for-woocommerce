@@ -14,7 +14,7 @@ class AdminNotice
     const activationNoticeOption = 'advanced-dynamic-pricing-for-woocommerce-activation-notice-shown';
     const disabledRulesOption = 'wdp_rules_disabled_notify';
     const dismissedPersistenceRulesNoticeOption = 'wdp_dismissed_persistence_rules_notice';
-    const persistenceRulesNoticeThreshold = 30;
+    const persistenceRulesNoticeThreshold = 50;
     const dismissedNoticeOption = 'wdp_dismissed_notice_';
 
     /**
@@ -254,7 +254,7 @@ class AdminNotice
                 <?php
                 printf(
                     /* translators: Recommendation for enabling persistence rules */
-                    esc_html__( 'You have more than %s rules. You need to ', 'advanced-dynamic-pricing-for-woocommerce')
+                    esc_html__( 'You have more than %s rules. If you found out the site’s slow performance, we recommend to ', 'advanced-dynamic-pricing-for-woocommerce')
                         .'<a href="%s">' .esc_html__('enable the "Product only" rules', 'advanced-dynamic-pricing-for-woocommerce').'</a>',
                     // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                     self::persistenceRulesNoticeThreshold, $ruleEditUrl);

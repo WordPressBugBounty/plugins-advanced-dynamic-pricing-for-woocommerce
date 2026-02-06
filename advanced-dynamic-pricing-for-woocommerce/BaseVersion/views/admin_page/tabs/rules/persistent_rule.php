@@ -130,7 +130,6 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.", 'adv
                     echo sprintf(
                         wp_kses(
                             __('Select what to discount: any products, certain products, collections, categories, category slugs, attributes, custom attributes, tags, SKUs, custom fields, sellers.', 'advanced-dynamic-pricing-for-woocommerce')
-                            .'<br><br>' .__('Exclude products that wouldn’t be discounted: enter the values into the field “Exclude products” or turn on the checkboxes with the same name.', 'advanced-dynamic-pricing-for-woocommerce')
                             .'<br><a href="%s">' .__('Read docs', 'advanced-dynamic-pricing-for-woocommerce') .'</a>',
                             array('br' => array(), 'a' => array('href' => array()))
                         ),
@@ -205,10 +204,10 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.", 'adv
                     <div>
                         <div style="display: inline-block;margin: 0 10px 0 0;">
                             <label>
-                                <?php esc_html_e('Limit discount to amount:', 'advanced-dynamic-pricing-for-woocommerce') ?>
+                                <?php esc_html_e('Limit discount to amount', 'advanced-dynamic-pricing-for-woocommerce') ?>
                                 <input style="display: inline-block; width: 200px;"
                                        name="rule[product_adjustments][max_discount_sum]" type="number"
-                                       class="product-adjustments-max-discount" placeholder="0.00" min="0" step="any"/>
+                                       class="product-adjustments-max-discount" placeholder="<?php esc_html_e('Unlimited', 'advanced-dynamic-pricing-for-woocommerce') ?>" min="0" step="any"/>
                             </label>
                         </div>
 
@@ -516,20 +515,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.", 'adv
                         <span class="wdp-description-cut-less wdp-link"><?php esc_html_e('Less', 'advanced-dynamic-pricing-for-woocommerce')?></span>
                     </div>
                 </div>
-                <p class="wdp-rule-help">
-                    <?php
-                    echo sprintf(
-                        wp_kses(
-                                __('Didn’t find a necessary condition?', 'advanced-dynamic-pricing-for-woocommerce')
-                                .'<br><a href="%s" target="_blank">' .__('Program your own custom condition', 'advanced-dynamic-pricing-for-woocommerce') .'</a>',
-                            array('br' => array(), 'a' => array('href' =>array(), 'target' => array()))
-                        ),
-                        esc_url('https://docs.algolplus.com/algol_pricing/developers-algol_pricing/custom-code-developers-algol_pricing/program-custom-condition/')
-                    );
-                    ?>
-                </p>
-
-                <a href="https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/?currency=USD"
+                <a href="https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/"
                    target=_blank><?php esc_html_e('Need more conditions?', 'advanced-dynamic-pricing-for-woocommerce') ?></a>
             </div>
             <div class="wdp-wrapper wdp-column">

@@ -274,7 +274,7 @@ defined('ABSPATH') or exit;
                                                 <select multiple
                                                         data-list="products"
                                                         data-field="autocomplete"
-                                                        data-placeholder="<?php esc_attr_e("Select values",
+                                                        data-placeholder="<?php esc_attr_e("Select exact products to exclude",
                                                             "advanced-dynamic-pricing-for-woocommerce") ?>"
                                                         name="rule[{t}][{f}][product_exclude][values][]">
                                                 </select>

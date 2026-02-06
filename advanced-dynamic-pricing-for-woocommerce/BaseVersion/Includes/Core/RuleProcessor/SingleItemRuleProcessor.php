@@ -19,6 +19,7 @@ use ADP\BaseVersion\Includes\Core\RuleProcessor\Structures\CartItemsCollection;
 use ADP\Factory;
 use Exception;
 use WC_Product;
+use ADP\BaseVersion\Includes\Core\Cart\DisableWcCouponsCart;
 
 defined('ABSPATH') or exit;
 
@@ -213,6 +214,9 @@ class SingleItemRuleProcessor implements RuleProcessor
         }
 
         if ( ! $this->isRuleMatchedCart($cart)) {
+            if ($this->rule->getActivationCouponCode()) {
+                $cart->addCouponsAdjustments(new DisableWcCouponsCart($this->rule->getActivationCouponCode(), $this->rule->getId()));
+            }
             return;
         }
 
@@ -281,7 +285,11 @@ class SingleItemRuleProcessor implements RuleProcessor
             return false;
         }
 
-        if( $this->rule->getRoleDiscounts() && !$this->roleDiscountStrategy->findMatchedRoleDiscounts($cart->getContext()->getCustomer())) {
+        if(
+            $this->rule->getRoleDiscounts()
+            && !$this->roleDiscountStrategy->findMatchedRoleDiscounts($cart->getContext()->getCustomer())
+            && !$this->rule->getProductRangeAdjustmentHandler()
+        ) {
             $this->status = $this::STATUS_CONDITIONS_NOT_PASSED;
 
             return false;

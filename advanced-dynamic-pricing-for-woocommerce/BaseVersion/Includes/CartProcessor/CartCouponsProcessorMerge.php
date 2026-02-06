@@ -223,7 +223,7 @@ class CartCouponsProcessorMerge implements ICartCouponsProcessor
         }
     }
 
-    protected function processCouponAdjustments(Cart $cart, WC_Cart $wcCart)
+    public function processCouponAdjustments(Cart $cart, WC_Cart $wcCart)
     {
         $this->cartContext = $cart->getContext();
 
@@ -531,6 +531,8 @@ class CartCouponsProcessorMerge implements ICartCouponsProcessor
         }
 
         if (in_array($wcCoupon->get_code(), $this->disabledWcCoupons, true)) {
+            WC()->cart->remove_coupon($wcCoupon->get_code());
+            $this->replaceDisabledCouponNotices();
             throw new \Exception(
                 esc_html__('Sorry, this coupon is not applicable to cart.', 'advanced-dynamic-pricing-for-woocommerce')
             );
@@ -575,5 +577,30 @@ class CartCouponsProcessorMerge implements ICartCouponsProcessor
                 'type' => 'error',
             )
         );
+    }
+
+    protected function replaceDisabledCouponNotices()
+    {
+        WcUtils::replaceWcNotice(
+            array(
+                //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
+                'text' => __('Coupon code applied successfully.', 'woocommerce'),
+                'type' => 'success',
+            ),
+            array(
+                'text' => __('Sorry, this coupon is not applicable to cart.',
+                    'advanced-dynamic-pricing-for-woocommerce'),
+                'type' => 'error',
+            )
+        );
+    }
+
+    public function checkDisabledCoupons(Cart $cart, WC_Cart $wcCart)
+    {
+        if(count($this->disabledWcCoupons)) {
+            throw new \Exception(
+                esc_html__('Sorry, this coupon is not applicable to cart.', 'advanced-dynamic-pricing-for-woocommerce')
+            );
+        }
     }
 }

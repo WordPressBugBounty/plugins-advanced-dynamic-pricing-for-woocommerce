@@ -44,15 +44,34 @@ class Loader
 
     public function initPlugin()
     {
+        // must load langs ASAP
+        // as Wordpress loads default transations on first usage __()
+        $this->loadTextDomain();
+
         if ( ! $this->checkRequirements()) {
             return;
         }
 
-        load_plugin_textdomain('advanced-dynamic-pricing-for-woocommerce', false,
-            basename(dirname(dirname(__FILE__))) . '/languages/');
-
         $context = adp_context(); // do not remove! Required for correct initialization
         $this->load($context);
+    }
+
+    protected function loadTextDomain()
+    {
+        // do nothing if loaded free version , it reads translations from Wordpress.org
+        if(!defined('WC_ADP_PRO_VERSION_PATH'))
+            return;
+
+        $pricingDomain = 'advanced-dynamic-pricing-for-woocommerce';
+        add_filter('load_textdomain_mofile', function ($moFile, $domain) use ($pricingDomain) {
+            if ($domain !== $pricingDomain) {
+                return $moFile;
+            }
+            $path = WP_PLUGIN_DIR . '/' . trim(basename(dirname(dirname(dirname(__FILE__)))) . '/languages/', '/');
+            $plugin_file = $path . '/' . substr($moFile, strrpos($moFile, '/') + 1);
+            return file_exists($plugin_file) ? $plugin_file : $moFile;
+        }, 10, 2);
+        load_plugin_textdomain($pricingDomain, false, basename(dirname(dirname(dirname(__FILE__)))) . '/languages/');
     }
 
     /**

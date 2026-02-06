@@ -262,6 +262,8 @@ class CartProcessor
             $this->wcchainprCmp->applyCompatibility();
         }
 
+        $this->context->getContainerCompatibilityManager()->addFilters();
+
         $this->cartItemConverter = new CartItemConverter();
     }
 
@@ -345,6 +347,26 @@ class CartProcessor
             return $cart;
         }
 
+        if ($this->context->getOption('dont_recalculate_cart_if_not_changed')) {
+            $applicableRules = $this->calc->getApplicableRulesForCart($cart);
+            $rulesHash = $this->calc->getRulesCollection()->getHash($applicableRules);
+            $cartHash = $this->getWcCartHash($wcCart);
+            $rulesCartHash = md5($rulesHash.$cartHash);
+
+            $storedRulesCartHash = WC()->session->get("adp_rules_cart_hash");
+
+            if($rulesCartHash === $storedRulesCartHash) {
+                foreach ($wcCart->cart_contents as $cartKey => $wcCartItem) {
+                    $facade  = new WcCartItemFacade($this->context, $wcCartItem, $cartKey);
+                    $product = $wcCartItem['data'];
+
+                    $product->set_price($facade->getNewPrice());
+                }
+
+                return $cart;
+            }
+        }
+
         $optionDontProcessCart = apply_filters('adp_dont_process_cart_on_page_load', $this->context->getOption("dont_recalculate_cart_on_page_load", true));
         if( $first AND $optionDontProcessCart ) {
             $doFirst = true;
@@ -394,7 +416,7 @@ class CartProcessor
         // do not use global WC_Cart because we change prices to get correct initial subtotals
         $clonedWcCart     = clone $wcCart;
         $currencySwitcher = $this->context->currencyController;
-
+        
         if ($currencySwitcher->isCurrencyChanged()) {
             foreach ($clonedWcCart->cart_contents as $cartKey => $wcCartItem) {
                 $facade  = new WcCartItemFacade($this->context, $wcCartItem, $cartKey);
@@ -535,6 +557,7 @@ class CartProcessor
         }
 
         $flags = array();
+        $flags[] = $wcNoFilterWorker::FLAG_DISALLOW_CALCULATION_HOOKS;
         if ($this->wcSubsCmp->isActive() && $this->wcsAttCmp->isActive()) {
             $flags[] = $wcNoFilterWorker::FLAG_ALLOW_PRICE_HOOKS;
         }
@@ -582,7 +605,7 @@ class CartProcessor
 
             $freeProductsMapping = $this->calculateFreeProductsMapping($cart, $clonedWcCart);
 
-            $flags = array($wcNoFilterWorker::FLAG_ALLOW_PRICE_HOOKS);
+            $flags = array($wcNoFilterWorker::FLAG_ALLOW_PRICE_HOOKS, $wcNoFilterWorker::FLAG_DISALLOW_CALCULATION_HOOKS);
             if ($this->context->getOption("disable_shipping_calc_during_process", false)) {
                 $flags[] = $wcNoFilterWorker::FLAG_DISALLOW_SHIPPING_CALCULATION;
             }
@@ -594,6 +617,7 @@ class CartProcessor
                 $wcNoFilterWorker->calculateTotals($clonedWcCart);
             } else {
                 $flags[] = $wcNoFilterWorker::FLAG_ALLOW_PRICE_HOOKS;
+                $flags[] = $wcNoFilterWorker::FLAG_DISALLOW_SHIPPING_CALCULATION;
                 $wcNoFilterWorker->calculateTotals($clonedWcCart, ...$flags);
             }
             $initialTotals = $clonedWcCart->get_totals();
@@ -601,7 +625,7 @@ class CartProcessor
 
             $this->addFreeItems($freeProductsMapping, $clonedWcCart, $cart, $wcCart, $flags);
 
-            $flags = array();
+            $flags = array($wcNoFilterWorker::FLAG_DISALLOW_CALCULATION_HOOKS);
             if ($this->context->getOption("disable_shipping_calc_during_process", false)) {
                 $flags[] = $wcNoFilterWorker::FLAG_DISALLOW_SHIPPING_CALCULATION;
             }
@@ -643,6 +667,7 @@ class CartProcessor
                 $flags[] = $wcNoFilterWorker::FLAG_ALLOW_PRICE_HOOKS;
             }
 
+            $flags = apply_filters( 'adp_flags_for_final_calculate_totals', $flags);
             $wcNoFilterWorker->calculateTotals($wcCart, ...$flags);
 
             $this->normalizeCart($wcCart);
@@ -698,8 +723,15 @@ class CartProcessor
             }
             // required to process bundles
             $this->addCommonItems($cart, $wcCart);
+            do_action('adp_after_add_common_items');
+            
+            $this->cartCouponsProcessor->processCouponAdjustments($cart, $wcCart);
+            if($this->context->isWCStoreAPIRequest()) 
+            {
+                $this->cartCouponsProcessor->checkDisabledCoupons($cart, $wcCart);
+            }
             $wcNoFilterWorker->calculateTotals($wcCart, ...$flags);
-
+            
             $this->normalizeCart($wcCart);
 
             $cart->getContext()->getSession()->flush()->push();
@@ -709,6 +741,12 @@ class CartProcessor
                 }
                 $this->shippingProcessor->refresh($cart);
             }
+        }
+
+        if ($this->context->getOption('dont_recalculate_cart_if_not_changed')) {
+            $cartHash = $this->getWcCartHash($wcCart);
+            $rulesCartHash = md5($rulesHash.$cartHash);
+            WC()->session->set("adp_rules_cart_hash", $rulesCartHash);
         }
 
         $this->listener->processFinished($wcCart, WC()->session);
@@ -1279,13 +1317,22 @@ class CartProcessor
     protected function insertRegularTotals($wcCart, $cart, $flags)
     {
         $clonedWcCartForRegular = clone $wcCart;
+
+        $tmpflags = array_merge(
+            $flags,
+            [
+                $this->wcNoFilterWorker::FLAG_DISALLOW_CALCULATION_HOOKS,
+                $this->wcNoFilterWorker::FLAG_DISALLOW_SHIPPING_CALCULATION
+            ]
+        );
+
         foreach ($clonedWcCartForRegular->cart_contents as $cartItemKey => $wcCartItem) {
             $facade = new WcCartItemFacade($wcCartItem, $cartItemKey);
             $facade->getProduct()->set_price($facade->getProduct()->get_regular_price('edit'));
             $clonedWcCartForRegular->cart_contents[$cartItemKey] = $facade->getData();
         }
 
-        $this->wcNoFilterWorker->calculateTotals($clonedWcCartForRegular, ...$flags);
+        $this->wcNoFilterWorker->calculateTotals($clonedWcCartForRegular, ...$tmpflags);
 
         foreach ($clonedWcCartForRegular->cart_contents as $cartItemKey => $wcCartItem) {
             if ( ! isset($wcCart->cart_contents[$cartItemKey])) {
@@ -1574,7 +1621,7 @@ class CartProcessor
          * Add flag 'FLAG_ALLOW_PRICE_HOOKS'
          * because some plugins set price using 'get_price' hooks instead of modify WC_Product property.
          */
-        $flags = array($wcNoFilterWorker::FLAG_ALLOW_PRICE_HOOKS);
+        $flags = array($wcNoFilterWorker::FLAG_ALLOW_PRICE_HOOKS, $wcNoFilterWorker::FLAG_DISALLOW_CALCULATION_HOOKS);
         if ($this->context->getOption("disable_shipping_calc_during_process", false) && !did_action( "wpo_before_update_cart" )) {
             //BUG: shipping cost ignored if rules are NOT applied to the cart
             //$flags[] = $wcNoFilterWorker::FLAG_DISALLOW_SHIPPING_CALCULATION;
@@ -1583,4 +1630,17 @@ class CartProcessor
         // Delete all 'pricing' data from the cart ended
     }
 
+    protected function getWcCartHash($wcCart) 
+    {
+        $packages = $wcCart->get_shipping_packages();
+        foreach ( $packages as $package_key => $package ) {
+			// Remove data objects so hashes are consistent.
+			foreach ( $packages[$package_key]['contents'] as $item_id => $item ) {
+				unset( $packages[$package_key]['contents'][ $item_id ]['data'] );
+			}
+			unset($packages[$package_key]['rates']);
+		}
+
+        return md5(json_encode($packages));
+    }
 }

@@ -83,7 +83,7 @@ defined('ABSPATH') or exit;
                 </div>
             <?php endforeach; ?>
 
-            <a href="https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/?currency=USD"
+            <a href="https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/"
                target=_blank><?php esc_html_e('Need more settings?', 'advanced-dynamic-pricing-for-woocommerce') ?></a>
 
             <p class="wdp-settings-button">

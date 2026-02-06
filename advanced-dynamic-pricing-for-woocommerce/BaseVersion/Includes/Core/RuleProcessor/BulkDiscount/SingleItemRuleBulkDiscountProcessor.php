@@ -93,6 +93,7 @@ class SingleItemRuleBulkDiscountProcessor
 
                 $meta[] = $facade->getProductId();
                 $meta[] = $facade->getVariationId();
+                $meta[] = $facade->getVariation();
 
                 $key = md5(json_encode($meta));
 
@@ -293,15 +294,7 @@ class SingleItemRuleBulkDiscountProcessor
                     continue;
                 }
 
-                $minPrice = $item->prices()->getMinDiscountRangePrice();
-
-                if ($minPrice !== null) {
-                    if ($price < $minPrice) {
-                        $item->prices()->setMinDiscountRangePrice($price);
-                    }
-                } else {
-                    $item->prices()->setMinDiscountRangePrice($price);
-                }
+                $item->prices()->setDiscountRangePrice($price);
             }
         }
 

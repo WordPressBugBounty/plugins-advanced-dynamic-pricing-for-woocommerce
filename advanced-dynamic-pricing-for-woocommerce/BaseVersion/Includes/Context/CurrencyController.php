@@ -58,6 +58,9 @@ class CurrencyController
     public function __construct($context, $defaultCurrency)
     {
         $this->context         = $context;
+        if(!$defaultCurrency) {
+            $defaultCurrency = self::getDefaultWoocomerceCurrency();
+        }
         $this->defaultCurrency = $defaultCurrency;
         $this->currentCurrency = $defaultCurrency;
         $this->rate            = $this->defaultCurrency->getRate();
@@ -464,6 +467,15 @@ class CurrencyController
             'ZAR' => '&#82;',
             'ZMW' => 'ZK',
         );
+    }
+
+    public static function getDefaultWoocomerceCurrency()
+    {
+        $currencyCode = get_option('woocommerce_currency');
+        $symbols      = self::getDefaultCurrencySymbols();
+
+        $symbol       = isset($symbols[$currencyCode]) ? $symbols[$currencyCode] : '';
+        return new Currency($currencyCode, $symbol, 1);
     }
 
 }

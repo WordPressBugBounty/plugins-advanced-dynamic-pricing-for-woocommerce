@@ -3,6 +3,9 @@
 namespace ADP\BaseVersion\Includes\WC;
 
 use ADP\BaseVersion\Includes\Functions;
+use ADP\Factory;
+
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 class Utils
 {
@@ -68,7 +71,10 @@ class Utils
         add_filter('woocommerce_shortcode_products_query', function($query_args, $atts, $type) {
             // Check if the shortcode is sale_products
             if ($type === 'sale_products') {
-                $salePriceAdpProductIds = Functions::getInstance()->getProductsWithSalePriceAdp();
+                // $salePriceAdpProductIds = Functions::getInstance()->getProductsWithSalePriceAdp();
+
+                $onSaleProducts = Factory::get("Shortcodes_OnSaleProducts");
+                $salePriceAdpProductIds = $onSaleProducts->getCachedProductsIds();
 
                 // Merge the product IDs with the existing post__in array if it exists
                 if (!empty($query_args['post__in'])) {

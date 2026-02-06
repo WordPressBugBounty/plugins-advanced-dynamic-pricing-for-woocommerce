@@ -61,17 +61,18 @@ foreach ($groups as $group) {
                         <?php esc_html_e('Paste text into this field to import settings into the current WordPress install.',
                             'advanced-dynamic-pricing-for-woocommerce') ?>
                     </label>
-                    <select id="wdp-import-select" name="wdp-import-type">
-                        <?php foreach ($import_data_types as $type => $label): ?>
-                            <option value="<?php echo esc_attr($type) ?>"
-                                <?php if ($type == 'rules') {
-                                    echo ' selected';
-                                } ?>><?php echo esc_html($label) ?></option>
-                        <?php endforeach; ?>
-                    </select>
                 </p>
                 <p>
                     <textarea id="wdp-import-data" name="wdp-import-data" class="large-text" rows="15"></textarea>
+                </p>
+                <p class="wdp-import-type-options-rules wdp-import-type-options">
+                    <span>
+                        <?php esc_html_e('Or import JSON backup file:', 'advanced-dynamic-pricing-for-woocommerce') ?>
+                    </span>
+                    <input type="file" name="json-to-import" id="json-to-import" accept="application/json" hidden>
+                    <button id="wdp-import-json" class="button button-primary">
+                        <?php esc_html_e('Import JSON', 'advanced-dynamic-pricing-for-woocommerce') ?>
+                    </button>
                 </p>
                 <p class="wdp-import-type-options-rules wdp-import-type-options">
                     <input type="hidden" name="wdp-import-data-reset-rules" value="0">

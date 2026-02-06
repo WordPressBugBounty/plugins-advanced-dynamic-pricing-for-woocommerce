@@ -30,8 +30,6 @@ use ADP\BaseVersion\Includes\Core\Rule\Structures\RoleDiscount;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\SetDiscount;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\BulkDiscount\BulkMeasurementEnum;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\OptionsConverter;
-use ADP\BaseVersion\Includes\Enums\AutoAddChoiceTypeEnum;
-use ADP\BaseVersion\Includes\Enums\AutoAddModeEnum;
 use ADP\BaseVersion\Includes\Enums\Exceptions\UnexpectedValueException;
 use ADP\BaseVersion\Includes\Enums\GiftChoiceTypeEnum;
 use ADP\BaseVersion\Includes\Enums\GiftModeEnum;
@@ -848,6 +846,8 @@ class RuleStorage
                     $discount = new Discount($this->context, Discount::TYPE_AMOUNT, $value);
                 } elseif ($discountType === 'discount__amount_per_item') {
                     $discount = new Discount($this->context, Discount::TYPE_AMOUNT_PER_ITEM, $value);
+                }elseif ($discountType === 'discount__expression_price') {
+                    $discount = new Discount($this->context, Discount::TYPE_EXPRESSION_PRICE, $value);
                 } else {
                     return;
                 }
@@ -961,7 +961,9 @@ class RuleStorage
                 $type = Discount::TYPE_PERCENTAGE;
             } elseif ($type === 'discount__amount') {
                 $type = Discount::TYPE_AMOUNT;
-            } elseif ($type === 'price__fixed') {
+            } elseif ($type === 'discount__expression_price') {
+                $type = Discount::TYPE_EXPRESSION_PRICE;
+            }elseif ($type === 'price__fixed') {
                 if ( $value === '' ) {
                     $type = Discount::TYPE_PERCENTAGE;
                     $value = 0;

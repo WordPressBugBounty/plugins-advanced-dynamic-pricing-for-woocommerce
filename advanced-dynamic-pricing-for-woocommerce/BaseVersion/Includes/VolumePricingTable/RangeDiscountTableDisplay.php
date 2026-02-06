@@ -101,7 +101,9 @@ class RangeDiscountTableDisplay
         foreach ($product->get_variation_attributes() as $attrName => $options) {
             $queryKey = wc_variation_attribute_name($attrName);
 
+			 //phpcs:ignore WordPress.Security.NonceVerification.Recommended
             if (isset($_GET[$queryKey])) {
+				//phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput
                 $attributes[$queryKey] = wc_clean(wp_unslash($_GET[$queryKey]));
             } else {
                 $attributes[$queryKey] = $product->get_variation_default_attribute($attrName);

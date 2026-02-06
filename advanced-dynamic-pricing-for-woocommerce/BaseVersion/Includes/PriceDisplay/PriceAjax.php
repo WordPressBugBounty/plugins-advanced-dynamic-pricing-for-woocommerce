@@ -258,7 +258,7 @@ class PriceAjax
                 );
             } elseif (!$processedProduct->areRulesAppliedAtAll()) {
                 return array(
-                    'price_html' => $prodPriceDisplay->getFormattedPriceHtml($prodPriceDisplay->getPriceHtml()),
+                    'price_html' => $prodPriceDisplay->getPriceHtmlWithoutFormatting($prodPriceDisplay->getPriceHtml()),
                     'subtotal_html' => $prodPriceDisplay->getFormattedSubtotalHtml($qty),
                     'total_price_html' => $totalProductPriceFormatter->getHtmlAreRulesNotApplied($product, $qty),
                     'original_price' => $prodPriceDisplay->getOriginalPrice(),
@@ -268,7 +268,7 @@ class PriceAjax
                 );
             } else {
                 return array(
-                    'price_html' => $prodPriceDisplay->getFormattedPriceHtml($prodPriceDisplay->getPriceHtml()),
+                    'price_html' => $prodPriceDisplay->getPriceHtmlWithoutFormatting($prodPriceDisplay->getPriceHtml()),
                     'subtotal_html' => $prodPriceDisplay->getFormattedSubtotalHtml($qty),
                     'total_price_html' => $totalProductPriceFormatter->getHtmlProcessedProductSimple($processedProduct),
                     'original_price' => $prodPriceDisplay->getOriginalPrice(),

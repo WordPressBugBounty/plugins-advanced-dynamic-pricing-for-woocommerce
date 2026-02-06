@@ -278,16 +278,12 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
                         $key[] = "C{$role}";
                         return $key;
                     };
-                    add_filter("adp_calculate_product_hash", $customHash);
-                    add_filter("adp_calculate_processed_product_hash", $customHash);
                     add_filter("adp_calculate_persistent_rule_product_hash", $customHash);
 
                     $hash = $this->calculateDbHashWithProduct($product, $cartItemData);
 
                     $processedProduct = $productProcessor->calculateProduct($product, 1.0, $cartItemData);
-                    
-                    remove_filter("adp_calculate_product_hash", $customHash);
-                    remove_filter("adp_calculate_processed_product_hash", $customHash);
+
                     remove_filter("adp_calculate_persistent_rule_product_hash", $customHash);
                     $customer->setRoles($initialRoles);
 
@@ -374,14 +370,10 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
                 $key[] = "C{$role}";
                 return $key;
             };
-            add_filter("adp_calculate_product_hash", $customHash);
-            add_filter("adp_calculate_processed_product_hash", $customHash);
             add_filter("adp_calculate_persistent_rule_product_hash", $customHash);
 
             $hash[] = $this->calculateDbHash($item);
 
-            remove_filter("adp_calculate_product_hash", $customHash);
-            remove_filter("adp_calculate_processed_product_hash", $customHash);
             remove_filter("adp_calculate_persistent_rule_product_hash", $customHash);
         }
         return $hash;
@@ -413,13 +405,12 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
         $hash = implode(',', array_map(function($v) {
             return "'" . esc_sql($v) . "'";
         }, $hash));
-        
+
         global $wpdb;
 
         $tableCache = $wpdb->prefix . PersistentRuleModel::TABLE_NAME;
         //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-        $query = $wpdb->prepare("SELECT persistent_rules_cache.rule_id, persistent_rules_cache.price FROM {$tableCache} AS persistent_rules_cache
-            WHERE persistent_rules_cache.product IN ({$hash})
+        $query = $wpdb->prepare("SELECT persistent_rules_cache.rule_id, persistent_rules_cache.price FROM {$tableCache} AS persistent_rules_cache WHERE persistent_rules_cache.product IN ({$hash})
             AND persistent_rules_cache.qty_start <= %s
             AND (persistent_rules_cache.qty_finish IS NULL OR persistent_rules_cache.qty_finish >= %s)",
             array($qty, $qty)
@@ -520,14 +511,95 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
      * @return void
      */
     protected function saveCacheInProductMetaData($product, $cache) {
+        static $last_parent_id = false, $last_parent_min_price=0;
+        global $wpdb;
+
+        $price = $cache['price'];
+
         // save calculated price in product meta
-        update_post_meta($product->get_id(), '_sale_price_adp', $cache['price']);
+        update_post_meta($product->get_id(), '_sale_price_adp', $price);
+        //update lookup table too
+        // phpcs:ignore WordPress.DB
+        $wpdb->update( $wpdb->wc_product_meta_lookup, ['min_price' => $price, 'onsale'=>1],  ['product_id' => $product->get_id()] );
+
         if($product instanceof \WC_Product_Variation) {
-            update_post_meta($product->get_parent_id('edit'), '_sale_price_adp', $cache['price']);
+            $parent_id = $product->get_parent_id('edit');
+            if( $last_parent_id == $parent_id){ // variations of same product processed still ?
+                if($last_parent_min_price > $price) //use min price of variation
+                    $last_parent_min_price = $price;
+            } else {
+                $last_parent_id = $parent_id;
+                $last_parent_min_price = $price;
+            }
+
+            update_post_meta($last_parent_id, '_sale_price_adp', $last_parent_min_price);
+            // phpcs:ignore WordPress.DB
+            $wpdb->update( $wpdb->wc_product_meta_lookup, ['min_price' => $last_parent_min_price, 'onsale'=>1],  ['product_id' => $last_parent_id] );
         }
     }
 
     public function clearCacheInProductMetaData() {
         delete_post_meta_by_key('_sale_price_adp');
+    }
+
+    public function installHooksForProductLookupTable() {
+        add_action( 'wc_update_product_lookup_tables_column', function($column){
+            global $wpdb;
+
+            if($column == 'min_max_price') {
+                // phpcs:ignore WordPress.DB
+                $sql = "UPDATE {$wpdb->wc_product_meta_lookup} lookup_table INNER JOIN {$wpdb->postmeta} meta ON lookup_table.product_id = meta.post_id AND meta.meta_key = '_sale_price_adp' SET lookup_table.min_price = meta.meta_value";
+                // phpcs:ignore  WordPress.DB
+                $wpdb->query($sql);
+            }
+            if($column == 'onsale') {
+                // phpcs:ignore WordPress.DB
+                $sql = "UPDATE {$wpdb->wc_product_meta_lookup} lookup_table INNER JOIN {$wpdb->postmeta} meta ON lookup_table.product_id = meta.post_id AND meta.meta_key = '_sale_price_adp' SET lookup_table.onsale = 1";
+                // phpcs:ignore  WordPress.DB
+                $wpdb->query($sql);
+            }
+        } , 100 );
+
+        add_filter( 'woocommerce_get_catalog_ordering_args', function ($sort_args) {
+            $orderby_value = null;
+
+            if ( isset( $_GET['orderby'] ) ) {
+                $orderby_value = wc_clean( $_GET['orderby'] );
+            }
+
+            if (!empty($orderby_value) && $orderby_value === 'on_sale_first') {
+                add_filter(
+                    'woocommerce_product_query_meta_query',
+                    function ($meta_query) {
+
+                        $meta_query = [
+                            'relation' => 'OR',
+                            [
+                                'key'     => '_sale_price_adp',
+                                'compare' => 'NOT EXISTS',
+                            ],
+                            [
+                                'relation' => 'OR',
+                                [
+                                    'key'     => '_sale_price_adp',
+                                    'value'   => 0,
+                                    'compare' => '>=',
+                                    'type'    => 'NUMERIC',
+                                ],
+                                [
+                                    'key'     => '_sale_price_adp',
+                                    'value'   => '',
+                                    'compare' => '=',
+                                ],
+                            ],
+                        ];
+
+                        return $meta_query;
+                    },
+                    100
+                );
+            }
+            return $sort_args;
+        }, 100);
     }
 }

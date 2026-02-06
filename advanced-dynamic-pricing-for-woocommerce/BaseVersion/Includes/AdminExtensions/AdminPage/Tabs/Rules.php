@@ -52,7 +52,7 @@ class Rules implements AdminTabInterface
     public function handleSubmitAction()
     {
         if ( $bulkAction = $this->getBulkAction() ) {
-            if(wp_verify_nonce($_POST[Ajax::SECURITY_QUERY_ARG] ?? null, Ajax::SECURITY_ACTION) === false) {
+            if( isset($_POST[Ajax::SECURITY_QUERY_ARG] ) AND wp_verify_nonce(sanitize_key(wp_unslash($_POST[Ajax::SECURITY_QUERY_ARG])), Ajax::SECURITY_ACTION) === false) {
                 wp_die(
                     esc_html__('Invalid nonce specified', 'advanced-dynamic-pricing-for-woocommerce'),
                     esc_html__('Error', 'advanced-dynamic-pricing-for-woocommerce'),
@@ -72,7 +72,7 @@ class Rules implements AdminTabInterface
                 array_map( [$ruleRepository, 'markRuleAsDeleted'], $rulesList );
             }
             //phpcs:ignore WordPress.Security.ValidatedSanitizedInput
-            wp_redirect($_SERVER['HTTP_REFERER']);
+            wp_safe_redirect($_SERVER['HTTP_REFERER']);
             exit();
         }
     }
@@ -375,12 +375,14 @@ class Rules implements AdminTabInterface
     {
         $baseVersionUrl = WC_ADP_PLUGIN_URL . "/BaseVersion/";
 
+        $tiptip_plugin = version_compare(WC_VERSION, WC_ADP_WC_TIPTIP_SINCE_VERSION, '>=') ? 'wc-jquery-tiptip' : 'jquery-tiptip';
+
         wp_enqueue_script('wdp_settings-scripts', $baseVersionUrl . 'assets/js/rules.js', array(
             'jquery',
             'jquery-ui-sortable',
             'wdp_select2',
             'wc-clipboard',
-            'jquery-tiptip'
+            $tiptip_plugin
         ), WC_ADP_VERSION, true);
 
         wp_localize_script('wdp_settings-scripts', 'wdp_data', $this->getScriptData());
@@ -837,7 +839,7 @@ class Rules implements AdminTabInterface
     {
         return array(
             'key'   => 'discount__expression_price',
-            'label' => __('Calculating the price using the expression', 'advanced-dynamic-pricing-for-woocommerce'),
+            'label' => __('Fixed price by the formula', 'advanced-dynamic-pricing-for-woocommerce'),
         );
     }
 

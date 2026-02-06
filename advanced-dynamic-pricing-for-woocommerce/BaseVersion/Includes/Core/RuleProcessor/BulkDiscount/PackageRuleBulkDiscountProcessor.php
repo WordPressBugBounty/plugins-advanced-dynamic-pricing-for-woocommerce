@@ -267,6 +267,7 @@ class PackageRuleBulkDiscountProcessor
 
                     $meta[] = $facade->getProductId();
                     $meta[] = $facade->getVariationId();
+                    $meta[] = $facade->getVariation();
 
                     $hash = md5(json_encode($meta));
 

@@ -125,6 +125,17 @@ defined('ABSPATH') or exit;
                         <select name="rule[bulk_adjustments][qty_based]" class="bulk-qty_based-type"></select>
                     </div>
 
+                    <span class="wdp-help-tip" style="margin-top:0.4rem; margin-left: 0.5rem; display: none;" data-qty-based="all" data-tip='<?php esc_attr_e( "bulk qty counts only for the products matched with the Product Filter", "advanced-dynamic-pricing-for-woocommerce" ); ?>'></span>
+                    <span class="wdp-help-tip" style="margin-top:0.4rem; margin-left: 0.5rem; display: none;" data-qty-based="total_qty_in_cart" data-tip='<?php esc_attr_e( "bulk qty counts all products in the cart even if the products don’t match to the Product Filter", "advanced-dynamic-pricing-for-woocommerce" ); ?>'></span>
+                    <span class="wdp-help-tip" style="margin-top:0.4rem; margin-left: 0.5rem; display: none;" data-qty-based="product_categories" data-tip='<?php esc_attr_e( "bulk qty counts by the each products from the selected category, e.g., separately for the Product A, separately for the Product B", "advanced-dynamic-pricing-for-woocommerce" ); ?>'></span>
+                    <span class="wdp-help-tip" style="margin-top:0.4rem; margin-left: 0.5rem; display: none;" data-qty-based="product_selected_categories" data-tip='<?php esc_attr_e( "bulk qty counts all the products from the selected category, e.g., both Product A + Product B qty", "advanced-dynamic-pricing-for-woocommerce" ); ?>'></span>
+                    <span class="wdp-help-tip" style="margin-top:0.4rem; margin-left: 0.5rem; display: none;" data-qty-based="selected_products" data-tip='<?php esc_attr_e( "bulk qty counts only for the selected products from this field", "advanced-dynamic-pricing-for-woocommerce" ); ?>'></span>
+                    <span class="wdp-help-tip" style="margin-top:0.4rem; margin-left: 0.5rem; display: none;" data-qty-based="sets" data-tip='<?php esc_attr_e( "for cases when the Product filter qty > 1, or for multiple Product filters, the bulk qty will be counted only for the product sets", "advanced-dynamic-pricing-for-woocommerce" ); ?>'></span>
+                    <span class="wdp-help-tip" style="margin-top:0.4rem; margin-left: 0.5rem; display: none;" data-qty-based="product" data-tip='<?php esc_attr_e( "bulk qty counts by each product separately", "advanced-dynamic-pricing-for-woocommerce" ); ?>'></span>
+                    <span class="wdp-help-tip" style="margin-top:0.4rem; margin-left: 0.5rem; display: none;" data-qty-based="variation" data-tip='<?php esc_attr_e( "bulk qty counts by each variation separately, e.g., separately for the Green variation, and for the Red variation", "advanced-dynamic-pricing-for-woocommerce" ); ?>'></span>
+                    <span class="wdp-help-tip" style="margin-top:0.4rem; margin-left: 0.5rem; display: none;" data-qty-based="cart_position" data-tip='<?php esc_attr_e( "bulk qty counts from the first range for every cart line separately", "advanced-dynamic-pricing-for-woocommerce" ); ?>'></span>
+                    <span class="wdp-help-tip" style="margin-top:0.4rem; margin-left: 0.5rem; display: none;" data-qty-based="meta_data" data-tip='<?php esc_attr_e( "bulk qty counts separately for each product’s meta data", "advanced-dynamic-pricing-for-woocommerce" ); ?>'></span>
+
                     <div class="wdp-column bulk-selected_categories-type">
                         <select multiple
                                 data-list="product_categories"

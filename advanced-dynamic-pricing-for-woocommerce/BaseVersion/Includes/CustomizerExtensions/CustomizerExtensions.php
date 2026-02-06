@@ -629,7 +629,7 @@ class CustomizerExtensions
                         'control_type' => 'select',
                         'choices'      => apply_filters("wdp_" . "cart" . "_discount_message_places",
                             array(
-                                'woocommerce_cart_totals_before_shipping' => __('After subtotal',
+                                'woocommerce_cart_totals_before_shipping' => __('Before shipping',
                                     'advanced-dynamic-pricing-for-woocommerce'),
                                 'woocommerce_cart_totals_before_order_total' => __('Before order total',
                                     'advanced-dynamic-pricing-for-woocommerce'),
@@ -677,7 +677,7 @@ class CustomizerExtensions
                                     'advanced-dynamic-pricing-for-woocommerce'),
                                 'woocommerce_review_order_after_cart_contents'  => __('After cart contents',
                                     'advanced-dynamic-pricing-for-woocommerce'),
-                                'woocommerce_review_order_before_shipping'    => __('After subtotal',
+                                'woocommerce_review_order_before_shipping'    => __('Before shipping',
                                     'advanced-dynamic-pricing-for-woocommerce'),
                                 'woocommerce_review_order_before_order_total'    => __('Before order total',
                                     'advanced-dynamic-pricing-for-woocommerce'),

@@ -144,6 +144,7 @@ class ReporterAjax
             'additions',
             'active_hooks',
             'rules',
+            'product_collections'
         );
 
         if ( ! in_array('all', $reports)) {

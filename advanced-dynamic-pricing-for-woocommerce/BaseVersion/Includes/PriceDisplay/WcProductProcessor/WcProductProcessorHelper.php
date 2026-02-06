@@ -10,6 +10,8 @@ use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Container\ContainerCartItem
 use ADP\BaseVersion\Includes\PriceDisplay\ProcessedProductContainer;
 use WC_Product;
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 class WcProductProcessorHelper
 {
     /**

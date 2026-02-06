@@ -75,7 +75,7 @@ class TotalProductPriceFormatter
 
         $isOnSale     = $product->is_on_sale('edit');
         $amountSaved = $regularPrice - $price;
-        $percentageSaved = round($amountSaved / $regularPrice * 100, 2);
+        $percentageSaved = round($amountSaved / $regularPrice * 100);
 
         $strikedTotal = $isOnSale ?
             $this->priceFunctions->formatSalePrice(
@@ -167,7 +167,7 @@ class TotalProductPriceFormatter
         if ( $origPrice === 0.0 ) {
             $percentageSaved = 0.0;
         } else {
-            $percentageSaved = round($amountSaved / $origPrice * 100, 2);
+            $percentageSaved = round($amountSaved / $origPrice * 100);
         }
 
         /** @var ConcreteProductPriceHtml $prodPriceDisplay */

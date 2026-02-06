@@ -2,6 +2,8 @@
 
 namespace ADP\BaseVersion\Includes\Compatibility;
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 /**
 * Plugin Name: German Market
 * Author: MarketPress

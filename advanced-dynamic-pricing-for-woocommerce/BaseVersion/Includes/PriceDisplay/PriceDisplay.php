@@ -217,7 +217,7 @@ class PriceDisplay
             }
         }
 
-        if ($context->isBaseVersion() AND apply_filters('adp_show_onsale_badge_for_variable', false)) {
+        if (!$context->isBaseVersion() AND apply_filters('adp_show_onsale_badge_for_variable', false)) {
             add_filter('woocommerce_product_variation_get_sale_price', array($this, 'hookGetSalePrice'), $priority,
                 2);
             add_filter('woocommerce_product_variation_get_regular_price', array($this, 'hookGetRegularPrice'),
@@ -313,7 +313,12 @@ class PriceDisplay
 
         if ($processed->areRulesApplied()) {
             if ($processed instanceof ProcessedProductSimple) {
+                if(defined('WOOCO_PREMIUM') && get_class($processed) == ProcessedProductContainer::class) {
+                    return $value;
+                }
                 $value = $processed->getCalculatedPrice();
+            } elseif ($processed instanceof ProcessedVariableProduct) {
+                $value = $processed->getLowestPrice();
             }
         }
 

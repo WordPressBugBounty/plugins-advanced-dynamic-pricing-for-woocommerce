@@ -10,6 +10,7 @@ use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Container\ContainerPartCart
 use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\ICartItem;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\Listener;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\RuleProcessor;
+use ADP\BaseVersion\Includes\Core\RuleProcessor\PersistentRuleProcessor;
 use ADP\BaseVersion\Includes\Database\Repository\PersistentRuleRepository;
 use ADP\BaseVersion\Includes\Database\Repository\PersistentRuleRepositoryInterface;
 use ADP\BaseVersion\Includes\Database\RulesCollection;
@@ -279,7 +280,7 @@ class CartCalculator implements ICartCalculator
                 $wcSalePrice += $item->getAddonsAmount();
             }
         }
-        return $wcSalePrice;
+        return apply_filters('adp_get_wc_sale_price', $wcSalePrice, $product, $item, $prodPropsWithFilters);
 
         //Failed code, caused infinite loop  -  some plugins add hook for 'view' context
         /** Always remember about scheduled WC sales */
@@ -421,7 +422,7 @@ class CartCalculator implements ICartCalculator
                 }
             }
 
-            if ( ! $object || ! $object->rule || ! $object->price) {
+            if ( ! $object || ! $object->rule || ! $object->price || !($processor instanceof PersistentRuleProcessor) ) {
                 continue;
             }
 
@@ -472,5 +473,22 @@ class CartCalculator implements ICartCalculator
         }
         $this->maxDiscountRate = $maxDiscountRate;
         $this->maxDiscountAmount = $maxDiscountAmount;
+    }
+
+    /**
+     * @param Cart $cart
+     *
+     * @return array
+     */
+    public function getApplicableRulesForCart($cart)
+    {
+        $context = $this->context;
+        return array_filter(array_map(function($rule) use($context, $cart) {
+            $proc = $rule->buildProcessor($context);
+            if ($proc->isRuleMatchedCart($cart)) {
+                return $rule;
+            }
+            return null;
+        }, $this->ruleCollection->getRules()));
     }
 }

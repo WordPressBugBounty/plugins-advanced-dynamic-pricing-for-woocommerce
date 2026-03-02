@@ -227,26 +227,41 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
 
         <div class="wdp-block wdp-filter-block wdp-row" style="display: none;">
             <div class="wdp-column wdp-column-help">
-                <label><?php Helpers::ruleFilterLabel('Filter by products', 'advanced-dynamic-pricing-for-woocommerce'); ?></label><br>
-                <label class="wdp-filter-warning" style="color:red"><?php esc_html_e('If you add many lines to this section – you will create product bundle',
-                'advanced-dynamic-pricing-for-woocommerce'); ?></label>
-                <p class="wdp-rule-help">
-                <?php
-                    echo sprintf(
-                        wp_kses(
-                            __('Select what to discount: any products, certain products, collections, categories, category slugs, attributes, custom attributes, tags, SKUs, custom fields, sellers.', 'advanced-dynamic-pricing-for-woocommerce')
-                            .'<br><a href="%s" target="_blank">' .__('Read docs', 'advanced-dynamic-pricing-for-woocommerce') .'</a>',
-                        array('br' => array(), 'a' => array('href' => array(), 'target' => array()))
-                    ),
-                        esc_url('https://docs.algolplus.com/algol_pricing/rules/rules-sections/product-filters/')
-                    );
-                ?>
-                </p>
+                <div class="wdp-column-help-filter">
+                    <label><?php Helpers::ruleFilterLabel('Filter by products') ?></label><br>
+                    <p class="wdp-rule-help">
+                        <?php
+                            echo sprintf(
+                                wp_kses(
+                                        __('Select what to discount: any products, certain products, collections, categories, category slugs, attributes, custom attributes, tags, SKUs, custom fields, sellers.', 'advanced-dynamic-pricing-for-woocommerce')
+                                        .'<br><a href="%s" target="_blank">' .__('Read docs', 'advanced-dynamic-pricing-for-woocommerce') .'</a>',
+                                    array('br' => array(), 'a' => array('href' => array(), 'target' => array()))
+                                ),
+                                esc_url('https://docs.algolplus.com/algol_pricing/rules/rules-sections/product-filters/')
+                            );
+                        ?>
+                    </p>
+                </div>
+                <div class="wdp-column-help-set">
+                    <label><?php Helpers::ruleFilterLabel('Product set') ?></label><br>
+                    <p class="wdp-rule-help">
+                        <?php
+                            echo sprintf(
+                                wp_kses(
+                                        __('Add a discount for a set of products. Each row is a filter for a separate product.', 'advanced-dynamic-pricing-for-woocommerce')
+                                        .'<br><a href="%s" target="_blank">' .__('Read docs', 'advanced-dynamic-pricing-for-woocommerce') .'</a>',
+                                    array('br' => array(), 'a' => array('href' => array(), 'target' => array()))
+                                ),
+                                esc_url('https://docs.algolplus.com/algol_pricing/rules/rules-sections/product-filters/')
+                            );
+                        ?>
+                    </p>
+                </div>
             </div>
             <div class="wdp-wrapper wdp_product_filter wdp-column">
                 <div class="wdp-product-filter-container"></div>
                 <div class="wdp-add-condition">
-                    <button type="button" class="button add-product-filter"><?php esc_html_e('Add product filter',
+                    <button type="button" class="button add-product-filter"><?php esc_html_e('Add another product',
                             'advanced-dynamic-pricing-for-woocommerce'); ?></button>
                 </div>
             </div>
@@ -553,24 +568,38 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
         </div>
 
         <div class="wdp-add-condition">
-            <button type="button" class="button wdp-btn-add-product-filter"><?php esc_html_e('Product filters',
-                    'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="button" class="button wdp-btn-add-product-adjustment"><?php esc_html_e('Product discounts',
-                    'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="button" class="button wdp-btn-add-role-discount"><?php esc_html_e('Role discounts',
-                    'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="button" class="button wdp-btn-add-bulk"><?php esc_html_e('Bulk rules',
-                    'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="button" class="button wdp-btn-add-getproduct"><?php esc_html_e('Free products',
-                    'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="button" class="button wdp-btn-add-cart-adjustment"><?php esc_html_e('Cart/Shipping discounts',
-                    'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="button" class="button wdp-btn-add-condition"><?php esc_html_e('Cart conditions',
-                    'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="button" class="button wdp-btn-add-limit"><?php esc_html_e('Limits',
-                    'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="submit" class="button button-primary save-rule"><?php esc_html_e('Save changes',
-                    'advanced-dynamic-pricing-for-woocommerce') ?></button>
+            <div style="margin-bottom: 0.5rem">
+                <button type="button" class="button wdp-btn-add-product-filter"><?php esc_html_e('Product filters',
+                        'advanced-dynamic-pricing-for-woocommerce'); ?></button>
+                <button type="button" class="button wdp-btn-add-product-set"><?php esc_html_e('Product set',
+                        'advanced-dynamic-pricing-for-woocommerce'); ?></button>
+                <button type="button" class="button wdp-btn-add-product-adjustment"><?php esc_html_e('Product discounts',
+                        'advanced-dynamic-pricing-for-woocommerce'); ?></button>
+                <button type="button" class="button wdp-btn-add-role-discount"><?php esc_html_e('Role discounts',
+                        'advanced-dynamic-pricing-for-woocommerce'); ?></button>
+                <button type="button" class="button wdp-btn-add-bulk"><?php esc_html_e('Bulk rules',
+                        'advanced-dynamic-pricing-for-woocommerce'); ?></button>
+                <button type="button" class="button wdp-btn-add-getproduct"><?php esc_html_e('Free products',
+                        'advanced-dynamic-pricing-for-woocommerce'); ?></button>
+                <button type="button" class="button disabled wdp-btn-popup-autoadd">
+                    <?php esc_html_e('Auto add to cart', 'advanced-dynamic-pricing-for-woocommerce'); ?>
+                    <span class="wdp-help-tip" data-tip='<?php esc_attr_e( "Available in pro", "advanced-dynamic-pricing-for-woocommerce" ); ?>'></span>
+                </button>
+            </div>
+            <div>
+                <button type="button" class="button wdp-btn-add-cart-adjustment"><?php esc_html_e('Cart/Shipping discounts',
+                        'advanced-dynamic-pricing-for-woocommerce'); ?></button>
+                <button type="button" class="button wdp-btn-add-condition"><?php esc_html_e('Cart conditions',
+                        'advanced-dynamic-pricing-for-woocommerce'); ?></button>
+                <button type="button" class="button disabled wdp-btn-popup-discount-message">
+                    <?php esc_html_e('Advertising', 'advanced-dynamic-pricing-for-woocommerce'); ?>
+                    <span class="wdp-help-tip" data-tip='<?php esc_attr_e( "Available in pro", "advanced-dynamic-pricing-for-woocommerce" ); ?>'></span>
+                </button>
+                <button type="button" class="button wdp-btn-add-limit"><?php esc_html_e('Limits',
+                        'advanced-dynamic-pricing-for-woocommerce'); ?></button>
+                <button type="submit" class="button button-primary save-rule"><?php esc_html_e('Save changes',
+                        'advanced-dynamic-pricing-for-woocommerce') ?></button>
+            </div>
         </div>
     </div>
 </form>

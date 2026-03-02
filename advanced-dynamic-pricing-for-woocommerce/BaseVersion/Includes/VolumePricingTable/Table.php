@@ -53,6 +53,12 @@ class Table
     protected $layout;
 
     /**
+     * @var string
+     */
+
+    protected $tableClass;
+
+    /**
      * @param null $deprecated
      */
     public function __construct($deprecated = null)
@@ -66,6 +72,7 @@ class Table
         $this->tableFooter = '';
         $this->measurement = '';
         $this->layout      = '';
+        $this->tableClass  = '';
     }
 
     public function getHtml()
@@ -92,7 +99,8 @@ class Table
             'data_rows'    => $this->dataRows,
             'footer_html'  => $this->tableFooter,
             'measurement'  => $this->measurement,
-            'layout'       => $this->layout
+            'layout'       => $this->layout,
+            'tableClass'   => $this->tableClass
         );
 
         ob_start();
@@ -178,7 +186,10 @@ class Table
             $this->tableFooter = $text;
         }
 
-
         return $this;
+    }
+
+    public function setTableClass($tableClass) {
+        $this->tableClass = $tableClass;
     }
 }

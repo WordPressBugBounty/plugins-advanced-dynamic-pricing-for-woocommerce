@@ -83,13 +83,21 @@ defined('ABSPATH') or exit;
                 </div>
             <?php endforeach; ?>
 
-            <a href="https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/"
-               target=_blank><?php esc_html_e('Need more settings?', 'advanced-dynamic-pricing-for-woocommerce') ?></a>
 
-            <p class="wdp-settings-button">
-                <button type="submit" class="button button-primary" name="save-options"><?php esc_html_e('Save changes',
-                        'advanced-dynamic-pricing-for-woocommerce') ?></button>
-            </p>
+            <div class="wdp-settings-button">
+                <div>
+                    <span class="wdp-need-more-settings">
+                        <b><?php esc_html_e('Need more settings?', 'advanced-dynamic-pricing-for-woocommerce') ?>
+                        <a href="https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/"
+                            target=_blank><?php esc_html_e('Buy Pro Version', 'advanced-dynamic-pricing-for-woocommerce') ?></a>
+                        </b>
+                </span>
+                </div>
+                <div>
+                    <button type="submit" class="button button-primary" name="save-options"><?php esc_html_e('Save changes',
+                            'advanced-dynamic-pricing-for-woocommerce') ?></button>
+                </div>
+            </div>
         </form>
     </div>
 </div>

@@ -149,7 +149,7 @@ class Order
         $sql = /** @lang MySQL */
             "CREATE TABLE {$tableName} (
             id INT NOT NULL AUTO_INCREMENT,
-            order_id INT NOT NULL,
+            order_id bigint(20) unsigned NOT NULL,
             rule_id INT NOT NULL,
             amount DECIMAL(50,2) DEFAULT 0,
             qty INT DEFAULT 0,

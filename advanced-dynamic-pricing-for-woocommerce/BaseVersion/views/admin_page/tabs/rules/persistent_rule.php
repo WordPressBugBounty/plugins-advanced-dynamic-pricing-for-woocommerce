@@ -397,42 +397,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.", 'adv
                             <div>
                                 <div class="wdp-product-filter-options">
                                     <div class="wdp-row">
-
-                                        <div class="wdp-product-exclude wdp-column wdp-column-subfields">
-                                            <div style="width: 100px"></div>
-                                            <div class="wdp-column" style="flex: 1">
-                                                <details>
-                                                    <summary class="wdp-link">
-                                                        <?php esc_html_e( 'Exclude products', 'advanced-dynamic-pricing-for-woocommerce' ); ?>
-                                                    </summary>
-                                                    <div style="display: flex">
-                                                        <div>
-                                                            <label>
-                                                                <span class="wdp-exclude-title">
-                                                                    <?php esc_html_e( 'Exclude products', 'advanced-dynamic-pricing-for-woocommerce' ); ?>
-                                                                </span>
-                                                            </label>
-                                                        </div>
-                                                        <div style="margin-left: 5px" class="wdp-exclude-on-wc-sale-container">
-                                                            <label>
-                                                                <input type="checkbox" class="wdp-exclude-on-wc-sale" name="rule[{t}][{f}][product_exclude][on_wc_sale]" value="1" >
-                                                                <span class="wdp-exclude-on-wc-sale-title">
-                                                                    <?php esc_html_e( 'on sale products', 'advanced-dynamic-pricing-for-woocommerce' ); ?>
-                                                                </span>
-                                                            </label>
-                                                        </div>
-                                                    </div>
-
-                                                    <select multiple
-                                                            data-list="products"
-                                                            data-field="autocomplete"
-                                                            data-placeholder="<?php esc_attr_e("Select values",
-                                                                "advanced-dynamic-pricing-for-woocommerce") ?>"
-                                                            name="rule[{t}][{f}][product_exclude][values][]">
-                                                    </select>
-                                                </details>
-                                            </div>
-                                        </div>
+                                        <?php include "templates/wdp-product-exclude.php" ?>
                                     </div>
                                 </div>
                             </div>
@@ -560,22 +525,26 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.", 'adv
         </div>
 
         <div class="wdp-add-condition">
-            <button type="button" class="button wdp-btn-add-product-filter"><?php esc_html_e('Product filters',
-                    'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="button" class="button wdp-btn-add-product-adjustment"><?php esc_html_e('Product discounts',
-                    'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="button" class="button wdp-btn-add-role-discount"><?php esc_html_e('Role discounts',
-                    'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="button" class="button wdp-btn-add-bulk"><?php esc_html_e('Bulk rules',
-                    'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="button" class="button wdp-btn-add-getproduct"><?php esc_html_e('Free products',
-                    'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="button" class="button wdp-btn-add-condition"><?php esc_html_e('Cart conditions',
-                    'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="button" class="button wdp-btn-add-limit"><?php esc_html_e('Limits',
-                    'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-            <button type="submit" class="button button-primary save-rule"><?php esc_html_e('Save changes',
-                    'advanced-dynamic-pricing-for-woocommerce') ?></button>
+            <div style="margin-bottom: 0.5rem">
+                <button type="button" class="button wdp-btn-add-product-filter"><?php esc_html_e('Product filters',
+                        'advanced-dynamic-pricing-for-woocommerce'); ?></button>
+                <button type="button" class="button wdp-btn-add-product-adjustment"><?php esc_html_e('Product discounts',
+                        'advanced-dynamic-pricing-for-woocommerce'); ?></button>
+                <button type="button" class="button wdp-btn-add-role-discount"><?php esc_html_e('Role discounts',
+                        'advanced-dynamic-pricing-for-woocommerce'); ?></button>
+                <button type="button" class="button wdp-btn-add-bulk"><?php esc_html_e('Bulk rules',
+                        'advanced-dynamic-pricing-for-woocommerce'); ?></button>
+                <button type="button" class="button wdp-btn-add-getproduct"><?php esc_html_e('Free products',
+                        'advanced-dynamic-pricing-for-woocommerce'); ?></button>
+            </div>
+            <div>
+                <button type="button" class="button wdp-btn-add-condition"><?php esc_html_e('Cart conditions',
+                        'advanced-dynamic-pricing-for-woocommerce'); ?></button>
+                <button type="button" class="button wdp-btn-add-limit"><?php esc_html_e('Limits',
+                        'advanced-dynamic-pricing-for-woocommerce'); ?></button>
+                <button type="submit" class="button button-primary save-rule"><?php esc_html_e('Save changes',
+                        'advanced-dynamic-pricing-for-woocommerce') ?></button>
+            </div>
         </div>
     </div>
 </form>

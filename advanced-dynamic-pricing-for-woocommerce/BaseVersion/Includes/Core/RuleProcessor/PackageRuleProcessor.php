@@ -812,29 +812,26 @@ class PackageRuleProcessor implements RuleProcessor
             $filters = $package->getFilters();
             /** @var $productFiltering ProductFiltering */
             $productFiltering = Factory::get("Core_RuleProcessor_ProductFiltering", $this->context);
-            /** @var $productExcluding ProductFiltering */
-            $productExcluding = Factory::get("Core_RuleProcessor_ProductFiltering", $this->context);
 
             /**
              * Item must match all filters
              */
             $match = true;
             foreach ($filters as $filter) {
-                $productFiltering->prepare($filter->getType(), $filter->getValue(), $filter->getMethod());
-
-                $productExcluding->prepare($filter::TYPE_PRODUCT, $filter->getExcludeProductIds(),
-                    $filter::METHOD_IN_LIST);
-
-                if ($productExcluding->checkProductSuitability($product, array())) {
-                    $match = false;
-                    break;
-                }
-
                 if ($filter->isExcludeWcOnSale() && $product->is_on_sale('')) {
                     $match = false;
                     break;
                 }
 
+                foreach ($filter->getExcludeFilters() as $excludeFilter) {
+                    $productFiltering->prepare($excludeFilter->getType(), $excludeFilter->getValue(), $excludeFilter->getMethod());
+                    if ($productFiltering->checkProductSuitability($product, array())) {
+                        $match = false;
+                        break 2;
+                    }
+                }
+
+                $productFiltering->prepare($filter->getType(), $filter->getValue(), $filter->getMethod());
                 if ( ! $productFiltering->checkProductSuitability($product, array())) {
                     $match = false;
                     break;

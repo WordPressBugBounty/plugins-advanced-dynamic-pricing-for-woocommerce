@@ -17,7 +17,6 @@ use ADP\BaseVersion\Includes\Database\RuleStorage;
 use ADP\BaseVersion\Includes\PriceDisplay\ProcessedGroupedProduct;
 use ADP\BaseVersion\Includes\PriceDisplay\ProcessedVariableProduct;
 use ADP\BaseVersion\Includes\PriceDisplay\Processor;
-use ADP\BaseVersion\Includes\Shortcodes\SqlGenerator;
 use ADP\Factory;
 
 defined('ABSPATH') or exit;

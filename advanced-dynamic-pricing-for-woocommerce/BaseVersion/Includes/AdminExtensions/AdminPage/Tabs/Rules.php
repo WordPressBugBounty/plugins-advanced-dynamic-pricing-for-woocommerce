@@ -382,8 +382,11 @@ class Rules implements AdminTabInterface
             'jquery-ui-sortable',
             'wdp_select2',
             'wc-clipboard',
+            'wc-backbone-modal',
             $tiptip_plugin
         ), WC_ADP_VERSION, true);
+        
+        wp_enqueue_style( 'woocommerce_admin_styles' );
 
         wp_localize_script('wdp_settings-scripts', 'wdp_data', $this->getScriptData());
     }

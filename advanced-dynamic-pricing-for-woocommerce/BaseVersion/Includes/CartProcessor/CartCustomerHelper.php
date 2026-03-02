@@ -164,6 +164,40 @@ class CartCustomerHelper
         return $ids;
     }
 
+    public function getOrderedProductIds()
+    {
+        if ($this->cartCustomer->isGuest()) {
+            return array();
+        }
+
+        $args = array(
+            'numberposts' => -1,
+            'orderby'     => 'date',
+            'order'       => 'DESC',
+            'customer_id' => $this->cartCustomer->getId(),
+            'post_type'   => wc_get_order_types(),
+            'post_status' => $this->getPreparedIsPaidOrderStatuses(),
+            'limit'   => -1,
+        );
+
+        $orders = wc_get_orders($args);
+
+        if(!count($orders)) {
+            return [];
+        }
+
+        $productIds = [];
+
+        foreach ($orders as $order) {
+            foreach ($order->get_items() as $item) {
+                $productIds[] = $item->get_product_id();
+            }
+        }
+
+        return array_unique($productIds);
+    }
+
+
     /**
      * @return bool
      */

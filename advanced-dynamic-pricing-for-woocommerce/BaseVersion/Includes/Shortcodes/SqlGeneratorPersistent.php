@@ -68,25 +68,39 @@ class SqlGeneratorPersistent
 
         $filter = reset($filters);
 
-        if ( ! $filter->isValid()) {
+        if(!$this->applyFilterToQuery($filter)) {
             return false;
         }
 
         $excludeIds = array();
-        if ($filter->getExcludeProductIds()) {
-            $excludeIds = $filter->getExcludeProductIds();
+        if(count($filter->getExcludeFilters())) {
+            $excludeGenerator = new self();
+            foreach($filter->getExcludeFilters() as $excludeFilter) {
+                $excludeGenerator->applyFilterToQuery($excludeFilter);
+            }
+
+            $excludeIds = $excludeGenerator->getProductIds();
+        }
+
+        $this->excludeIds = array_merge($this->excludeIds, $excludeIds);       
+
+        $this->appliedRules[] = $rule;
+
+        return true;
+    }
+
+    public function applyFilterToQuery($filter) {
+        if ( ! $filter->isValid()) {
+            return false;
         }
 
         $generated = $this->generateFilterSqlByType($filter->getType(), $filter->getValue());
-
-        $this->excludeIds = array_merge($this->excludeIds, $excludeIds);
 
         if ( ! empty($generated)) {
             $this->where[] = $generated;
         }
 
-        $this->appliedRules[] = $rule;
-
+        $this->appliedRules[] = $filter;
         return true;
     }
 

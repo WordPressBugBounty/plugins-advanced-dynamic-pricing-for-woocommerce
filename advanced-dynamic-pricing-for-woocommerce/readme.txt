@@ -5,7 +5,7 @@ Tags: woocommerce, coupons, discounts, dynamic pricing, bulk discount
 Requires PHP: 7.1
 Requires at least: 6.1
 Tested up to: 6.9
-Stable tag: 4.11.0
+Stable tag: 4.12.0
 License: GNU General Public License v3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -182,6 +182,18 @@ You should be PHP programmer to do it. [Please, review sample addon and adapt it
 
 
 == Changelog ==
+
+= 4.12.0 - 2026-03-02 =
+* Completely redesigned the "Exclude Products" section
+* Fixed bug - the "Split" discount mode sometimes displayed a zero price on the shop page
+* Fixed bug - incorrect discounts were displayed in the order preview on the >WooCommerce>Orders page
+* Fixed bug -  PHP warnings were generated when any custom product taxonomies were present
+* Added compatibility with "Payment Gateway Currency for WooCommerce", by WPFactory
+* Updated compatibility with "YITH WooCommerce Product Bundles"
+* Updated compatibility with "Aelia Currency Switcher"
+* Updated compatibility with "WPML"
+* Updated compatibility with "WooCommerce All Products for Subscriptions"
+* Updated compatibility with "WooCommerce Price Based on Country"
 
 = 4.11.0 - 2026-01-26 =
 * This release dedicated to speed

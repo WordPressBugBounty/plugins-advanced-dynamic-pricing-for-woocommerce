@@ -9,6 +9,7 @@ use ADP\BaseVersion\Includes\AdminExtensions\WcOrderPreviewExtensions;
 use ADP\BaseVersion\Includes\AdminExtensions\WcProductPageExtensions;
 use ADP\BaseVersion\Includes\Advertising\DiscountMessage;
 use ADP\BaseVersion\Includes\CartExtensions\CartExtensions;
+use ADP\BaseVersion\Includes\Compatibility\Wpml\WpmlCmp;
 use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\CustomizerExtensions\CustomizerExtensions;
 use ADP\BaseVersion\Includes\Database\Repository\OrderItemRepository;
@@ -143,6 +144,11 @@ class AdminAjax implements LoadStrategy
 
     public function woocommerceAddToCartFragments($fragments)
     {
+
+        $wpmlCmp = new WpmlCmp();
+        if ($wpmlCmp->isActiveSitepress()) {
+            add_filter('wpml_is_ajax', '__return_true');
+        }
         /**
          * Fix incorrect add-to-cart url in cross-sells elements.
          * We need to remove "wc-ajax" argument because WC_Product children in method add_to_cart_url() use
@@ -157,6 +163,11 @@ class AdminAjax implements LoadStrategy
         if (empty($text)) {
             $text = '<div class="cross-sells"></div>';
         }
+
+        if ($wpmlCmp->isActiveSitepress()) {
+            remove_filter('wpml_is_ajax', '__return_true');
+        }
+
         $fragments['div.cross-sells'] = $text;
 
         return $fragments;

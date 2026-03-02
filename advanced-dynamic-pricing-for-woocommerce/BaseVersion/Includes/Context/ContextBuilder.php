@@ -14,6 +14,7 @@ use ADP\BaseVersion\Includes\Compatibility\Container\WpcCompositeCmp;
 use ADP\BaseVersion\Includes\Compatibility\Container\YithBundlesCmp;
 use ADP\BaseVersion\Includes\Compatibility\PriceBasedOnCountryCmp;
 use ADP\BaseVersion\Includes\Compatibility\VillaThemeMultiCurrencyCmp;
+use ADP\BaseVersion\Includes\Compatibility\WcPgCurrencyCmp;
 use ADP\BaseVersion\Includes\Compatibility\WooCommerceMultiCurrencyCmp;
 use ADP\BaseVersion\Includes\Compatibility\WoocsCmp;
 use ADP\BaseVersion\Includes\Compatibility\YayCurrencyCmp;
@@ -75,6 +76,12 @@ class ContextBuilder
             $yayCmp->prepareHooks();
         }
 
+        $pcgCmp = new WcPgCurrencyCmp();
+        if($pcgCmp->isActive()) {
+            $pcgCmp->modifyContext($context);
+            $pcgCmp->prepareHooks();
+        }
+
         $priceBasedOnCountryCmp = new PriceBasedOnCountryCmp();
         if ($priceBasedOnCountryCmp->isActive()) {
             $priceBasedOnCountryCmp->modifyContext($context);
@@ -84,6 +91,12 @@ class ContextBuilder
         if($asanaEasyBundlesCmp->isActive()) {
             $asanaEasyBundlesCmp->prepareHooks();
         }
+        $yithBundlesCmp = new YithBundlesCmp($context);
+
+        if($yithBundlesCmp->isActive()) {
+            $yithBundlesCmp->prepareHooks();
+        }
+
         $wcMultiCurrencyCmp = new WooCommerceMultiCurrencyCmp($context);
     }
 

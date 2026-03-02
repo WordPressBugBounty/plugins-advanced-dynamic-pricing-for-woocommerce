@@ -37,7 +37,8 @@
 
 .wdp-settings-button {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .wcp_tabs_container_list {
@@ -122,4 +123,8 @@
 
 .wdp-settings-template-active {
     display: block !important;
+}
+
+.wdp-need-more-settings {
+  font-size: 14px;
 }

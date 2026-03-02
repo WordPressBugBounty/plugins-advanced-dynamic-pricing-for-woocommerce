@@ -2,10 +2,14 @@
 
 namespace ADP\BaseVersion\Includes\Compatibility\Container;
 
+use ADP\BaseVersion\Includes\CartProcessor\CartProcessor;
 use ADP\BaseVersion\Includes\Context;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Container\ContainerCartItem;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Container\ContainerPartCartItem;
 use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Container\ContainerPriceTypeEnum;
 use ADP\BaseVersion\Includes\WC\WcCartItemFacade;
-use YITH_WCPB_Frontend_Premium;
+use WC_Product_Yith_Bundle;
+use YITH_WC_Bundled_Item;
 
 defined('ABSPATH') or exit;
 
@@ -30,10 +34,64 @@ class YithBundlesCmp extends AbstractContainerCompatibility
     public function __construct(Context $context)
     {
         $this->context = $context;
-        if(class_exists('YITH_WCPB_Frontend_Premium')){
-            $this->yithWcpbFrontendPremium = yith_wcpb_frontend();
-        }
     }
+
+    public function prepareHooks(): void
+    {
+        add_filter( 'yith_wcpb_woocommerce_get_price_html', [$this, 'fixBundlePriceHtml'], 999, 2 );
+
+        if($this->context->getOption('suppress_other_pricing_plugins')) {
+            add_filter('yith_wcpb_ajax_update_price_enabled', function ($enabled) {
+                return false;
+            }, 999);
+        }
+
+        add_filter(
+            'yith_wcpb_ajax_get_bundle_total_price',
+            [$this, 'fixBundleTotalPriceHtml'],
+            999,
+            3
+        );
+    }
+
+    /**
+     * @var YITH_WC_Bundled_Item $product
+     * */
+    public function fixBundleTotalPriceHtml($price_html, $price, $product)
+    {
+        $regularPrice = (float) $product->get_per_item_price_tot_max();
+        $price        = (float) $price;
+
+        if ($regularPrice <= $price) {
+            return wc_price($price);
+        }
+
+        return wc_format_sale_price(
+            wc_price($regularPrice),
+            wc_price($price)
+        );
+    }
+
+    /**
+     * @var WC_Product_Yith_Bundle $productBundle
+     * */
+    public function fixBundlePriceHtml($price_html, $productBundle)
+    {
+        $pricedIndividually = 'yes' === $productBundle->get_meta( '_yith_wcpb_per_item_pricing' );
+        if (!($productBundle instanceof \WC_Product_Yith_Bundle)) {
+            return $price_html;
+        }
+        if ($pricedIndividually) {
+            $regular_price = $productBundle->get_price();
+            $sale_price = $productBundle->get_sale_price();
+
+            if ($productBundle->is_on_sale()) {
+                $price_html = wc_format_sale_price($regular_price, $sale_price);
+            }
+        }
+       return $price_html;
+    }
+
 
     protected function getContext(): Context
     {
@@ -89,19 +147,26 @@ class YithBundlesCmp extends AbstractContainerCompatibility
             return [];
         }
 
+        $pricedIndividually = 'yes' === $product->get_meta( '_yith_wcpb_per_item_pricing' );
         return array_map(
-            function ($bundleItem) use ($product) {
+            function ($bundleItem) use ($product, $pricedIndividually) {
                 /** @var \YITH_WC_Bundled_Item $bundleItem */
                 $bundledProduct = $bundleItem->get_product();
 
-                $price = $bundledProduct->get_price('edit');
+                $price = floatval($bundledProduct->get_price('edit'));
+
+                if ($bundleItem->apply_discount){
+                    $discount = (float) $bundleItem->discount;
+                    $amount = round($price * $discount / 100, wc_get_price_decimals());
+                    $price  = round($price - $amount, wc_get_price_decimals());
+                }
 
                 return ContainerPartProduct::of(
                     $product,
                     $bundledProduct,
                     (float)$price,
                     (float)$bundleItem->get_quantity(),
-                    false
+                    $pricedIndividually
                 );
             },
             $product->get_bundled_items()
@@ -110,13 +175,19 @@ class YithBundlesCmp extends AbstractContainerCompatibility
 
     public function calculatePartOfContainerPrice(WcCartItemFacade $facade): float
     {
+        $thirdPartyData = $facade->getThirdPartyData();
         $product = $facade->getProduct();
         $reflection = new \ReflectionClass($product);
         $property = $reflection->getProperty('data');
         $property->setAccessible(true);
-        $basePrice = $property->getValue($product)['price'];
+        $price = $property->getValue($product)['price'];
+        if(isset($thirdPartyData['discount'])){
+            $discount = floatval($thirdPartyData['discount']);
+            $amount = round($price * $discount / 100, wc_get_price_decimals());
+            $price  = round($price - $amount, wc_get_price_decimals());
+        }
 
-        return floatval($basePrice);
+        return floatval($price);
     }
 
     /**
@@ -126,17 +197,25 @@ class YithBundlesCmp extends AbstractContainerCompatibility
      */
     public function calculateContainerPrice(WcCartItemFacade $facade, array $children): float
     {
-
-        if (!is_null($this->yithWcpbFrontendPremium) && $this->yithWcpbFrontendPremium->show_item_prices_in_cart_and_checkout) {
-            $containerPrice = 0.0;
-
-            foreach ($children as $child) {
-                $containerPrice += floatval($child->getProduct()->get_price());
-            }
-            return $containerPrice;
+        $product = $facade->getProduct();
+        $pricedIndividually = 'yes' === $product->get_meta( '_yith_wcpb_per_item_pricing' );
+        if (!($product instanceof \WC_Product_Yith_Bundle)) {
+            return floatval($facade->getProduct()->get_price('edit'));
         }
+        if ($pricedIndividually) {
+            $price = 0.0;
+            foreach ($product->get_bundled_items() as $bundledProduct) {
+                if ($bundledProduct->apply_discount) {
+                    $amount = round(floatval($bundledProduct->get_product()->get_price()) * $bundledProduct->discount / 100, wc_get_price_decimals());
+                    $price  += round(floatval($bundledProduct->get_product()->get_price()) - $amount, wc_get_price_decimals());
+                } else {
+                    $price += floatval($bundledProduct->get_product()->get_price());
+                }
+            }
+            return $price;
 
-        return floatval($facade->getProduct()->get_price());
+        }
+        return floatval($facade->getProduct()->get_price('edit'));
     }
 
     /**
@@ -146,35 +225,74 @@ class YithBundlesCmp extends AbstractContainerCompatibility
      */
     public function calculateContainerBasePrice(WcCartItemFacade $facade, array $children): float
     {
-        if (!is_null($this->yithWcpbFrontendPremium) && $this->yithWcpbFrontendPremium->show_item_prices_in_cart_and_checkout) {
+        $product = $facade->getProduct();
+        $pricedIndividually = 'yes' === $product->get_meta( '_yith_wcpb_per_item_pricing' );
+        if($pricedIndividually){
             return 0.0;
         }
-
-        return floatval($facade->getProduct()->get_regular_price());
+        return floatval(CartProcessor::getProductPriceDependsOnPriceMode($facade->getProduct()));
     }
 
     public function getContainerPriceTypeByParentFacade(WcCartItemFacade $facade): ?ContainerPriceTypeEnum
     {
         $product = $facade->getProduct();
-
-        if (!($product instanceof \WC_Product_Yith_Bundle)) {
-            return null;
-        }
-
-        if (!is_null($this->yithWcpbFrontendPremium) && !$this->yithWcpbFrontendPremium->show_item_prices_in_cart_and_checkout) {
-            return ContainerPriceTypeEnum::FIXED();
-        } else {
+        $pricedIndividually = 'yes' === $product->get_meta( '_yith_wcpb_per_item_pricing' );
+        if($pricedIndividually){
             return ContainerPriceTypeEnum::BASE_PLUS_SUM_OF_SUB_ITEMS();
         }
+        return ContainerPriceTypeEnum::FIXED();
     }
 
     public function isPartOfContainerFacadePricedIndividually(WcCartItemFacade $facade): ?bool
     {
-        if (!is_null($this->yithWcpbFrontendPremium) && $this->yithWcpbFrontendPremium->show_item_prices_in_cart_and_checkout) {
-            return true;
-        }else {
+        $trdPartyData = $facade->getThirdPartyData();
+
+        if (empty($trdPartyData['bundled_by'])) {
             return false;
         }
+        $cartItem = WC()->cart->get_cart_item($trdPartyData['bundled_by']);
+
+        if (!$cartItem || empty($cartItem['data'])) {
+            return false;
+        }
+        $product = $cartItem['data'];
+        $pricedIndividually = 'yes' === $product->get_meta( '_yith_wcpb_per_item_pricing' );
+        if($pricedIndividually){
+            return true;
+        }
+        return false;
+    }
+
+    public function adaptContainerCartItem(
+        WcCartItemFacade $facade,
+        array $children,
+        int $pos
+    ): ContainerCartItem {
+        $containerItem = parent::adaptContainerCartItem($facade, $children, $pos);
+
+        return $containerItem->setItems(
+            array_map(
+                function ($subContainerItem) use ($facade) {
+                    /** @var ContainerPartCartItem $subContainerItem */
+                    return $this->modifyPartOfContainerItemQty($subContainerItem, $facade);
+                },
+                array_map([$this, 'adaptContainerPartCartItem'], $children)
+            )
+        );
+    }
+
+    /**
+     * @param ContainerPartCartItem $subContainerItem
+     * @param WcCartItemFacade $parentFacade
+     * @return ContainerPartCartItem
+     */
+    protected function modifyPartOfContainerItemQty(
+        ContainerPartCartItem $subContainerItem,
+        WcCartItemFacade $parentFacade
+    ): ContainerPartCartItem {
+        $subContainerItem->setQty($subContainerItem->getQty() / $parentFacade->getQty());
+
+        return $subContainerItem;
     }
 
     public function overrideContainerReferenceForPartOfContainerFacadeAfterPossibleDuplicates(

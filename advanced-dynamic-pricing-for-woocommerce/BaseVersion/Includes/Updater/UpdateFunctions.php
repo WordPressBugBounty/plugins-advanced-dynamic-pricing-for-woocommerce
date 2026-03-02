@@ -683,5 +683,93 @@ class UpdateFunctions
             \ADP\ProVersion\Includes\Database\Repository\CollectionRepository::storeProductCollection($collection);
         }
     }
+
+    public static function migrateSummaryTo_4_12_0()
+    {
+        global $wpdb;
+
+        $table = $wpdb->prefix . Rule::TABLE_NAME;
+        $sql   = "SELECT id, filters FROM $table";
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
+        $rows  = $wpdb->get_results($sql);
+
+        foreach ($rows as $item) {
+            $id = $item->id;
+            $filters = unserialize($item->filters);
+
+            if(empty($filters)) {
+                continue;
+            }
+
+            $changed = false;
+            foreach ($filters as &$filter) {
+                $excludes = [];
+
+                if(isset($filter['method']) && $filter['method'] === 'not_in_list') {
+                    $excludes[$filter['type']] = [
+                        'type' => $filter['type'],
+                        'value' => $filter['value']
+                    ];
+                    $filter['type'] = 'any';
+                    $filter['method'] = '';
+                    $filter['value'] = '';
+                    $changed = true;
+                }
+
+                if(isset($filter['product_exclude']) && isset($filter['product_exclude']['values']) 
+                        && is_array($filter['product_exclude']['values'])
+                        && !empty($filter['product_exclude']['values'])) {
+
+                    if(isset($excludes['products'])) {
+                        $excludes['products']['value'] = array_unique(
+                            array_merge(
+                                $excludes['products']['value'],
+                                $filter['product_exclude']['values']
+                            )
+                        );
+                    } else {
+                        $excludes['products'] = [
+                            'type' => 'products',
+                            'value' => $filter['product_exclude']['values']
+                        ];
+                    }
+                    unset($filter['product_exclude']['values']);
+                    $changed = true;
+                }
+
+                if(isset($filter['collections_exclude']) && isset($filter['collections_exclude']['values']) 
+                        && is_array($filter['collections_exclude']['values'])
+                        && !empty($filter['collections_exclude']['values'])) {
+
+                    if(isset($excludes['product_collections'])) {
+                        $excludes['product_collections']['value'] = array_unique(
+                            array_merge(
+                                $excludes['product_collections']['value'],
+                                $filter['collections_exclude']['values']
+                            )
+                        );
+                    } else {
+                        $excludes['product_collections'] = [
+                            'type' => 'product_collections',
+                            'value' => $filter['collections_exclude']['values']
+                        ];
+                    }
+                    unset($filter['collections_exclude']);
+                    $changed = true;
+                }
+
+                if($changed) {
+                    $filter['excludes'] = array_values($excludes);
+                }
+            }
+
+            if($changed) {
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $wpdb->update($table, [
+                    'filters' => serialize($filters),
+                ], ['id' => $id]);
+            }
+        }
+    }
 }
 

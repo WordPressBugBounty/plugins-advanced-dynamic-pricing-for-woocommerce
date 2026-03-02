@@ -58,6 +58,9 @@ class Updater
         '4.10.4' => array(
             'migrateSummaryTo_4_10_4',
         ),
+        '4.12.0' => array(
+            'migrateSummaryTo_4_12_0',
+        ),
     );
 
     public static function update()
@@ -85,6 +88,7 @@ class Updater
                         UpdateFunctions::call_update_function($update_callback);
                     }
                 }
+                update_option(self::DB_VERSION_KEY, $version, false);
             }
 
             update_option(self::DB_VERSION_KEY, WC_ADP_VERSION, false);

@@ -245,6 +245,7 @@ class ConditionsLoader
                     self::LIST_LABEL_KEY         => $taxonomyCondition->getTaxonomyLabel(),
                     self::LIST_TEMPLATE_PATH_KEY => $taxonomyCondition->getTemplatePath(),
                     self::LIST_PARENT_CLASS_KEY  => Factory::getShortClassName(get_parent_class($className)),
+                    self::LIST_INDEX_KEY         => $className::getIndex(),
                     'taxonomy'                   => $taxonomy,
                 );
             } else {

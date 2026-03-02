@@ -14,13 +14,15 @@
     border: solid 1px #dfdfdf;
     padding: 5px 10px;
     text-align: center;
+    caret-color: transparent;
 }
 
 .wdp_pricing_table tr.clickable_bulk {
     cursor: pointer;
 }
 
-.wdp_pricing_table .clickable_bulk:hover > * {
+.wdp_pricing_table .clickable_bulk:hover > *,
+.wdp_pricing_table .wdp_selected_row td {
     background-color: var(--highlight-range-bg) !important;
     color: var(--highlight-range-text) !important;
 }
@@ -38,3 +40,6 @@ del .woocommerce-Price-amount {
     display: inline;
 }
 
+.wdp_pricing_table_radio_btn td {
+    border: none;
+}

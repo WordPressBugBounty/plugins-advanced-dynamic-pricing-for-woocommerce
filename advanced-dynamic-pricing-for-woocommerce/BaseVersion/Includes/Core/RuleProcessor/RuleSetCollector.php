@@ -132,14 +132,11 @@ class RuleSetCollector
     protected function preparePackage($cart, $package, &$typeProductsHashes)
     {
         $filters = $package->getFilters();
-//		$excludes = $package->getExcludes();
 
         /**
          * @var $productFiltering ProductFiltering
-         * @var $productExcluding ProductFiltering
          */
         $productFiltering = Factory::get("Core_RuleProcessor_ProductFiltering", $cart->getContext()->getGlobalContext());
-        $productExcluding = Factory::get("Core_RuleProcessor_ProductFiltering", $cart->getContext()->getGlobalContext());
         $limitation              = $package->getLimitation();
 
 
@@ -152,39 +149,12 @@ class RuleSetCollector
             $wcCartItemFacade = $cartItem->getWcItem();
             $product          = $wcCartItemFacade->getProduct();
 
-//					$isExclude = false;
-//
-//					foreach ( $excludes as $exclude ) {
-//						$productExcluding->prepare( $exclude->getType(), $exclude->getValue(), $exclude->getMethod() );
-//
-//						if ( $productExcluding->check_product_suitability( $product, $wcCartItemFacade->getData() ) ) {
-//							$isExclude = true;
-//							break;
-//						}
-//					}
-//
-//					if ( $isExclude ) {
-//						continue;
-//					}
 
             /**
              * Item must match all filters
              */
             $match = true;
             foreach ($filters as $filter) {
-                $productFiltering->prepare($filter->getType(), $filter->getValue(), $filter->getMethod());
-
-                $productExcluding->prepare(
-                    $filter::TYPE_PRODUCT,
-                    $filter->getExcludeProductIds(),
-                    $filter::METHOD_IN_LIST
-                );
-
-                if ($productExcluding->checkProductSuitability($product, $wcCartItemFacade->getData())) {
-                    $match = false;
-                    break;
-                }
-
                 if ($filter->isExcludeWcOnSale() && $product->is_on_sale('')) {
                     $match = false;
                     break;
@@ -195,6 +165,15 @@ class RuleSetCollector
                     break;
                 }
 
+                foreach ($filter->getExcludeFilters() as $excludeFilter) {
+                    $productFiltering->prepare($excludeFilter->getType(), $excludeFilter->getValue(), $excludeFilter->getMethod());
+                    if ($productFiltering->checkProductSuitability($product, $wcCartItemFacade->getData())) {
+                        $match = false;
+                        break 2;
+                    }
+                }
+
+                $productFiltering->prepare($filter->getType(), $filter->getValue(), $filter->getMethod());
                 if ( ! $productFiltering->checkProductSuitability($product, $wcCartItemFacade->getData())) {
                     $match = false;
                     break;

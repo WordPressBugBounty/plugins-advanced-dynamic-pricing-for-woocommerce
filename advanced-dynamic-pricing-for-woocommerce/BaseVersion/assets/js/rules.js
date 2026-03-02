@@ -411,7 +411,7 @@ jQuery(document).ready(function ($) {
 		finishLoadRule(new_rule);
 		if(new_rule.find('.wdp-discount-type').length) {
 			new_rule.find('.wdp-discount-type').show();
-			new_rule.find('.wdp-add-condition, .replace-adjustments').hide();
+			new_rule.find('.inside > .wdp-add-condition, .replace-adjustments').hide();
 		}
 		new_rule.find('.wdp-title').focus();
 		$("html, body").animate({ scrollTop: $(document).height() }, "slow"); //scroll to bottom
@@ -1070,6 +1070,7 @@ jQuery(document).ready(function ($) {
       $rule.find('.wdp-filter-item').remove();
       blocks.setProductFiltersOpen(false)
       $(rule).find('.wdp-btn-add-product-filter').show();
+      $(rule).find('.wdp-btn-add-product-set').show();
 
       //remove product discount
       $rule.find('.wdp-btn-add-product-adjustment').show();
@@ -1226,8 +1227,8 @@ jQuery(document).ready(function ($) {
         ]
       };
 
-      add_product_filter(new_rule.find('.wdp-filter-block'), filter_data_1);
-      add_product_filter(new_rule.find('.wdp-filter-block'), filter_data_2);
+      add_product_filter(new_rule.find('.wdp-filter-block'), filter_data_1, null, {isSet: true});
+      add_product_filter(new_rule.find('.wdp-filter-block'), filter_data_2, null, {isSet: true});
 
       add_product_adjustment(new_rule.find('.wdp-product-adjustments'), adjustment_data);
     }
@@ -1312,8 +1313,8 @@ jQuery(document).ready(function ($) {
         ]
       };
 
-      add_product_filter(new_rule.find('.wdp-filter-block'), filter_data_1);
-      add_product_filter(new_rule.find('.wdp-filter-block'), filter_data_2);
+      add_product_filter(new_rule.find('.wdp-filter-block'), filter_data_1, null, {isSet: true});
+      add_product_filter(new_rule.find('.wdp-filter-block'), filter_data_2, null, {isSet: true});
 
       add_product_adjustment(new_rule.find('.wdp-product-adjustments'), adjustment_data);
     }
@@ -1418,7 +1419,7 @@ jQuery(document).ready(function ($) {
 				break;
 			}
       new_rule.find('.wdp-title').focus();
-			new_rule.find('.wdp-add-condition').show();
+			new_rule.find('.inside > .wdp-add-condition').show();
 		});
 
         // Add discount message
@@ -1442,8 +1443,35 @@ jQuery(document).ready(function ($) {
         });
 
         // Add product filter
-        new_rule.find('.add-product-filter, .wdp-btn-add-product-filter').click(function () {
-            add_product_filter(new_rule.find('.wdp-filter-block'));
+        new_rule.find('.wdp-btn-add-product-filter').click(function () {
+            add_product_filter(new_rule.find('.wdp-filter-block'), null, null, {isSet: false});
+        });
+
+        new_rule.find('.wdp-btn-popup-autoadd').click(function () {
+          $( this ).WCBackboneModal( {
+            template: 'autoadd_modal'
+          } );
+        });
+
+        new_rule.find('.wdp-btn-popup-discount-message').click(function () {
+          $( this ).WCBackboneModal( {
+            template: 'discount-message_modal'
+          } );
+        });
+
+        // Add product filter
+        new_rule.find('.add-product-filter, .wdp-btn-add-product-set').click(function () {
+          if(new_rule.find('.wdp-filter-block').find('.wdp-exlcude-filter-item').length == 0) {
+            add_product_filter(new_rule.find('.wdp-filter-block'), null, null, {isSet: true});
+          }
+          add_product_filter(new_rule.find('.wdp-filter-block'), null, null, {isSet: true});
+        });
+
+        new_rule.click(function(e) {
+          if(e.target.closest('.add-exclude-filter')) {
+            add_exclude_filter($(e.target).closest('.wdp-product-exclude').find('.wdp-exlclude-filters'));
+            e.preventDefault();
+          }
         });
 
         // Add product filter for 'Add product adjustment' block
@@ -1695,8 +1723,10 @@ jQuery(document).ready(function ($) {
 
     if (blocks.isProductFiltersOpen()) {
       var $wdp_product_filter = new_rule.find('.wdp-filter-block')
+
+      let isSet = data.filters.length > 1;
       $.each(data.filters, function (i, filter) {
-        add_product_filter($wdp_product_filter, filter, blocks)
+        add_product_filter($wdp_product_filter, filter, blocks, {isSet})
       })
     }
 
@@ -1819,7 +1849,7 @@ jQuery(document).ready(function ($) {
         }
     }
 
-    function add_product_filter($container, data, blocks) {
+    function add_product_filter($container, data, blocks, options={}) {
         if ( ! blocks ) {
           blocks = new RuleBlocks($container.closest('.postbox'))
           blocks.setProductFiltersOpen(true)
@@ -1829,8 +1859,14 @@ jQuery(document).ready(function ($) {
 
         if ( blocks.isProductFiltersOpen() ) {
           $container.closest('.postbox').find('.wdp-btn-add-product-filter').hide();
+          $container.closest('.postbox').find('.wdp-btn-add-product-set').hide();
         } else {
           $container.closest('.postbox').find('.wdp-btn-add-product-filter').show();
+          $container.closest('.postbox').find('.wdp-btn-add-product-set').show();
+        }
+
+        if(options && options.isSet) {
+          $container.addClass('wdp-set-block');
         }
 
         var product_filter_index = get_new_product_filter_index($container);
@@ -1927,7 +1963,9 @@ jQuery(document).ready(function ($) {
                 blocks.setProductFiltersOpen(false)
                 blocks.updateView()
                 $container.closest('.postbox').find('.wdp-btn-add-product-filter').show();
+                $container.closest('.postbox').find('.wdp-btn-add-product-set').show();
                 $container.trigger('change');
+                $container.removeClass('wdp-set-block');
 			}
 
           if(filters_count > 1) {
@@ -2122,19 +2160,8 @@ jQuery(document).ready(function ($) {
                 });
                 $container.find('.wdp-condition-field-value select').append(html);
             }
-
+            
             if ( data.product_exclude ) {
-                if ( data.product_exclude.values ) {
-                    var product_exclude_html = '';
-                    var pr_excl_type = 'products';
-                    $.each(data.product_exclude.values, function (i, id) {
-                        var title = wdp_data.titles[pr_excl_type] && wdp_data.titles[pr_excl_type][id] ? wdp_data.titles[pr_excl_type][id] : id;
-                        var link = wdp_data.links && wdp_data.links[pr_excl_type] && wdp_data.links[pr_excl_type][id] ? wdp_data.links[pr_excl_type][id] : '';
-						            product_exclude_html += '<option selected data-link="' + link + '" value="' + id + '">' + title + '</option>';
-                    });
-                    $container.find('.wdp-product-exclude select').append(product_exclude_html);
-                }
-
                 if (data.product_exclude.on_wc_sale) {
                     $container.find('.wdp-exclude-on-wc-sale-container input').prop('checked', true);
                 }
@@ -2153,21 +2180,6 @@ jQuery(document).ready(function ($) {
                 $container.find('.wdp-product-exclude details').prop('open', true);
             }
 
-            if ( data.collections_exclude ) {
-              if ( data.collections_exclude.values ) {
-                var collections_exclude_html = '';
-                var cl_excl_type = 'product_collections';
-                $.each(data.collections_exclude.values, function (i, id) {
-                  var title = wdp_data.titles[cl_excl_type] && wdp_data.titles[cl_excl_type][id] ? wdp_data.titles[cl_excl_type][id] : id;
-                  var link = wdp_data.links && wdp_data.links[cl_excl_type] && wdp_data.links[cl_excl_type][id] ? wdp_data.links[cl_excl_type][id] : '';
-                  collections_exclude_html += '<option selected data-link="' + link + '" value="' + id + '">' + title + '</option>';
-                });
-                $container.find('.wdp-collection-exclude select').append(collections_exclude_html);
-            }
-
-            $container.find('.wdp-collection-exclude details').prop('open', true);
-          }
-
             if (data.limitation) {
                 $container.find('.wdp-limitation select').val(data.limitation);
             }
@@ -2181,6 +2193,104 @@ jQuery(document).ready(function ($) {
 
         make_select2_products($container.find('[data-field="autocomplete"]'));
 	    make_select2_product_taxonomies($container.find('[data-field="autocomplete"][data-list="product_taxonomies"]'));
+
+      let $exFilters = $container.find('.wdp-exlclude-filters');
+      if(data && data.excludes) {
+        for (const [id, filter] of Object.entries(data.excludes)) {
+          add_exclude_filter($exFilters, filter);
+        }
+      } else {
+        if($exFilters.children().length) {
+          let filters = $exFilters.serializeArray();
+            $exFilters.children().each(function( index ) {
+              filters.push({
+                type: $(this).find('.wdp-filter-exclude-type select').val(), 
+                value: $(this).find('.wdp-filter-exlclude-value select').val()
+              });
+            });
+
+            $exFilters.html('');
+            filters.forEach(filter => {
+              add_exclude_filter($exFilters, filter);
+            });
+        }
+      }
+      if(!$exFilters.children().length) {
+        add_exclude_filter($exFilters);
+      }
+    }
+
+    function add_exclude_filter($items, filter={}) {
+      let filterType = $items.closest('.wdp-filter-item').find('.wdp-filter-field-type select').val();
+      let type = filter.type || 'products';
+      let value = filter.value || [];
+      let options = value.map((id) => {
+          let title = wdp_data.titles[type] && wdp_data.titles[type][id] ? wdp_data.titles[type][id] : id;
+          let link = wdp_data.links && wdp_data.links[type] && wdp_data.links[type][id] ? wdp_data.links[type][id] : '';
+          return '<option selected data-link="' + link + '" value="' + id + '">' + title + '</option>';
+      }).join('');
+
+      let excludeId = 0; 
+      $items.children().each(function (i, el) {
+        let index = ~~$(el).data('index');
+        excludeId = index + 1;
+      });
+      
+      let variables = {
+        filterId: get_current_product_filter_index($items),
+        excludeId: excludeId,
+        type,
+        options
+      };
+
+      let html = get_template(`exclude_filter_${filterType}`, variables);
+      if(!html) {
+        html = get_template(`exclude_filter`, variables);
+      }
+      
+      $items.append(html);
+      let $item = $items.find(`[data-index=${excludeId}]`);
+      let $type = $item.find('.wdp-filter-exclude-type select');
+      $type.val(type);
+
+      if($type.val() !== type) {
+        $item.remove();
+        return;
+      };
+
+      addExcludeAutocomplete($item, type, value, excludeId);
+
+      $type.on('change', () => {
+        addExcludeAutocomplete($item, $type.val(), [], excludeId, true);
+      });
+
+      $item.find('.wdp-filter-exlclude-remove').on('click', (e) => {
+        $item.remove();
+      });
+    }
+
+    function addExcludeAutocomplete($item, type, value, excludeId) {
+      let $value = $item.find('.wdp-filter-exlclude-value');
+
+      $value.html('');
+
+      let options = value.map((id) => {
+          let title = wdp_data.titles[type] && wdp_data.titles[type][id] ? wdp_data.titles[type][id] : id;
+          let link = wdp_data.links && wdp_data.links[type] && wdp_data.links[type][id] ? wdp_data.links[type][id] : '';
+          return '<option selected data-link="' + link + '" value="' + id + '">' + title + '</option>';
+      }).join('');
+
+      let html = get_template('product_exclude_filter', {
+        filterId: get_current_product_filter_index($item),
+        excludeId: excludeId,
+        type,
+        options
+      });
+
+      $value.html(html);
+  
+      make_select2_products($item.find('[data-field="autocomplete"]'));
+      make_select2_product_taxonomies($item.find('[data-field="autocomplete"][data-list="product_taxonomies"]'));
     }
 
     function add_condition($el, data, blocks) {
@@ -3363,7 +3473,9 @@ jQuery(document).ready(function ($) {
     /* Utils */
     // find template by id, replace variables by values and return string
         function get_template(name, variables) {
+          
         var template = $('#' + name + '_template').html() || '';
+
         for (var v in variables) {
             template = template.replace(new RegExp('{' + v + '}', 'g'), variables[v]);
         }

@@ -55,7 +55,7 @@ class WcsAttCmp
             add_filter('woocommerce_cart_item_price', array('\WCS_ATT_Display_Cart', 'show_cart_item_subscription_options'), 10001, 3);
         }
 
-        if ($this->isActive() && isset($this->wcsAtt->product_data)) {
+        if ($this->isActive() && isset($this->wcsAtt->product_data) ) {
             $this->wcsAtt->product_data = new ADP_WCS_ATT_Product_Data_Wrapper($this->wcsAtt->product_data);
         }
     }
@@ -74,20 +74,21 @@ if (!class_exists('ADP_WCS_ATT_Product_Data_Wrapper')) {
         private $handle;
 
         public function __construct($handle) {
-            $this->handle = $handle;
+            $this->handle = ($handle instanceof self) ? $handle->handle : $handle;
         }
 
         protected function get_id_val($product, $key) {
             if (!is_object($product) || !method_exists($product, 'get_id')) {
                 return null;
             }
-            $pid = $product->get_id();
 
-            return md5($pid . $key );
+            return md5($product->get_id() . $key . 'adp_wcsatt_unique');
         }
+
 
         public function get($product, $key, $default = null) {
             $id_val = $this->get_id_val($product, $key);
+            if (!$id_val) return $default;
 
             if (method_exists($product, 'get_meta')) {
                 $value = $product->get_meta('_adp_wcsatt_' . $id_val, true);
@@ -96,7 +97,11 @@ if (!class_exists('ADP_WCS_ATT_Product_Data_Wrapper')) {
                 }
             }
 
-            return $this->handle->get($product, $key, $default);
+            if ($this->handle && method_exists($this->handle, 'get')) {
+                return $this->handle->get($product, $key, $default);
+            }
+
+            return $default;
         }
 
         public function set($product, $key, $value) {
@@ -107,7 +112,9 @@ if (!class_exists('ADP_WCS_ATT_Product_Data_Wrapper')) {
                 $product->update_meta_data('_adp_wcsatt_' . $id_val, maybe_serialize($value));
             }
 
-            $this->handle->set($product, $key, $value);
+            if ($this->handle && method_exists($this->handle, 'set')) {
+                $this->handle->set($product, $key, $value);
+            }
         }
 
         public function delete($product, $key) {
@@ -118,7 +125,12 @@ if (!class_exists('ADP_WCS_ATT_Product_Data_Wrapper')) {
                 $product->delete_meta_data('_adp_wcsatt_' . $id_val);
             }
 
-            return $this->handle->delete($product, $key);
+            if ($this->handle && method_exists($this->handle, 'delete')) {
+                return $this->handle->delete($product, $key);
+            }
+
+            return false;
         }
     }
+
 }

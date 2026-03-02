@@ -110,10 +110,8 @@ class RuleTranslator
             foreach ($rule->getFilters() as $filter) {
                 $filter->setValue($filterTranslator->translateByType($filter->getType(), $filter->getValue(), $oi));
 
-                if ( $filter->getExcludeProductIds() ) {
-                    $filter->setExcludeProductIds(
-                        array_map([$oi, 'translateProductId'], $filter->getExcludeProductIds())
-                    );
+                foreach ($filter->getExcludeFilters() as $excludeFilter) {
+                    $excludeFilter->setValue($filterTranslator->translateByType($excludeFilter->getType(), $excludeFilter->getValue(), $oi));
                 }
 
                 $filters[] = $filter;
@@ -126,10 +124,8 @@ class RuleTranslator
                 foreach ($package->getFilters() as $filter) {
                     $filter->setValue($filterTranslator->translateByType($filter->getType(), $filter->getValue(), $oi));
 
-                    if ( $filter->getExcludeProductIds() ) {
-                        $filter->setExcludeProductIds(
-                            array_map([$oi, 'translateProductId'], $filter->getExcludeProductIds())
-                        );
+                    foreach ($filter->getExcludeFilters() as $excludeFilter) {
+                        $excludeFilter->setValue($filterTranslator->translateByType($excludeFilter->getType(), $excludeFilter->getValue(), $oi));
                     }
 
                     $filters[] = $filter;

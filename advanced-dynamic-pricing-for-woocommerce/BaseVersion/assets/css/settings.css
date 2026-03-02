@@ -408,7 +408,6 @@
 .wdp-list-container .wdp-filter-content-no-remove .two-on-two-column.left-column {
 	display: flex;
 	flex-direction: column;
-	min-width: 294px;
 }
 
 .wdp-list-container .wdp-filter-content-no-remove .two-on-two-column.right-column {
@@ -503,10 +502,6 @@
 
 .wdp-list-container .wdp-column:first-child {
 	margin-left: 0;
-}
-
-select{
-	width: 225px;
 }
 
 .rule-type select{
@@ -1298,3 +1293,110 @@ div.wdp-row.wdp-options select {
 }
 
 
+.wdp-exlcude-filter-item:first-child .wdp-filter-exlclude-remove {
+	visibility: hidden;
+}
+
+.wdp-ruleitem .wdp-filter-block .wdp-add-condition {
+	display: none;
+}
+.wdp-filter-block.wdp-set-block .wdp-add-condition {
+	display: flex;
+	justify-content: center;
+	width: 294px;
+}
+
+.wdp-filter-block .wdp-column-help-set {
+	display: none;
+}
+.wdp-filter-block.wdp-set-block .wdp-column-help-filter {
+	display: none;
+}
+
+.wdp-filter-block.wdp-set-block .wdp-column-help-set {
+	display: block;
+}
+
+.wdp-row-hr {
+    border-top: 2px solid #aaa3;
+    margin: 20px 0;
+}
+
+.wdp-row-hr-wrap {
+	width: 294px;
+    display: flex;
+    justify-content: center;
+}
+
+.wdp-row-hr img {
+	margin-top: -16px;
+	margin-left: 10px;
+}
+
+.wdp-row-hr:last-child {
+	display: none;
+}
+
+.wdp-product-filter-options {
+	margin-left: 10px;
+}
+
+.wdp-ruleitem-persistent .wdp-exclude-options {
+	display: none;
+}
+
+.wdp-exlclude-buttons {
+	display: flex;
+    justify-content: flex-end;
+	margin-right: 30px;
+}
+.wdp-ruleitem .wdp-product-exclude {
+	border: 1px solid #e6e6e6;
+    border-radius: 4px;
+    padding: 10px;
+	background-color: #e6e6e650;
+}
+
+.wdp-exclude-title {
+	width: 160px;
+    display: block;
+	font-size: 15px;
+	text-align: center;
+}
+
+.wdp-exclude-options {
+	display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+	margin-left: 10px;
+}
+
+.wdp-repeat label,
+.wdp-apply-to label {
+	display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 5px;
+}
+
+.wdp-repeat label select,
+.wdp-apply-to label select{
+	flex: 1
+}
+
+#product-collections-container .wdp-filter-field-method {
+	margin-left: 10px !important;
+}
+
+.wdp-add-condition .button.disabled {
+	cursor: pointer;
+}
+
+.wdp-modal .wc-backbone-modal-main article {
+	padding-top: 45px;
+}
+
+.wdp-modal .wc-backbone-modal-main {
+	padding-bottom: 45px;
+}

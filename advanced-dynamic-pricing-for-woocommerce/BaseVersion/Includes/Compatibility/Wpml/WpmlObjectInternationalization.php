@@ -16,8 +16,14 @@ class WpmlObjectInternationalization implements IObjectInternationalization
         $this->languageCode = $languageCode;
     }
 
-    public function translateProductId(int $productId): int
+    public function translateProductId($productId): int
     {
+        if (!is_numeric($productId)) {
+            return 0;
+        }
+
+        $productId = (int)$productId;
+
         if ($translValue = apply_filters('translate_object_id', $productId, 'post', false, $this->languageCode)) {
             $productId = (int)$translValue;
         }
@@ -65,8 +71,12 @@ class WpmlObjectInternationalization implements IObjectInternationalization
         return $tagId;
     }
 
-    public function translateCustomTaxonomyTermId(int $termID, string $taxonomy): int
+    public function translateCustomTaxonomyTermId($termID, string $taxonomy): int
     {
+        if (!is_numeric($termID)) {
+            return 0;
+        }
+
         $translValue = apply_filters('translate_object_id', $termID, $taxonomy, false, $this->languageCode);
         if ($translValue) {
             $termID = (int)$translValue;

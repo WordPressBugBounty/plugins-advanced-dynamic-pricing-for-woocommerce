@@ -123,8 +123,13 @@ class Exporter
                         'on_wc_sale'       => $filter->isExcludeWcOnSale() ? "1" : "",
                         'already_affected' => $filter->isExcludeAlreadyAffected() ? "1" : "",
                         'backorder'        => $filter->isExcludeBackorder() ? "1" : "",
-                        'values'           => $filter->getExcludeProductIds() ? $filter->getExcludeProductIds() : array(),
                     ),
+                    'excludes' => array_map(function($excludeFilter) {
+                        return [
+                            'type'  => $excludeFilter->getType(),
+                            'value' => $excludeFilter->getValue(),
+                        ];
+                    }, $filter->getExcludeFilters()),
                 );
             }
             $rule[KeyKeeperDB::FILTERS] = $filters;
@@ -143,8 +148,13 @@ class Exporter
                         'on_wc_sale'       => $filter->isExcludeWcOnSale() ? "1" : "",
                         'already_affected' => $filter->isExcludeAlreadyAffected() ? "1" : "",
                         'backorder'        => $filter->isExcludeBackorder() ? "1" : "",
-                        'values'           => $filter->getExcludeProductIds() ? $filter->getExcludeProductIds() : array(),
                     ),
+                    'excludes' => array_map(function($excludeFilter) {
+                        return [
+                            'type'  => $excludeFilter->getType(),
+                            'value' => $excludeFilter->getValue(),
+                        ];
+                    }, $filter->getExcludeFilters()),
                 );
             }
             $rule[KeyKeeperDB::FILTERS] = $filters;
@@ -165,8 +175,13 @@ class Exporter
                             'on_wc_sale'       => $filter->isExcludeWcOnSale() ? "1" : "",
                             'already_affected' => $filter->isExcludeAlreadyAffected() ? "1" : "",
                             'backorder'        => $filter->isExcludeBackorder() ? "1" : "",
-                            'values'           => $filter->getExcludeProductIds() ? $filter->getExcludeProductIds() : array(),
                         ),
+                        'excludes' => array_map(function($excludeFilter) {
+                            return [
+                                'type'  => $excludeFilter->getType(),
+                                'value' => $excludeFilter->getValue(),
+                            ];
+                        }, $filter->getExcludeFilters()),
                     );
                 }
             }

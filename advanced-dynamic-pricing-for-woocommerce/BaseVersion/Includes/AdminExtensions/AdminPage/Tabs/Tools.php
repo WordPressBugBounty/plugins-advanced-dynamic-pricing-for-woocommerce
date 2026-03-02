@@ -423,8 +423,15 @@ class Tools implements AdminTabInterface
                 foreach ($rule['filters'] as &$item) {
                     $item['value'] = isset($item['value']) ? $item['value'] : array();
                     $item['value'] = $this->convertElementsFromIdToName($item['value'], $item['type']);
+
+                    foreach ($item['excludes'] as &$excludeItem) {
+                        $excludeItem['value'] = isset($excludeItem['value']) ? $excludeItem['value'] : array();
+                        $excludeItem['value'] = $this->convertElementsFromIdToName($excludeItem['value'], $excludeItem['type']);
+                    }
+                    
                 }
                 unset($item);
+                unset($excludeItem);
             }
 
             if ( ! empty($rule['get_products']['value'])) {

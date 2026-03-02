@@ -153,7 +153,7 @@ defined('ABSPATH') or exit;
                             <?php
 
                             $product_filter_type_list = array(
-                                'any'                       => __('Any product',
+                                'any'                       => __('Any products',
                                     'advanced-dynamic-pricing-for-woocommerce'),
                                 'products'                  => __('Products',
                                     'advanced-dynamic-pricing-for-woocommerce'),
@@ -238,49 +238,7 @@ defined('ABSPATH') or exit;
                         <div>
                             <div class="wdp-product-filter-options">
                                 <div class="wdp-row">
-
-                                    <div class="wdp-product-exclude wdp-column wdp-column-subfields">
-                                        <div style="width: 100px"></div>
-                                        <div class="wdp-column" style="flex: 1">
-                                            <details>
-                                                <summary class="wdp-link">
-                                                    <?php esc_html_e( 'Exclude products', 'advanced-dynamic-pricing-for-woocommerce' ); ?>
-                                                </summary>
-                                                <div style="display: flex">
-                                                    <div>
-                                                        <label>
-                                                            <span class="wdp-exclude-title">
-                                                                <?php esc_html_e( 'Exclude products', 'advanced-dynamic-pricing-for-woocommerce' ); ?>
-                                                            </span>
-                                                        </label>
-                                                    </div>
-                                                    <div style="margin-left: 5px" class="wdp-exclude-on-wc-sale-container">
-                                                        <label>
-                                                            <input type="checkbox" class="wdp-exclude-on-wc-sale" name="rule[{t}][{f}][product_exclude][on_wc_sale]" value="1" >
-                                                            <span class="wdp-exclude-on-wc-sale-title">
-                                                                <?php esc_html_e( 'on sale products', 'advanced-dynamic-pricing-for-woocommerce' ); ?>
-                                                            </span>
-                                                        </label>
-                                                    </div>
-                                                    <div style="margin-left: 5px" class="wdp-exclude-already-affected-container">
-                                                        <label>
-                                                            <input type="checkbox" class="wdp-exclude-already-affected" name="rule[{t}][{f}][product_exclude][already_affected]" value="1" >
-                                                            <span>
-                                                                <?php esc_html_e( 'modified by other pricing rules', 'advanced-dynamic-pricing-for-woocommerce' ); ?>
-                                                            </span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <select multiple
-                                                        data-list="products"
-                                                        data-field="autocomplete"
-                                                        data-placeholder="<?php esc_attr_e("Select exact products to exclude",
-                                                            "advanced-dynamic-pricing-for-woocommerce") ?>"
-                                                        name="rule[{t}][{f}][product_exclude][values][]">
-                                                </select>
-                                            </details>
-                                        </div>
-                                    </div>
+                                    <?php include "templates/wdp-product-exclude.php" ?>
                                 </div>
 
                             </div>
@@ -301,6 +259,58 @@ defined('ABSPATH') or exit;
                 </div>
             </div>
         </div>
+        <div class="wdp-row-hr">
+            <div class="wdp-row-hr-wrap">
+                <img src="<?php echo esc_url( WC_ADP_PLUGIN_URL . '/BaseVersion/assets/images/plus_sign.svg' ); ?>" class="wdp-filter-img">
+            </div>
+        </div>
+    </div>
+
+    <?php
+        $product_filter_type_list = array(
+            'products'                  => __('Products', 'advanced-dynamic-pricing-for-woocommerce'),
+            'product_sku'               => __( 'SKUs', 'advanced-dynamic-pricing-for-woocommerce' ),
+            'product_categories'        => __('Categories', 'advanced-dynamic-pricing-for-woocommerce'),
+            'product_category_slug'     => __('Category slugs', 'advanced-dynamic-pricing-for-woocommerce'),
+            'product_attributes'        => __('Attributes', 'advanced-dynamic-pricing-for-woocommerce'),
+            'product_custom_attributes' => __('Custom attributes', 'advanced-dynamic-pricing-for-woocommerce'),
+            'product_tags'              => __('Tags', 'advanced-dynamic-pricing-for-woocommerce'),
+        );
+
+        foreach ( \ADP\BaseVersion\Includes\Helpers\Helpers::getCustomProductTaxonomies() as $tax ) {
+            $product_filter_type_list[ $tax->name ] = $tax->labels->menu_name;
+        }
+
+        $product_filter_type_list = array_merge( $product_filter_type_list, array(
+            'product_custom_fields' => __( 'Custom fields', 'advanced-dynamic-pricing-for-woocommerce' ),
+            'product_sellers'       => __( 'Sellers', 'advanced-dynamic-pricing-for-woocommerce' ),
+        ) );
+
+        $product_filter_type_list = apply_filters( 'wdp_select_product_filter_type_list', $product_filter_type_list );
+        $default_filter = 'products';
+    ?>
+    <div id="exclude_filter_any_template">
+        <?php include "templates/exclude-filter.php" ?>
+    </div>
+
+    <?php
+        $product_filter_type_list = array(
+            'products'                  => __('Products', 'advanced-dynamic-pricing-for-woocommerce'),
+            'product_sku'               => __( 'SKUs', 'advanced-dynamic-pricing-for-woocommerce' ),
+        );
+    ?>
+    <div id="exclude_filter_template">
+        <?php include "templates/exclude-filter.php" ?>
+    </div>
+
+    <div id="product_exclude_filter_template">
+        <select multiple
+            data-list="{type}"
+            data-field="autocomplete"
+            data-placeholder="<?php esc_attr_e( "Select exact products to exclude", "advanced-dynamic-pricing-for-woocommerce" ) ?>"
+            name="rule[filters][{filterId}][excludes][{excludeId}][value][]">
+            {options}
+        </select>
     </div>
 
     <div id="filter_any_template">
@@ -309,14 +319,7 @@ defined('ABSPATH') or exit;
     </div>
 
     <div id="filter_products_template">
-        <div class="wdp-column wdp-filter-field-method">
-            <select name="rule[{t}][{f}][method]">
-                <option value="in_list" selected><?php esc_html_e('in list',
-                        'advanced-dynamic-pricing-for-woocommerce') ?></option>
-                <option value="not_in_list"><?php esc_html_e('not in list',
-                        'advanced-dynamic-pricing-for-woocommerce') ?></option>
-            </select>
-        </div>
+        <input type="hidden" name="rule[{t}][{f}][method]" value="in_list">
 
         <div class="wdp-column wdp-condition-field-value">
             <div>
@@ -344,14 +347,7 @@ defined('ABSPATH') or exit;
     </div>
 
     <div id="filter_product_tags_template">
-        <div class="wdp-column wdp-filter-field-method">
-            <select name="rule[{t}][{f}][method]">
-                <option value="in_list" selected><?php esc_html_e('in list',
-                        'advanced-dynamic-pricing-for-woocommerce') ?></option>
-                <option value="not_in_list"><?php esc_html_e('not in list',
-                        'advanced-dynamic-pricing-for-woocommerce') ?></option>
-            </select>
-        </div>
+        <input type="hidden" name="rule[{t}][{f}][method]" value="in_list">
 
         <div class="wdp-column wdp-condition-field-value">
             <div>
@@ -366,14 +362,7 @@ defined('ABSPATH') or exit;
     </div>
 
     <div id="filter_product_categories_template">
-        <div class="wdp-column wdp-filter-field-method">
-            <select name="rule[{t}][{f}][method]">
-                <option value="in_list" selected><?php esc_html_e('in list',
-                        'advanced-dynamic-pricing-for-woocommerce') ?></option>
-                <option value="not_in_list"><?php esc_html_e('not in list',
-                        'advanced-dynamic-pricing-for-woocommerce') ?></option>
-            </select>
-        </div>
+        <input type="hidden" name="rule[{t}][{f}][method]" value="in_list">
 
         <div class="wdp-column wdp-condition-field-value">
             <div>
@@ -388,14 +377,7 @@ defined('ABSPATH') or exit;
     </div>
 
     <div id="filter_product_category_slug_template">
-        <div class="wdp-column wdp-filter-field-method">
-            <select name="rule[{t}][{f}][method]">
-                <option value="in_list" selected><?php esc_html_e('in list',
-                        'advanced-dynamic-pricing-for-woocommerce') ?></option>
-                <option value="not_in_list"><?php esc_html_e('not in list',
-                        'advanced-dynamic-pricing-for-woocommerce') ?></option>
-            </select>
-        </div>
+        <input type="hidden" name="rule[{t}][{f}][method]" value="in_list">
 
         <div class="wdp-column wdp-condition-field-value">
             <div>
@@ -411,14 +393,7 @@ defined('ABSPATH') or exit;
 
     <?php foreach (\ADP\BaseVersion\Includes\Helpers\Helpers::getCustomProductTaxonomies() as $tax): ?>
         <div id="filter_<?php echo esc_attr($tax->name); ?>_template">
-            <div class="wdp-column wdp-filter-field-method">
-                <select name="rule[{t}][{f}][method]">
-                    <option value="in_list" selected><?php esc_html_e('in list',
-                            'advanced-dynamic-pricing-for-woocommerce') ?></option>
-                    <option value="not_in_list"><?php esc_html_e('not in list',
-                            'advanced-dynamic-pricing-for-woocommerce') ?></option>
-                </select>
-            </div>
+            <input type="hidden" name="rule[{t}][{f}][method]" value="in_list">
 
             <div class="wdp-column wdp-condition-field-value">
                 <div>
@@ -435,14 +410,7 @@ defined('ABSPATH') or exit;
     <?php endforeach; ?>
 
     <div id="filter_product_attributes_template">
-        <div class="wdp-column wdp-filter-field-method">
-            <select name="rule[{t}][{f}][method]">
-                <option value="in_list" selected><?php esc_html_e('in list',
-                        'advanced-dynamic-pricing-for-woocommerce') ?></option>
-                <option value="not_in_list"><?php esc_html_e('not in list',
-                        'advanced-dynamic-pricing-for-woocommerce') ?></option>
-            </select>
-        </div>
+        <input type="hidden" name="rule[{t}][{f}][method]" value="in_list">
 
         <div class="wdp-column wdp-condition-field-value">
             <select multiple
@@ -455,16 +423,7 @@ defined('ABSPATH') or exit;
     </div>
 
     <div id="filter_product_custom_attributes_template">
-        <div class="wdp-column wdp-filter-field-method">
-            <select name="rule[{t}][{f}][method]">
-                <option value="in_list" selected>
-                    <?php esc_html_e('in list', 'advanced-dynamic-pricing-for-woocommerce') ?>
-                </option>
-                <option value="not_in_list">
-                    <?php esc_html_e('not in list', 'advanced-dynamic-pricing-for-woocommerce') ?>
-                </option>
-            </select>
-        </div>
+    <input type="hidden" name="rule[{t}][{f}][method]" value="in_list">
 
         <div class="wdp-column wdp-condition-field-value">
             <select multiple
@@ -477,16 +436,7 @@ defined('ABSPATH') or exit;
     </div>
 
     <div id="filter_product_sku_template">
-        <div class="wdp-column wdp-filter-field-method">
-            <select name="rule[{t}][{f}][method]">
-                <option value="in_list" selected>
-                    <?php esc_html_e('in list', 'advanced-dynamic-pricing-for-woocommerce') ?>
-                </option>
-                <option value="not_in_list">
-                    <?php esc_html_e('not in list', 'advanced-dynamic-pricing-for-woocommerce') ?>
-                </option>
-            </select>
-        </div>
+        <input type="hidden" name="rule[{t}][{f}][method]" value="in_list">
 
         <div class="wdp-column wdp-condition-field-value">
             <select multiple
@@ -499,16 +449,7 @@ defined('ABSPATH') or exit;
     </div>
 
     <div id="filter_product_custom_fields_template">
-        <div class="wdp-column wdp-filter-field-method">
-            <select name="rule[{t}][{f}][method]">
-                <option value="in_list" selected>
-                    <?php esc_html_e('in list', 'advanced-dynamic-pricing-for-woocommerce') ?>
-                </option>
-                <option value="not_in_list">
-                    <?php esc_html_e('not in list', 'advanced-dynamic-pricing-for-woocommerce') ?>
-                </option>
-            </select>
-        </div>
+        <input type="hidden" name="rule[{t}][{f}][method]" value="in_list">
 
         <div class="wdp-column wdp-condition-field-value">
             <select multiple
@@ -672,5 +613,73 @@ defined('ABSPATH') or exit;
             </div>
         </div>
     </div>
+
+    <script type="text/template" id="tmpl-autoadd_modal">
+        <div class="wc-backbone-modal wdp-modal">
+            <div class="wc-backbone-modal-content">
+                <section class="wc-backbone-modal-main" role="main">
+                    <header class="wc-backbone-modal-header">
+                        <h1>Auto add to cart</h1>
+                        <button class="modal-close modal-close-link dashicons dashicons-no-alt">
+                            <span class="screen-reader-text"><?php
+                                // phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
+                                esc_html_e( 'Close modal panel', 'woocommerce' );
+                                ?>
+                            </span>
+                        </button>
+                    </header>
+                    <article>
+                        <p class="wdp-rule-help">
+                            <?php esc_html_e(
+                                'Choose the products that would be automatically added into the cart, discount type and amount.',
+                                'advanced-dynamic-pricing-for-woocommerce'
+                            ); ?>
+                            <a href="https://docs.algolplus.com/algol_pricing/rules/rules-sections/auto-add-to-cart-pro/" target="_blank"><?php esc_html_e('Read docs', 'advanced-dynamic-pricing-for-woocommerce')?></a>
+                        </p>
+                        <a href="https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/"
+                            target=_blank><?php esc_html_e('Buy a pro version of our plugin and get an access to this section',
+                                    'advanced-dynamic-pricing-for-woocommerce') ?></a>
+                    </article>
+                </section>
+            </div>
+        </div>
+        <div class="wc-backbone-modal-backdrop modal-close"></div>
+    </script>
+
+    <script type="text/template" id="tmpl-discount-message_modal">
+        <div class="wc-backbone-modal wdp-modal">
+            <div class="wc-backbone-modal-content">
+                <section class="wc-backbone-modal-main" role="main">
+                    <header class="wc-backbone-modal-header">
+                        <h1>Discount messages</h1>
+                        <button class="modal-close modal-close-link dashicons dashicons-no-alt">
+                            <span class="screen-reader-text"><?php
+                                // phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
+                                esc_html_e( 'Close modal panel', 'woocommerce' ); ?>
+                            </span>
+                        </button>
+                    </header>
+                    <article>
+                        <p class="wdp-rule-help">
+                            <?php
+                            echo sprintf(
+                                wp_kses(
+                                        __('Enter an advertising message about the discounted products.', 'advanced-dynamic-pricing-for-woocommerce')
+                                        .' <a href="%s" target="_blank">' .__('Read docs', 'advanced-dynamic-pricing-for-woocommerce') .'</a>',
+                                    array('br' => array(), 'a' => array('href' => array(), 'target' => array()))
+                                ),
+                                esc_url('https://docs.algolplus.com/algol_pricing/rules/rules-sections/advertising-pro/')
+                            );
+                            ?>
+                        </p>
+                        <a href="https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/"
+                            target=_blank><?php esc_html_e('Buy a pro version of our plugin and get an access to this section',
+                                    'advanced-dynamic-pricing-for-woocommerce') ?></a>
+                    </article>
+                </section>
+            </div>
+        </div>
+        <div class="wc-backbone-modal-backdrop modal-close"></div>
+    </script>
 
 </div>

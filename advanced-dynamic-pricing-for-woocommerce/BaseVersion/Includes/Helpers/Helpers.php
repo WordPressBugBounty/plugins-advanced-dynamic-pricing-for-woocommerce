@@ -554,6 +554,7 @@ class Helpers
     public static function ruleFilterLabel($name, $domain = 'advanced-dynamic-pricing-for-woocommerce') {
         $map = [
             'Filter by products' => 'product_filter',
+            'Product set'        => 'product_set',
             'Product discounts'  => 'product_discount',
             'Role discounts'     => 'role_discount',
             'Bulk mode'          => 'bulk',

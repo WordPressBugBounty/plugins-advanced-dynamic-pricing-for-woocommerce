@@ -142,7 +142,7 @@ class Rule
      */
     public $date;
 
-    public function __construct(
+    final public function __construct(
         $id,
         $deleted,
         $enabled,

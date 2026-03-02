@@ -154,8 +154,8 @@ class PriceBasedOnCountryCmp
     protected static function stringToFloat($context, $value)
     {
         if (is_string($value)) {
-            $value = str_replace($context->priceSettings->getThousandSeparator(), "", $value);
-            $value = str_replace($context->priceSettings->getDecimalSeparator(), ".", $value);
+            $value = str_replace($context->priceSettings->getThousandSeparator(), ".", $value);
+            $value = str_replace($context->priceSettings->getDecimalSeparator(), ",", $value);
         }
 
         return (float)$value;

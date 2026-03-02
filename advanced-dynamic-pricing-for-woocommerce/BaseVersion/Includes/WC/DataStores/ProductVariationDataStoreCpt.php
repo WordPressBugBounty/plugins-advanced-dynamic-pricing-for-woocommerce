@@ -75,6 +75,10 @@ class ProductVariationDataStoreCpt extends WC_Product_Variation_Data_Store_CPT i
         $foundParentAttributes = array();
         $variationAttributes   = array();
 
+        if (!is_array($parentAttributes) || empty($parentAttributes)) {
+            return [];
+        }
+
         // Compare to parent variable product attributes and ensure they match.
         foreach ($parentAttributes as $attributeName => $attribute) {
             /**

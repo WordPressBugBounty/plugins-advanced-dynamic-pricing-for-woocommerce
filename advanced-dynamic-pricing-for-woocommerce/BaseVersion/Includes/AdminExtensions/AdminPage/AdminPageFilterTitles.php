@@ -103,15 +103,14 @@ class AdminPageFilterTitles
                     }
                 }
 
-                if (isset($filter['product_exclude']['values'])) {
-                    foreach ($filter['product_exclude']['values'] as $productId) {
-                        $filtersByType['products'][] = $productId;
-                    }
-                }
-
-                if (isset($filter['collections_exclude']['values'])) {
-                    foreach ($filter['collections_exclude']['values'] as $collId) {
-                        $filtersByType['product_collections'][] = $collId;
+                foreach ($filter['excludes'] ?? [] as $excludeFilter) {
+                    if ( ! empty($excludeFilter['value'])) {
+                        $type  = $excludeFilter['type'];
+                        $value = $excludeFilter['value'];
+    
+                        if (isset($filtersByType[$type])) {
+                            $filtersByType[$type] = array_merge($filtersByType[$type], (array)$value);
+                        }
                     }
                 }
             }

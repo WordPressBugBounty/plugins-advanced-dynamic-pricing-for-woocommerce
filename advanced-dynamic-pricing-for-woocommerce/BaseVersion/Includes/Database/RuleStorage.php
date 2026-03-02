@@ -21,6 +21,7 @@ use ADP\BaseVersion\Includes\Core\Rule\Structures\AutoAddChoice;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\Discount;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\DiscountForRange;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\Filter;
+use ADP\BaseVersion\Includes\Core\Rule\Structures\SimpleFilter;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\Gift;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\GiftChoice;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\PackageItem;
@@ -311,8 +312,16 @@ class RuleStorage
             $filter->setMethod($method);
             $filter->setValue($value);
 
-            if (isset($filterData['product_exclude']['values'])) {
-                $filter->setExcludeProductIds($filterData['product_exclude']['values']);
+            if(isset($filterData['excludes'])){
+                foreach ($filterData['excludes'] as $excludeFilterData) {
+                    if(isset($excludeFilterData['type']) && isset($excludeFilterData['value'])) {
+                        $excludeFilter = new SimpleFilter();
+                        $excludeFilter->setType($excludeFilterData['type'])
+                                    ->setValue($excludeFilterData['value']);
+                        
+                        $filter->addExcludeFilter($excludeFilter);
+                    }
+                }
             }
 
             if (isset($filterData['product_exclude']['on_wc_sale'])) {
@@ -508,8 +517,16 @@ class RuleStorage
         $filter->setMethod($method);
         $filter->setValue($value);
 
-        if (isset($filterData['product_exclude']['values'])) {
-            $filter->setExcludeProductIds($filterData['product_exclude']['values']);
+        if(isset($filterData['excludes'])){
+            foreach ($filterData['excludes'] as $excludeFilterData) {
+                if(isset($excludeFilterData['type']) && isset($excludeFilterData['value'])) {
+                    $excludeFilter = new SimpleFilter();
+                    $excludeFilter->setType($excludeFilterData['type'])
+                                ->setValue($excludeFilterData['value']);
+                    
+                    $filter->addExcludeFilter($excludeFilter);
+                }
+            }
         }
 
         if (isset($filterData['product_exclude']['on_wc_sale'])) {
@@ -605,8 +622,15 @@ class RuleStorage
             $filter->setMethod($method);
             $filter->setValue($value);
 
-            if (isset($filterData['product_exclude']['values'])) {
-                $filter->setExcludeProductIds($filterData['product_exclude']['values']);
+            if(isset($filterData['excludes'])){
+                foreach ($filterData['excludes'] as $excludeFilterData) {
+                    if(isset($excludeFilterData['type']) && isset($excludeFilterData['value'])) {
+                        $excludeFilter = new SimpleFilter();
+                        $excludeFilter->setType($excludeFilterData['type'])
+                                ->setValue($excludeFilterData['value']);
+                        $filter->addExcludeFilter($excludeFilter);
+                    }
+                }
             }
 
             if (isset($filterData['product_exclude']['on_wc_sale'])) {

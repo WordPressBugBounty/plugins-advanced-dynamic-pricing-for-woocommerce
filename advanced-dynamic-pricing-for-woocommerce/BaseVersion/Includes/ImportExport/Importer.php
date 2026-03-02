@@ -64,8 +64,15 @@ class Importer
                 foreach ($rule['filters'] as &$item) {
                     $item['value'] = isset($item['value']) ? $item['value'] : array();
                     $item['value'] = self::convertElementsFromNameToId($item['value'], $item['type']);
+
+                    foreach ($item['excludes'] as &$excludeItem) {
+                        $excludeItem['value'] = isset($excludeItem['value']) ? $excludeItem['value'] : array();
+                        $excludeItem['value'] = self::convertElementsFromNameToId($excludeItem['value'], $excludeItem['type']);
+                    }
                 }
+                
                 unset($item);
+                unset($excludeItem);
             }
 
             if ( ! empty($rule['get_products']['value'])) {

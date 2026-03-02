@@ -120,6 +120,7 @@ class Options implements AdminTabInterface
 		$data['product_bulk_table_customizer_url']  = $product;
 		$data['category_bulk_table_customizer_url'] = $category;
 		$data['highlight_bulk_table_customizer_url'] = $this->makeCustomerUrl('product', 'table_columns');
+		$data['highlight_rows_bulk_table_customizer_url'] = $this->makeCustomerUrl('product', 'table');
 		$data['amount_saved_customer_url']          = $this->makeCustomerUrl('discount_message');
 
 		$data['sections'] = $this->getSections();

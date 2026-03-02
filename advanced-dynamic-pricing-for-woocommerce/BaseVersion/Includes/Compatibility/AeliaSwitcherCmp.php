@@ -62,18 +62,6 @@ class AeliaSwitcherCmp
                 10
             );
 
-            add_filter('wc_aelia_cs_converted_amount', function($converted_amount, $original_amount, $from_currency, $to_currency, $decimals) {
-                return $original_amount;
-            }, 100, 5);
-
-            if ($this->context->getOption('suppress_other_pricing_plugins')) {
-                remove_filter(
-                    'woocommerce_product_get_price',
-                    [\Aelia\WC\CurrencySwitcher\WC27\WC_Aelia_CurrencyPrices_Manager::instance(), 'woocommerce_product_get_price'],
-                    5
-                );
-            }
-
         }
     }
 
@@ -143,10 +131,10 @@ class AeliaSwitcherCmp
             $this,
             'customProductRegularPriceCallback'
         ));
-        $this->context->currencyController->setCustomProductSalePriceCallback(array(
+        /*$this->context->currencyController->setCustomProductSalePriceCallback(array(
             $this,
             'customProductSalePriceCallback'
-        ));
+        ));*/
     }
 
     /**

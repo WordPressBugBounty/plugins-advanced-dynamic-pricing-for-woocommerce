@@ -107,7 +107,7 @@ abstract class Products extends WC_Shortcode_Products
         add_filter( 'woocommerce_shortcode_products_query', function($query_args, $attributes, $type ) use ($post__in){
                 $query_args['post__in'] = $post__in;
                 return $query_args;
-        },0,4);
+        },0,3);
         $queryArgs = parent::parse_query_args();
         $queryArgs['post__in'] = $post__in;//force own ids only
 

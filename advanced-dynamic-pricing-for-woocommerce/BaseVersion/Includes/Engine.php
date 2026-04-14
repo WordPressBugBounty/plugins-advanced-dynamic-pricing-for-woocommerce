@@ -10,6 +10,7 @@ use ADP\BaseVersion\Includes\Compatibility\KlarnaCmp;
 use ADP\BaseVersion\Includes\Compatibility\SmartCouponsCmp;
 use ADP\BaseVersion\Includes\Compatibility\WcSubscriptionsCmp;
 use ADP\BaseVersion\Includes\Compatibility\WcQuoteCmp;
+use ADP\BaseVersion\Includes\Compatibility\WebToffeeWooGiftCardsCmp;
 use ADP\BaseVersion\Includes\Database\Repository\PersistentRuleRepository;
 use ADP\BaseVersion\Includes\Debug\CalculationProfiler;
 use ADP\BaseVersion\Includes\PriceDisplay\PriceDisplay;
@@ -92,7 +93,12 @@ class Engine
         $this->freeItemsController       = Factory::get('CartProcessor_FreeAutoAddItemsController', $customizer);
         $this->freeItemsController->installHooks();
 
+        if (!$this->context->isBaseVersion()) {
+            $this->cartProcessor->installHooks();
+        }
+
         (new SmartCouponsCmp())->addActionToMoveAction();
+        (new WebToffeeWooGiftCardsCmp())->addActionToMoveAction();
 
         $ctxFeedCmp = new CTXFeedCmp();
         if ($ctxFeedCmp->isActive()) {

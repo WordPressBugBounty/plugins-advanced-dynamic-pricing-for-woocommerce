@@ -81,7 +81,7 @@ class OrderRepository implements OrderRepositoryInterface {
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
         $value = $wpdb->get_var($sql);
 
-        return (integer)$value;
+        return (int)$value;
     }
 
     public function getCountOfRuleUsagesPerCustomer($ruleId, $customerId)
@@ -103,7 +103,7 @@ class OrderRepository implements OrderRepositoryInterface {
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
         $value = $wpdb->get_var("SELECT COUNT(*) FROM {$tableOrderRules} WHERE rule_id = $ruleId  AND order_id IN (" . implode(',', $customerOrdersIds) . ")");
 
-        return (integer)$value;
+        return (int)$value;
     }
 
     /**
@@ -162,6 +162,6 @@ class OrderRepository implements OrderRepositoryInterface {
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
         $value = $wpdb->get_var("SELECT COUNT(*) FROM {$tableOrderRules} WHERE rule_id = $ruleId  AND order_id IN (" . implode(',', $customerOrdersIds) . ")");
 
-        return (integer)$value;
+        return (int)$value;
     }
 }

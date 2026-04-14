@@ -256,9 +256,9 @@ class RuleRepository implements RuleRepositoryInterface {
             }
 
             if ( ! is_null($count)) {
-                $count = (integer)$count;
+                $count = (int)$count;
                 if ( ! is_null($start)) {
-                    $start     = (integer)$start;
+                    $start     = (int)$start;
                     $sql_limit = sprintf("LIMIT %d, %d", $start, $count);
                 } else {
                     $sql_limit = sprintf("LIMIT %d", $count);
@@ -330,7 +330,7 @@ class RuleRepository implements RuleRepositoryInterface {
                     switch ($filter['type']) {
                         case 'products':
                             foreach ($filter['value'] as $value) {
-                                if ((integer)$value == $args['product'] || (isset($args["product_childs"]) && in_array((integer)$value,
+                                if ((int)$value == $args['product'] || (isset($args["product_childs"]) && in_array((int)$value,
                                             $args["product_childs"]))) {
                                     $new_rows[] = $row;
                                     break 3;
@@ -350,7 +350,7 @@ class RuleRepository implements RuleRepositoryInterface {
                         case 'product_attributes':
                         case 'product_tags':
                             foreach ($filter['value'] as $value) {
-                                if (isset($args[$filter['type']]) && in_array((integer)$value,
+                                if (isset($args[$filter['type']]) && in_array((int)$value,
                                         $args[$filter['type']])) {
                                     $new_rows[] = $row;
                                     break 3;
@@ -359,7 +359,7 @@ class RuleRepository implements RuleRepositoryInterface {
                             break 2;
                         case 'product_sellers':
                             foreach ($filter['value'] as $value) {
-                                if ( ! empty($productSellers) && in_array((integer)$value, $productSellers)) {
+                                if ( ! empty($productSellers) && in_array((int)$value, $productSellers)) {
                                     $new_rows[] = $row;
                                     break 3;
                                 }
@@ -499,7 +499,7 @@ class RuleRepository implements RuleRepositoryInterface {
             $sql = $wpdb->prepare("$sql AND (summary LIKE '%s')", "%$q%");
         }
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
-        return (integer)$wpdb->get_var($sql);
+        return (int)$wpdb->get_var($sql);
     }
 
     private static function validateBulkAdjustments($row)
@@ -523,7 +523,7 @@ class RuleRepository implements RuleRepositoryInterface {
                 return -1;
             }
 
-            return (integer)$a["to"] - (integer)$b["to"];
+            return (int)$a["to"] - (int)$b["to"];
         });
 
         $previousRange = null;
@@ -534,7 +534,7 @@ class RuleRepository implements RuleRepositoryInterface {
                     $from = 1;
                 } else {
                     if ($previousRange['to'] !== '') {
-                        $from = (integer)$previousRange['to'] + 1;
+                        $from = (int)$previousRange['to'] + 1;
                     }
                 }
             }

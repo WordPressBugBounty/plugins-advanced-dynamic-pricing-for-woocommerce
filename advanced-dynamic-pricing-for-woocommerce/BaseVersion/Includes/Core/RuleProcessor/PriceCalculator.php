@@ -792,6 +792,24 @@ class PriceCalculator
             'price' => (float) $price,
         ];
 
+        if ($product && method_exists($product, 'get_regular_price')) {
+            $regularPrice = $product->get_regular_price('edit');
+            if ($regularPrice !== '') {
+                $variables['regular_price'] = (float) $regularPrice;
+            }
+        }
+
+        if ($product && method_exists($product, 'get_sale_price')) {
+            $salePrice = $product->get_sale_price('edit');
+            if ($salePrice !== '' && method_exists($product, 'is_on_sale') && $product->is_on_sale('edit')) {
+                $variables['sale_price'] = (float) $salePrice;
+            } elseif (isset($variables['regular_price'])) {
+                $variables['sale_price'] = $variables['regular_price'];
+            } else {
+                $variables['sale_price'] = $price;
+            }
+        }
+
         if ($product && method_exists($product, 'get_meta')) {
             preg_match_all('/\{([a-zA-Z0-9_]+)\}/', $expression, $matches);
             foreach ($matches[1] as $var) {

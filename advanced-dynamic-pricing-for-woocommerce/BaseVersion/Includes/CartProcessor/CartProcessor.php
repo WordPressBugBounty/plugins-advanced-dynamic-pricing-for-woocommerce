@@ -18,6 +18,7 @@ use ADP\BaseVersion\Includes\Compatibility\WcSubscriptionsCmp;
 use ADP\BaseVersion\Includes\Compatibility\YoastSEOCmp;
 use ADP\BaseVersion\Includes\Compatibility\YithGiftCardsCmp;
 use ADP\BaseVersion\Includes\Compatibility\WcFreeGiftCouponsCmp;
+use ADP\BaseVersion\Includes\Compatibility\RoleBasedPricingCmp;
 use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\Core\Cart\Cart;
 use ADP\BaseVersion\Includes\Core\Cart\CartItem\CartItemConverter;
@@ -183,6 +184,11 @@ class CartProcessor
     protected $wcchainprCmp;
 
     /**
+     * @var RoleBasedPricingCmp
+     */
+    protected $roleBasedPricingCmp;
+
+    /**
      * CartProcessor constructor.
      *
      * @param Context|WC_Cart $contextOrWcCart
@@ -232,6 +238,7 @@ class CartProcessor
         $this->avataxCmp             = new AvataxCmp();
         $this->wcFreeGiftCouponsCmp  = new WcFreeGiftCouponsCmp();
         $this->wcchainprCmp          = new WcChainedProductsCmp();
+        $this->roleBasedPricingCmp   = new RoleBasedPricingCmp();
 
         if ($this->giftCart->isActive()) {
             $this->giftCart->applyCompatibility();
@@ -260,6 +267,10 @@ class CartProcessor
 
         if ($this->wcchainprCmp->isActive()) {
             $this->wcchainprCmp->applyCompatibility();
+        }
+
+        if ($this->roleBasedPricingCmp->isActive()) {
+            $this->roleBasedPricingCmp->applyCompatibility();
         }
 
         $this->context->getContainerCompatibilityManager()->addFilters();
@@ -348,20 +359,27 @@ class CartProcessor
         }
 
         if ($this->context->getOption('dont_recalculate_cart_if_not_changed')) {
-            $applicableRules = $this->calc->getApplicableRulesForCart($cart);
-            $rulesHash = $this->calc->getRulesCollection()->getHash($applicableRules);
-            $cartHash = $this->getWcCartHash($wcCart);
-            $rulesCartHash = md5($rulesHash.$cartHash);
+            $cartHash = $this->getCartHash($wcCart, $cart);
+            $storedCartHash = WC()->session->get("adp_cart_hash");
 
-            $storedRulesCartHash = WC()->session->get("adp_rules_cart_hash");
-
-            if($rulesCartHash === $storedRulesCartHash) {
+            if($cartHash === $storedCartHash) {
                 foreach ($wcCart->cart_contents as $cartKey => $wcCartItem) {
                     $facade  = new WcCartItemFacade($this->context, $wcCartItem, $cartKey);
                     $product = $wcCartItem['data'];
-
                     $product->set_price($facade->getNewPrice());
                 }
+
+                $data = WC()->session->get("adp_cached_cart");
+                $cart->fromArray($data);
+
+                $this->cartCouponsProcessor->prepareConfig();
+                $this->cartCouponsProcessor->processCartCoupons($cart, $wcCart);
+
+                $this->cartFeeProcessor->refreshFees($cart);
+                $this->shippingProcessor->refresh($cart);
+
+                $this->cartFeeProcessor->updateTotals($wcCart);
+                $this->shippingProcessor->updateTotals($wcCart);
 
                 return $cart;
             }
@@ -416,7 +434,7 @@ class CartProcessor
         // do not use global WC_Cart because we change prices to get correct initial subtotals
         $clonedWcCart     = clone $wcCart;
         $currencySwitcher = $this->context->currencyController;
-        
+
         if ($currencySwitcher->isCurrencyChanged()) {
             foreach ($clonedWcCart->cart_contents as $cartKey => $wcCartItem) {
                 $facade  = new WcCartItemFacade($this->context, $wcCartItem, $cartKey);
@@ -557,7 +575,9 @@ class CartProcessor
         }
 
         $flags = array();
-        $flags[] = $wcNoFilterWorker::FLAG_DISALLOW_CALCULATION_HOOKS;
+        if (!apply_filters('adp_allow_cal_hooks_proc', false)) {
+            $flags[] = $wcNoFilterWorker::FLAG_DISALLOW_CALCULATION_HOOKS;
+        }
         if ($this->wcSubsCmp->isActive() && $this->wcsAttCmp->isActive()) {
             $flags[] = $wcNoFilterWorker::FLAG_ALLOW_PRICE_HOOKS;
         }
@@ -724,14 +744,14 @@ class CartProcessor
             // required to process bundles
             $this->addCommonItems($cart, $wcCart);
             do_action('adp_after_add_common_items');
-            
+
             $this->cartCouponsProcessor->processCouponAdjustments($cart, $wcCart);
-            if($this->context->isWCStoreAPIRequest()) 
+            if($this->context->isWCStoreAPIRequest())
             {
                 $this->cartCouponsProcessor->checkDisabledCoupons($cart, $wcCart);
             }
             $wcNoFilterWorker->calculateTotals($wcCart, ...$flags);
-            
+
             $this->normalizeCart($wcCart);
 
             $cart->getContext()->getSession()->flush()->push();
@@ -744,9 +764,9 @@ class CartProcessor
         }
 
         if ($this->context->getOption('dont_recalculate_cart_if_not_changed')) {
-            $cartHash = $this->getWcCartHash($wcCart);
-            $rulesCartHash = md5($rulesHash.$cartHash);
-            WC()->session->set("adp_rules_cart_hash", $rulesCartHash);
+            $cartHash = $this->getCartHash($wcCart, $cart);
+            WC()->session->set("adp_cart_hash", $cartHash);
+            WC()->session->set('adp_cached_cart', $cart->toArray());
         }
 
         $this->listener->processFinished($wcCart, WC()->session);
@@ -1630,17 +1650,27 @@ class CartProcessor
         // Delete all 'pricing' data from the cart ended
     }
 
-    protected function getWcCartHash($wcCart) 
+    protected function getCartHash($wcCart, $cart)
     {
+        static $rulesHash = null;
+        if(is_null($rulesHash)) {
+            $rulesHash = $this->calc->getRulesCollection()->getHash();
+        }
+
         $packages = $wcCart->get_shipping_packages();
         foreach ( $packages as $package_key => $package ) {
 			// Remove data objects so hashes are consistent.
 			foreach ( $packages[$package_key]['contents'] as $item_id => $item ) {
 				unset( $packages[$package_key]['contents'][ $item_id ]['data'] );
+
+                unset($packages[$package_key]['contents'][ $item_id ][PhoneOrdersCmp::CART_ITEM_SKIP_KEY] );
 			}
 			unset($packages[$package_key]['rates']);
 		}
 
-        return md5(json_encode($packages));
+        $wcCartHash = md5(json_encode($packages));
+        $customerHash = $cart->getContext()->getCustomer()->getHash();
+
+        return md5($rulesHash . $wcCartHash . $customerHash);
     }
 }

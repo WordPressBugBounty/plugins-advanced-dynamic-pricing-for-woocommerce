@@ -187,6 +187,7 @@ class Options implements AdminTabInterface
                     10 => "apply_discount_for_onsale_products",
 					20 => "disable_shipping_calc_during_process",
 					30 => "dont_recalculate_cart_on_page_load",
+					35 => "dont_recalculate_cart_if_not_changed",
                     40 => "combine_discounts",
                     50 => "default_discount_name",
                     60 => "combine_fees",
@@ -213,9 +214,9 @@ class Options implements AdminTabInterface
 				'title'     => __("Cart", 'advanced-dynamic-pricing-for-woocommerce'),
                 'doc_link'  => 'https://docs.algolplus.com/algol_pricing/settings-algol_pricing/cart/',
 				'templates' => array(
-					0 => "amount_saved_url_to_customizer",
-					5  => "show_striked_prices",
-					10 => "show_cross_out_subtotal_in_cart_totals",
+                    0  => "show_striked_prices",
+                    5  => "show_cross_out_subtotal_in_cart_totals",
+					10 => "amount_saved_url_to_customizer",
 				),
 			),
 			"product_page"    => array(

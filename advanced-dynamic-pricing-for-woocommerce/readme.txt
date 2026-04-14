@@ -5,7 +5,7 @@ Tags: woocommerce, coupons, discounts, dynamic pricing, bulk discount
 Requires PHP: 7.1
 Requires at least: 6.1
 Tested up to: 6.9
-Stable tag: 4.12.0
+Stable tag: 4.13.0
 License: GNU General Public License v3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -174,14 +174,24 @@ You should be PHP programmer to do it. [Please, review sample addon and adapt it
 [Please, review full FAQ](https://docs.algolplus.com/category/faq/)
 
 == Screenshots ==
-1. List of pricing rules
-2. Rule type selector
-3. Discount 5%, up to 10 euro
-4. The rule was applied to the cart
+1. Rule type selector
+2. Discount 5%, up to 10 euro
+3. The rule was applied to the cart
+4. List of pricing rules
 5. Settings page
 
 
 == Changelog ==
+
+= 4.13.0 - 2026-04-14 =
+* Added option "Don't recalculate  cart if cart items don't have changed" (>Settings>Calculation)
+* The selector "Rule Type" is invisible now, until mode "Support Product only rules" activated
+* Fixed bug - sale price shown when use "Quick Edit" for product
+* Added compatibility with "Role Based Pricing for WooCommerce", by Addify
+* Added compatibility with "WebToffee WooCommerce Gift Cards", by WebToffee
+* Updated compatibility with "WooCommerce Price Based on Country"
+* Updated compatibility with "WPC Product Bundles for WooCommerce"
+* Updated compatibility with "YITH WooCommerce Product Bundles"
 
 = 4.12.0 - 2026-03-02 =
 * Completely redesigned the "Exclude Products" section

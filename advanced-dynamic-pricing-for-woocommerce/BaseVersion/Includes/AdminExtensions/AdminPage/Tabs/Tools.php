@@ -88,9 +88,9 @@ class Tools implements AdminTabInterface
         header('Expires: 0');
         header('Content-Disposition: attachment; filename="advanced-dynamic-pricing-export.csv"');
         $fp = fopen('php://output', 'w');
-        fputcsv($fp, array_keys($els[0]));
+        fputcsv($fp, array_keys($els[0]), ",", '"', "\\");
         foreach ($els as $el) {
-            fputcsv($fp, (array)$el);
+            fputcsv($fp, (array)$el, ",", '"', "\\");
         }
         // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
         fclose($fp);
@@ -428,7 +428,7 @@ class Tools implements AdminTabInterface
                         $excludeItem['value'] = isset($excludeItem['value']) ? $excludeItem['value'] : array();
                         $excludeItem['value'] = $this->convertElementsFromIdToName($excludeItem['value'], $excludeItem['type']);
                     }
-                    
+
                 }
                 unset($item);
                 unset($excludeItem);

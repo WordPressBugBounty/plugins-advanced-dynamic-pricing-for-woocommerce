@@ -89,7 +89,8 @@ class YithBundlesCmp extends AbstractContainerCompatibility
                 $price_html = wc_format_sale_price($regular_price, $sale_price);
             }
         }
-       return $price_html;
+
+       return apply_filters( 'woocommerce_get_price_html', $price_html, $productBundle );
     }
 
 

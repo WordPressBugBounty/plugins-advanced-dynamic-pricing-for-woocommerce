@@ -514,4 +514,26 @@ class CartCustomer
 
         return $result;
     }
+
+    public function getHash() {
+        $data = [
+            // $this->getJson(),
+
+            'removedFreeItemsList' => array_map(function($item) {
+                return $item->toArray();
+            }, $this->removedFreeItemsList),
+            'removedAutoAddItemsList' => array_map(function($item) {
+                return $item->toArray();
+            }, $this->removedAutoAddItemsList),
+            'addedRecommendedAutoAddItemsList' => array_map(function($item) {
+                return $item->toArray();
+            }, $this->addedRecommendedAutoAddItemsList),
+            'removedRecommendedPromotions' => array_map(function($item) {
+                return $item->toArray();
+            }, $this->removedRecommendedPromotions),
+        ];
+
+        $hash = md5(json_encode($data));
+        return $hash;
+    }
 }

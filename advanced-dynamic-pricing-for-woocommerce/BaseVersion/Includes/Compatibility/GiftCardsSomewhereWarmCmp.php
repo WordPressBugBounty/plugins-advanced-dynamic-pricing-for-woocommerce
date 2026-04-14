@@ -59,7 +59,7 @@ class GiftCardsSomewhereWarmCmp
             return;
         }
 
-        add_action('wdp_calculate_totals_hook_priority', function ($priority) {
+        add_filter('wdp_calculate_totals_hook_priority', function ($priority) {
             return $priority - 2;
         });
 

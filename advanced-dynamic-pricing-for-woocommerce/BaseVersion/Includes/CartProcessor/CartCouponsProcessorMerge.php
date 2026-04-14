@@ -117,14 +117,14 @@ class CartCouponsProcessorMerge implements ICartCouponsProcessor
 
     public function sanitize(WC_Cart $wcCart)
     {
-        $this->purge();
-        return;
+        // $this->purge();
+        // return;
         $appliedCoupons = $wcCart->applied_coupons;
 
         $adpCoupons = [];
         foreach ( InMemoryAdpMergedCouponStorage::getInstance()->getAllKeys() as $couponCode ) {
             $mergeCoupon = WcAdpMergedCouponHelper::loadOfCouponCode($couponCode);
-            if ($mergeCoupon !== null && !$mergeCoupon->hasWcExternalPart()) {
+            if ($mergeCoupon !== null && $mergeCoupon->hasAdpPart()) {
                 $adpCoupons[] = $mergeCoupon->getCode();
             }
         }
@@ -154,6 +154,7 @@ class CartCouponsProcessorMerge implements ICartCouponsProcessor
         $reflection = new \ReflectionClass($wcDiscounts);
         $discountsProperty = $reflection->getProperty('discounts');
         $discountsProperty->setAccessible(true);
+        $adpCoupons = [];
 
         foreach ($wcCart->get_coupons() as $wcCoupon) {
             /** @var $wcCoupon WC_Coupon */
@@ -171,10 +172,12 @@ class CartCouponsProcessorMerge implements ICartCouponsProcessor
                     ]
                 );
                 WcAdpMergedCouponHelper::store($mergedCoupon);
+            } else {
+                $adpCoupons[] = $couponCode;
             }
         }
 
-        $this->cartContext->getSession()->insertCouponsData([], [], []);
+        $this->cartContext->getSession()->insertCouponsData([], [], [], $adpCoupons);
     }
 
     public function applyCouponsToWcCart(Cart $cart, WC_Cart $wcCart)
@@ -238,7 +241,7 @@ class CartCouponsProcessorMerge implements ICartCouponsProcessor
         }
     }
 
-    protected function processCartCoupons(Cart $cart, WC_Cart $wcCart)
+    public function processCartCoupons(Cart $cart, WC_Cart $wcCart)
     {
         $context = $cart->getContext();
         $this->cartContext = $cart->getContext();

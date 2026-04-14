@@ -156,7 +156,7 @@ abstract class AbstractCartItem
 
     // initial cart pos methods
     /** @param int $initialCartPosition */
-    public function setInitialCartPosition($initialCartPosition)
+    public function setInitialCartPosition(int $initialCartPosition)
     {
         $this->initialCartPosition = $initialCartPosition;
         $this->recalculateHash();

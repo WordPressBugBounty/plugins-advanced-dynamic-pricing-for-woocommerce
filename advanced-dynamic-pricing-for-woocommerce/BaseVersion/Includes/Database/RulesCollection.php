@@ -97,11 +97,11 @@ class RulesCollection
         return new self($filtered_rules);
     }
 
-    public function getHash($rules)
+    public function getHash()
     {
         $hashes = array_values(array_map(function($rule) {
             return $rule->getHash();
-        }, $rules));
+        }, $this->rules));
 
         $hash = md5(json_encode($hashes));
 

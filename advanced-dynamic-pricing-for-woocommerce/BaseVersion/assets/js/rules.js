@@ -485,8 +485,8 @@ jQuery(document).ready(function ($) {
         // prepare template
         var rule_template = get_template(template_options.rule_type + '_rule', template_options);
         if (rule_template === '') {
-	    rule_template = get_template('rule', template_options);
-	}
+	        rule_template = get_template('rule', template_options);
+	      }
 
         var new_rule = $(rule_template);
         if (data && data.rule_type === 'persistent') {
@@ -505,6 +505,10 @@ jQuery(document).ready(function ($) {
         }
         set_type_label_color(new_rule);
         initWdpTooltips();
+
+        if (!wdp_data.options.support_persistence_rules && wdp_data.options.is_free_version) {
+          new_rule.closest('.postbox').find(".rule-type").hide();
+        }
         return new_rule;
     }
 
@@ -2160,7 +2164,7 @@ jQuery(document).ready(function ($) {
                 });
                 $container.find('.wdp-condition-field-value select').append(html);
             }
-            
+
             if ( data.product_exclude ) {
                 if (data.product_exclude.on_wc_sale) {
                     $container.find('.wdp-exclude-on-wc-sale-container input').prop('checked', true);
@@ -2204,7 +2208,7 @@ jQuery(document).ready(function ($) {
           let filters = $exFilters.serializeArray();
             $exFilters.children().each(function( index ) {
               filters.push({
-                type: $(this).find('.wdp-filter-exclude-type select').val(), 
+                type: $(this).find('.wdp-filter-exclude-type select').val(),
                 value: $(this).find('.wdp-filter-exlclude-value select').val()
               });
             });
@@ -2230,12 +2234,12 @@ jQuery(document).ready(function ($) {
           return '<option selected data-link="' + link + '" value="' + id + '">' + title + '</option>';
       }).join('');
 
-      let excludeId = 0; 
+      let excludeId = 0;
       $items.children().each(function (i, el) {
         let index = ~~$(el).data('index');
         excludeId = index + 1;
       });
-      
+
       let variables = {
         filterId: get_current_product_filter_index($items),
         excludeId: excludeId,
@@ -2247,7 +2251,7 @@ jQuery(document).ready(function ($) {
       if(!html) {
         html = get_template(`exclude_filter`, variables);
       }
-      
+
       $items.append(html);
       let $item = $items.find(`[data-index=${excludeId}]`);
       let $type = $item.find('.wdp-filter-exclude-type select');
@@ -2288,7 +2292,7 @@ jQuery(document).ready(function ($) {
       });
 
       $value.html(html);
-  
+
       make_select2_products($item.find('[data-field="autocomplete"]'));
       make_select2_product_taxonomies($item.find('[data-field="autocomplete"][data-list="product_taxonomies"]'));
     }
@@ -3473,7 +3477,7 @@ jQuery(document).ready(function ($) {
     /* Utils */
     // find template by id, replace variables by values and return string
         function get_template(name, variables) {
-          
+
         var template = $('#' + name + '_template').html() || '';
 
         for (var v in variables) {

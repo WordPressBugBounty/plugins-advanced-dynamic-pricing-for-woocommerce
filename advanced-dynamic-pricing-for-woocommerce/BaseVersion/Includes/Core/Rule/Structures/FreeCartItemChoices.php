@@ -147,6 +147,8 @@ class FreeCartItemChoices implements \Serializable
                 return $choice->serialize();
             }, $choices),
             'requiredQty' => $this->requiredQty,
+            'required'    => $this->required,
+            'attributes'  => $this->attributes,
         ];
     }
 
@@ -162,8 +164,16 @@ class FreeCartItemChoices implements \Serializable
 
     public function __unserialize($data)
     {
-        $this->choices     = $data['choices'];
+        $this->choices = array_map(function( $choice ) {
+            $data = maybe_unserialize($choice);
+            $obj = new GiftChoice();
+            $obj->unserialize($data);
+            return $obj;
+        }, $data['choices'] ?? []);
+        
         $this->requiredQty = $data['requiredQty'];
+        $this->required    = $data['required'];
+        $this->attributes  = $data['attributes'];
     }
 
     /**

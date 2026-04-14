@@ -81,7 +81,7 @@ class BasicCartItem extends AbstractCartItem implements ICartItem
     /**
      * @param int $initialCartPosition
      */
-    public function setInitialCartPosition($initialCartPosition)
+    public function setInitialCartPosition(int $initialCartPosition)
     {
         parent::setInitialCartPosition($initialCartPosition);
         $this->recalculateHash();

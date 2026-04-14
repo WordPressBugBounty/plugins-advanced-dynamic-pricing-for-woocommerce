@@ -85,6 +85,7 @@ class ContextBuilder
         $priceBasedOnCountryCmp = new PriceBasedOnCountryCmp();
         if ($priceBasedOnCountryCmp->isActive()) {
             $priceBasedOnCountryCmp->modifyContext($context);
+            $priceBasedOnCountryCmp->prepareHooks();
         }
 
         $asanaEasyBundlesCmp = new AsanaEasyBundlesCmp($context);

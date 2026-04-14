@@ -10,6 +10,8 @@ use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Container\ContainerPartCart
 use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Container\ContainerPriceTypeEnum;
 use ADP\BaseVersion\Includes\WC\WcCartItemFacade;
 
+use WPCleverWoosb;
+
 defined('ABSPATH') or exit;
 
 /**
@@ -40,6 +42,12 @@ class WpcBundleCmp extends AbstractContainerCompatibility
 
     public function addFilters()
     {
+        if (class_exists('WPCleverWoosb') && !is_admin()) {
+            remove_filter(
+                'woocommerce_product_price_class',
+                [ WPCleverWoosb::instance(), 'product_price_class' ]
+            );
+        }
     }
 
     public function isActive(): bool
@@ -126,7 +134,7 @@ class WpcBundleCmp extends AbstractContainerCompatibility
         $parentProduct = $facade->getProduct();
         if (!empty($thirdPartyData['woosb_discount'])) {
             $_price = floatval(CartProcessor::getProductPriceDependsOnPriceMode($parentProduct));
-            $_price   *=  (float) $thirdPartyData['woosb_discount']  / 100;
+            $_price = round($_price * (float) $thirdPartyData['woosb_discount'] / 100, wc_get_price_decimals());
             return -$_price;
         }
 
@@ -139,6 +147,9 @@ class WpcBundleCmp extends AbstractContainerCompatibility
         }
 
         if ($parentProduct instanceof \WC_Product_Woosb && !$parentProduct->is_fixed_price()) {
+            if ((float)$parentProduct->get_sale_price('edit') < (float)$parentProduct->get_regular_price('edit')) {
+                return (float)$parentProduct->get_sale_price('edit') - (float)$parentProduct->get_regular_price('edit');
+            }
             return 0.0;
         }
 

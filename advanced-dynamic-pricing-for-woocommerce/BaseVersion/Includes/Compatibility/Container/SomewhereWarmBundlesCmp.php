@@ -37,7 +37,7 @@ class SomewhereWarmBundlesCmp extends AbstractContainerCompatibility
     public function addFilters()
     {
         // type cast for "identical" comparison in "update_cart_action" method
-        add_filter('woocommerce_stock_amount_cart_item', function ($qty) {
+        add_filter('woocommerce_stock_amount_cart_item', function ($qty, $cart_item_key) {
             return (float)$qty;
         }, 10, 2);
 

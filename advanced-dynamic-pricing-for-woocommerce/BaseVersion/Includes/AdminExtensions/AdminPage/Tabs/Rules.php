@@ -385,7 +385,7 @@ class Rules implements AdminTabInterface
             'wc-backbone-modal',
             $tiptip_plugin
         ), WC_ADP_VERSION, true);
-        
+
         wp_enqueue_style( 'woocommerce_admin_styles' );
 
         wp_localize_script('wdp_settings-scripts', 'wdp_data', $this->getScriptData());
@@ -499,6 +499,8 @@ class Rules implements AdminTabInterface
                 'close_on_select' => defined("WC_ADP_PRO_VERSION_URL") ? false : true,
                 'rules_per_page' => $context->getOption('rules_per_page'),
                 'filter_priority' => $context->getOption('show_select_filter_priority'),
+                'support_persistence_rules' => $context->getOption('support_persistence_rules'),
+                'is_free_version' => $context->isBaseVersion(),
             ),
             'paged' => $paged,
             'security' => wp_create_nonce(Ajax::SECURITY_ACTION),

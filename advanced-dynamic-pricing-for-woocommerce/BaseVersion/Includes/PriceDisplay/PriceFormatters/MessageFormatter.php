@@ -42,7 +42,7 @@ class MessageFormatter
     {
         if(!$processedProduct) {
             return $this->formatter->applyReplacements([]);
-        }      
+        }
 
         $inclTax = adp_context()->getIsPricesIncludeTax();
 
@@ -57,7 +57,7 @@ class MessageFormatter
             ]);
         }
 
-        $discounts = array_values(array_filter(array_map(function($priceProduct) use($inclTax) {  
+        $discounts = array_values(array_filter(array_map(function($priceProduct) use($inclTax) {
             $amount = (float)array_sum(array_map(function ($amounts) {
                 return array_sum($amounts);
             }, $priceProduct->getDiscounts()));
@@ -67,7 +67,7 @@ class MessageFormatter
             }
 
             return $this->priceFunctions->format(
-                    $inclTax ? 
+                    $inclTax ?
                         $this->priceFunctions->getPriceIncludingTax($priceProduct->getProduct(), ['price' => $amount]) :
                         $this->priceFunctions->getPriceExcludingTax($priceProduct->getProduct(), ['price' => $amount])
             );
@@ -78,7 +78,7 @@ class MessageFormatter
         if(!$discounts) {
             $discountAmount = $this->priceFunctions->format(0);
         } else if(count($discounts) == 1) {
-            $discountAmount = array_first($discounts);
+            $discountAmount = $discounts[0];
         } else if(count($discounts) == 2) {
             $discountAmount = $this->priceFunctions->formatRange($discounts[0], $discounts[1]);
         }

@@ -646,4 +646,72 @@ class Cart
     public function expose(): array {
         return get_object_vars($this);
     }
+
+    public function toArray()
+    {
+        return [
+            'freeItems' => array_map(function($item) {
+                return $item->toArray();
+            }, $this->freeItems),
+
+            'autoAddItems' => array_map(function($item) {
+                return $item->toArray();
+            }, $this->autoAddItems),
+
+            'recommendedPromotions' => array_map(function($item) {
+                return $item->toArray();
+            }, $this->recommendedPromotions),
+
+            'coupons' => $this->coupons,
+            'originCouponsCodes' => $this->originCouponsCodes,
+            'ruleTriggerCouponCodes' => $this->ruleTriggerCouponCodes,
+            'anyRulesApplied' => $this->anyRulesApplied,
+
+            'shippingAdjustments' => array_map(function($item) {
+                return $item->toArray();
+            }, $this->shippingAdjustments),
+
+            'fees' => array_map(function($item) {
+                return $item->toArray();
+            }, $this->fees),
+
+            'couponsAdjustments' => array_map(function($item) {
+                return $item->toArray();
+            }, $this->couponsAdjustments),
+        ];
+    }
+
+    public function fromArray($data)
+    {
+        $this->freeItems = array_map(function($data) {
+            return FreeCartItem::fromArray($data);
+        }, $data['freeItems'] ?? []);
+
+        $this->autoAddItems = array_map(function($data) {
+            return AutoAddCartItem::fromArray($data);
+        }, $data['autoAddItems'] ?? []);
+
+        $this->recommendedPromotions = array_map(function($data) {
+            return AutoAddCartItem::fromArray($data);
+        }, $data['recommendedPromotions'] ?? []);
+
+        $this->coupons = $data['coupons'] ?? [];
+
+        $this->originCouponsCodes = $data['originCouponsCodes'];
+        $this->ruleTriggerCouponCodes = $data['ruleTriggerCouponCodes'];
+        $this->anyRulesApplied = $data['anyRulesApplied'];
+
+        $this->shippingAdjustments = array_map(function($data) {
+            return ShippingAdjustment::fromArray($data);
+        }, $data['shippingAdjustments'] ?? []);
+
+        $this->fees = array_map(function($data) {
+            return Fee::fromArray($data);
+        }, $data['fees'] ?? []);
+
+        // $this->couponsAdjustments = array_map(function($data) {
+        //     return Fee::fromArray($data);
+        // }, $data['couponsAdjustments'] ?? []);
+
+    }
 }

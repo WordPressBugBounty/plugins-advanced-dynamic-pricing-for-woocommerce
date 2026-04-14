@@ -7,6 +7,7 @@ use ADP\BaseVersion\Includes\Context\Currency;
 use ADP\BaseVersion\Includes\Context\CurrencyController;
 use ADP\BaseVersion\Includes\Core\Rule\Internationalization\RuleTranslator;
 use ADP\BaseVersion\Includes\Core\Rule\Rule;
+use ADP\HighLander\HighLanderShortcuts;
 
 defined('ABSPATH') or exit;
 
@@ -29,6 +30,23 @@ class PriceBasedOnCountryCmp
     public function isActive()
     {
         return defined("WCPBC_PLUGIN_FILE");
+    }
+
+    public function prepareHooks()
+    {
+        if ($this->isActive()) {
+            
+            HighLanderShortcuts::removeFilters(
+                [
+                    'woocommerce_package_rates' => [
+                        ["WCPBC_Frontend_Pricing", "package_rates"]
+                    ],
+                    'woocommerce_get_cart_item_from_session' => [
+                        ['WCPBC_Frontend_Pricing', 'set_cart_item_price']
+                    ]
+                ]
+            );
+        }
     }
 
     public function modifyContext(Context $context)
@@ -126,7 +144,7 @@ class PriceBasedOnCountryCmp
             return $price;
         }
 
-        $price = $this->getProductProtectedProp($product, 'regular_price');
+        $price = $this->getProductProtectedProp($product, 'sale_price');
         $price = wcpbc_the_zone()->get_price_prop($product, $price, "_sale_price");
 
         return $price !== "" ? self::stringToFloat($this->context, $price) : null;
@@ -145,7 +163,7 @@ class PriceBasedOnCountryCmp
             return $price;
         }
 
-        $price = $this->getProductProtectedProp($product, 'sale_price');
+        $price = $this->getProductProtectedProp($product, 'regular_price');
         $price = wcpbc_the_zone()->get_price_prop($product, $price, "_regular_price");
 
         return $price !== "" ? self::stringToFloat($this->context, $price) : null;

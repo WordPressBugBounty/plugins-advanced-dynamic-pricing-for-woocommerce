@@ -16,11 +16,14 @@ class KlarnaOnSiteMessagingCmp
 {
     public function __construct()
     {
-
+        
     }
 
     public function isActive()
     {
+        if(is_admin()) {
+            return false;
+        }
         return class_exists("\Klarna_OnSite_Messaging_For_WooCommerce") || class_exists("\WC_Klarna_Payments");
     }
 

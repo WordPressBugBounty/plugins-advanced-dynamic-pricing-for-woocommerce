@@ -4,8 +4,9 @@ namespace ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\AutoAdd;
 
 use ADP\BaseVersion\Includes\Cache\CacheHelper;
 use ADP\BaseVersion\Includes\Compatibility\PhoneOrdersCmp;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Base\SerializableCartItem;
 
-class AutoAddCartItem
+class AutoAddCartItem extends SerializableCartItem
 {
     /**
      * @var \WC_Product

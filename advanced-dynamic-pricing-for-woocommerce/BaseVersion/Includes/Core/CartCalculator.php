@@ -475,20 +475,4 @@ class CartCalculator implements ICartCalculator
         $this->maxDiscountAmount = $maxDiscountAmount;
     }
 
-    /**
-     * @param Cart $cart
-     *
-     * @return array
-     */
-    public function getApplicableRulesForCart($cart)
-    {
-        $context = $this->context;
-        return array_filter(array_map(function($rule) use($context, $cart) {
-            $proc = $rule->buildProcessor($context);
-            if ($proc->isRuleMatchedCart($cart)) {
-                return $rule;
-            }
-            return null;
-        }, $this->ruleCollection->getRules()));
-    }
 }

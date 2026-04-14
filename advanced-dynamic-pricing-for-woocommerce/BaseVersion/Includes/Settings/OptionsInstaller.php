@@ -450,6 +450,11 @@ class OptionsInstaller
                 __('Don\'t recalculate cart on page load', 'advanced-dynamic-pricing-for-woocommerce')
             ),
             $builder::boolean(
+                'dont_recalculate_cart_if_not_changed',
+                true,
+                __('Don\'t recalculate  cart if cart items don\'t have changed', 'advanced-dynamic-pricing-for-woocommerce')
+            ),
+            $builder::boolean(
                 'support_persistence_rules',
                 false,
                 __('Support Product only rules', 'advanced-dynamic-pricing-for-woocommerce')

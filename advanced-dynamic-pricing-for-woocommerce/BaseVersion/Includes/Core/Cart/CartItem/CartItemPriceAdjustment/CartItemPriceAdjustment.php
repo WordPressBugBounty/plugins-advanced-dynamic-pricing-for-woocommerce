@@ -16,6 +16,7 @@ class CartItemPriceAdjustment
 
     private $ruleId;
 
+
     public function __construct(
         CartItemPriceUpdateTypeEnum $type,
         CartItemPriceUpdateSourceEnum $source,
@@ -80,7 +81,7 @@ class CartItemPriceAdjustment
             $dict['originalPrice'],
             $dict['amount'],
             $dict['newPrice'],
-            $dict['ruleId']
+            $dict['ruleId'],
         );
     }
 
@@ -92,7 +93,7 @@ class CartItemPriceAdjustment
             'originalPrice' => $this->originalPrice,
             'amount' => $this->amount,
             'newPrice' => $this->newPrice,
-            'ruleId' => $this->ruleId
+            'ruleId' => $this->ruleId,
         ];
     }
 }

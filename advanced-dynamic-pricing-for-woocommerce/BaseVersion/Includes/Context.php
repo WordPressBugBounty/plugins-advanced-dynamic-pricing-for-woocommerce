@@ -239,6 +239,7 @@ class Context
         $priceBasedOnCountryCmp = new PriceBasedOnCountryCmp();
         if ($priceBasedOnCountryCmp->isActive()) {
             $priceBasedOnCountryCmp->modifyContext($this);
+            $priceBasedOnCountryCmp->prepareHooks();
         }
         /** --- End Currency ---  */
 

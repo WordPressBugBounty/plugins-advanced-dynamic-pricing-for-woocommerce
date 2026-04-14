@@ -16,6 +16,7 @@ class CartItemPriceAdjustmentBuilder
 
     private $ruleId;
 
+
     public static function ofCartItemPriceAdjustment(CartItemPriceAdjustment $adjustment)
     {
         $builder = new self();
@@ -73,7 +74,7 @@ class CartItemPriceAdjustmentBuilder
             $this->originalPrice,
             $this->amount,
             $this->newPrice,
-            $this->ruleId
+            $this->ruleId,
         );
     }
 }

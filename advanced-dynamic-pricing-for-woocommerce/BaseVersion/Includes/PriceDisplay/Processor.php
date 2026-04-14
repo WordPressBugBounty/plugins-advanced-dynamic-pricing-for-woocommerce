@@ -107,6 +107,10 @@ class Processor implements IWcProductProcessor
      */
     public function calculateProduct($theProduct, $qty = 1.0, $cartItemData = array())
     {
+        if (is_admin() && wp_doing_ajax() && isset($_POST['action']) && $_POST['action'] === 'inline-save') {
+            return null;
+        }
+
         static $last_product_key='';
         static $last_product_result;
 

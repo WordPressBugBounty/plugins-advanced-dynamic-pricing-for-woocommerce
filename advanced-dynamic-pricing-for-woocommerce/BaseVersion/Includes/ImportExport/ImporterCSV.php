@@ -231,7 +231,10 @@ class ImporterCSV {
         if( empty($rule['title']) )
             $rule['title'][] = __('Imported Rule', 'advanced-dynamic-pricing-for-woocommerce') . ' #' . $pos;
 
-        $char = array_sum(array_map(fn($str) => mb_strlen($str, 'UTF-8'), $rule['title'])) + count($rule['title']) - 1;
+        $char = array_sum(array_map(function ($str) {
+            return mb_strlen($str, 'UTF-8');
+        }, $rule['title'])) + count($rule['title']) - 1;
+        
         if ($char > 20) {
             $excess = $char - 20;
             $rule['title'][0] = mb_substr($rule['title'][0], 0, -$excess, 'UTF-8');

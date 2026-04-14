@@ -365,7 +365,7 @@ class WcCustomerSessionFacade
      * @param array<string, CouponInterface>             $singleCoupons
      * @param array<string, CouponInterface>             $wcSingleCoupons
      */
-    public function insertCouponsData($groupedCoupons, $singleCoupons, $wcSingleCoupons)
+    public function insertCouponsData($groupedCoupons, $singleCoupons, $wcSingleCoupons, $adpCoupons = [])
     {
         $groupCouponsData    = array();
         $singleCouponsData   = array();
@@ -397,6 +397,7 @@ class WcCustomerSessionFacade
             'group'     => $groupCouponsData,
             'single'    => $singleCouponsData,
             'wc_single' => $wcSingleCouponsData,
+            'adpCoupons' => $adpCoupons,
         );
     }
 
@@ -572,6 +573,22 @@ class WcCustomerSessionFacade
                 array_keys($this->totals[self::ADP_KEY_COUPONS]['wc_single'])
             )
         );
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function getAdpApliedCoupons()
+    {
+        if ( ! isset($this->totals[self::ADP_KEY_COUPONS])) {
+            return array();
+        }
+
+        if ( ! array_key_exists('adpCoupons', $this->totals[self::ADP_KEY_COUPONS])) {
+            return array();
+        }
+
+        return $this->totals[self::ADP_KEY_COUPONS]['adpCoupons'];
     }
 
     /**

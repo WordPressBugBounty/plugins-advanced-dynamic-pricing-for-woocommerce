@@ -117,6 +117,7 @@ class CartBuilder
         }
 
         $adpCoupons = $cart->getContext()->getSession()->getAdpCoupons();
+        $adpApliedCoupons = $cart->getContext()->getSession()->getAdpApliedCoupons();
 
         $pointAndRewardsCmp = new PointsAndRewardsForWoocommerceCmp();
 
@@ -136,7 +137,7 @@ class CartBuilder
                 if ((new \WC_Discounts(WC()->cart))->is_coupon_valid($wcCoupon)) {
                     if ($mergedCoupon->hasRuleTriggerPart()) {
                         $cart->addRuleTriggerCoupon($couponCode);
-                    } elseif (!$mergedCoupon->hasAdpPart()) {
+                    } elseif (!$mergedCoupon->hasAdpPart() && !in_array($couponCode, $adpApliedCoupons)) {
                         $cart->addOriginCoupon($couponCode);
                     }
                 }

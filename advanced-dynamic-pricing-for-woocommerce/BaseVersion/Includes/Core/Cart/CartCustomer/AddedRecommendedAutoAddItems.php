@@ -97,4 +97,12 @@ class AddedRecommendedAutoAddItems
     {
         $this->added = array();
     }
+
+    public function toArray() 
+    {
+        return [
+            'associatedGiftHash' => $this->associatedAutoAddHash,
+            'added' => array_filter($this->added),
+        ];
+    }
 }

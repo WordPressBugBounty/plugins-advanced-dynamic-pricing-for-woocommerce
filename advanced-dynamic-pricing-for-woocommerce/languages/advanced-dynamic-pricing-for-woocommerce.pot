@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Advanced Dynamic Pricing for WooCommerce (Pro)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-14 04:50+0000\n"
+"POT-Creation-Date: 2026-04-30 04:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -2469,7 +2469,7 @@ msgstr ""
 msgid "Remove rule?"
 msgstr ""
 
-#: BaseVersion/Includes/CartProcessor/CartProcessor.php:1135
+#: BaseVersion/Includes/CartProcessor/CartProcessor.php:1146
 msgid "Removed {{qty}} free {{product_name}}"
 msgstr ""
 
@@ -2907,8 +2907,8 @@ msgid "Slug"
 msgstr ""
 
 #: BaseVersion/Includes/CartProcessor/CartCouponsProcessorMerge.php:578
-#: BaseVersion/Includes/CartProcessor/CartCouponsProcessor.php:691
-#: BaseVersion/Includes/CartProcessor/CartCouponsProcessor.php:853
+#: BaseVersion/Includes/CartProcessor/CartCouponsProcessor.php:707
+#: BaseVersion/Includes/CartProcessor/CartCouponsProcessor.php:869
 msgid "Sorry, coupons are disabled for these products."
 msgstr ""
 
@@ -2916,8 +2916,8 @@ msgstr ""
 #: BaseVersion/Includes/CartProcessor/CartCouponsProcessorMerge.php:540
 #: BaseVersion/Includes/CartProcessor/CartCouponsProcessorMerge.php:594
 #: BaseVersion/Includes/CartProcessor/CartCouponsProcessorMerge.php:605
-#: BaseVersion/Includes/CartProcessor/CartCouponsProcessor.php:529
-#: BaseVersion/Includes/CartProcessor/CartCouponsProcessor.php:535
+#: BaseVersion/Includes/CartProcessor/CartCouponsProcessor.php:545
+#: BaseVersion/Includes/CartProcessor/CartCouponsProcessor.php:551
 msgid "Sorry, this coupon is not applicable to cart."
 msgstr ""
 
@@ -3226,11 +3226,11 @@ msgid "View most active rules, discounted products and etc"
 msgstr ""
 
 #: BaseVersion/Includes/CartProcessor/CartCouponsProcessorMerge.php:438
-#: BaseVersion/Includes/CartProcessor/CartCouponsProcessor.php:355
+#: BaseVersion/Includes/CartProcessor/CartCouponsProcessor.php:371
 msgid "WDP Coupon"
 msgstr ""
 
-#: BaseVersion/Includes/CartProcessor/CartCouponsProcessor.php:380
+#: BaseVersion/Includes/CartProcessor/CartCouponsProcessor.php:396
 msgid "WDP Coupon (exact item application)"
 msgstr ""
 

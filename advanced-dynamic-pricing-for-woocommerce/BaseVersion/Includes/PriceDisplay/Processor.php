@@ -10,6 +10,7 @@ use ADP\BaseVersion\Includes\Core\Cart\CartItem\CartItemConverter;
 use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Base\CartItemAttributeEnum;
 use ADP\BaseVersion\Includes\Core\CartCalculator;
 use ADP\BaseVersion\Includes\Core\ICartCalculator;
+use ADP\BaseVersion\Includes\Debug\Listener;
 use ADP\BaseVersion\Includes\Debug\ProductCalculatorListener;
 use ADP\BaseVersion\Includes\PriceDisplay\WcProductProcessor\IWcProductProcessor;
 use ADP\BaseVersion\Includes\PriceDisplay\WcProductProcessor\WcProductProcessorHelper;
@@ -45,7 +46,7 @@ class Processor implements IWcProductProcessor
     protected $cart;
 
     /**
-     * @var ProductCalculatorListener
+     * @var Listener
      */
     protected $listener;
 
@@ -61,7 +62,10 @@ class Processor implements IWcProductProcessor
     public function __construct($contextOrCalc = null, $deprecated = null)
     {
         $this->context = adp_context();
-        $this->listener = new ProductCalculatorListener();
+        $this->listener = new Listener();
+        if($this->context->isDebug()) {
+            $this->listener->subscribe(new ProductCalculatorListener());
+        }
         $calc = $contextOrCalc instanceof ICartCalculator ? $contextOrCalc : $deprecated;
 
         if ($calc instanceof ICartCalculator) {
@@ -77,6 +81,7 @@ class Processor implements IWcProductProcessor
     public function withContext(Context $context)
     {
         $this->context = $context;
+        $this->listener->withContext($context);
     }
 
     /**
@@ -472,9 +477,9 @@ class Processor implements IWcProductProcessor
     }
 
     /**
-     * @return ProductCalculatorListener
+     * @return Listener
      */
-    public function getListener(): ProductCalculatorListener
+    public function getListener(): Listener
     {
         return $this->listener;
     }

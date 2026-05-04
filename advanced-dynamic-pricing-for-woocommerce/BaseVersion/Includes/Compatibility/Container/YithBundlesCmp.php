@@ -77,7 +77,7 @@ class YithBundlesCmp extends AbstractContainerCompatibility
      * */
     public function fixBundlePriceHtml($price_html, $productBundle)
     {
-        $pricedIndividually = 'yes' === $productBundle->get_meta( '_yith_wcpb_per_item_pricing' );
+        $pricedIndividually = false; //'yes' === $productBundle->get_meta( '_yith_wcpb_per_item_pricing' );
         if (!($productBundle instanceof \WC_Product_Yith_Bundle)) {
             return $price_html;
         }
@@ -148,7 +148,7 @@ class YithBundlesCmp extends AbstractContainerCompatibility
             return [];
         }
 
-        $pricedIndividually = 'yes' === $product->get_meta( '_yith_wcpb_per_item_pricing' );
+        $pricedIndividually = false; //'yes' === $product->get_meta( '_yith_wcpb_per_item_pricing' );
         return array_map(
             function ($bundleItem) use ($product, $pricedIndividually) {
                 /** @var \YITH_WC_Bundled_Item $bundleItem */
@@ -199,7 +199,7 @@ class YithBundlesCmp extends AbstractContainerCompatibility
     public function calculateContainerPrice(WcCartItemFacade $facade, array $children): float
     {
         $product = $facade->getProduct();
-        $pricedIndividually = 'yes' === $product->get_meta( '_yith_wcpb_per_item_pricing' );
+        $pricedIndividually = false; //'yes' === $product->get_meta( '_yith_wcpb_per_item_pricing' );
         if (!($product instanceof \WC_Product_Yith_Bundle)) {
             return floatval($facade->getProduct()->get_price('edit'));
         }
@@ -227,7 +227,7 @@ class YithBundlesCmp extends AbstractContainerCompatibility
     public function calculateContainerBasePrice(WcCartItemFacade $facade, array $children): float
     {
         $product = $facade->getProduct();
-        $pricedIndividually = 'yes' === $product->get_meta( '_yith_wcpb_per_item_pricing' );
+        $pricedIndividually = false; //'yes' === $product->get_meta( '_yith_wcpb_per_item_pricing' );
         if($pricedIndividually){
             return 0.0;
         }
@@ -237,7 +237,7 @@ class YithBundlesCmp extends AbstractContainerCompatibility
     public function getContainerPriceTypeByParentFacade(WcCartItemFacade $facade): ?ContainerPriceTypeEnum
     {
         $product = $facade->getProduct();
-        $pricedIndividually = 'yes' === $product->get_meta( '_yith_wcpb_per_item_pricing' );
+        $pricedIndividually = false; //'yes' === $product->get_meta( '_yith_wcpb_per_item_pricing' );
         if($pricedIndividually){
             return ContainerPriceTypeEnum::BASE_PLUS_SUM_OF_SUB_ITEMS();
         }
@@ -257,7 +257,7 @@ class YithBundlesCmp extends AbstractContainerCompatibility
             return false;
         }
         $product = $cartItem['data'];
-        $pricedIndividually = 'yes' === $product->get_meta( '_yith_wcpb_per_item_pricing' );
+        $pricedIndividually = false; //'yes' === $product->get_meta( '_yith_wcpb_per_item_pricing' );
         if($pricedIndividually){
             return true;
         }

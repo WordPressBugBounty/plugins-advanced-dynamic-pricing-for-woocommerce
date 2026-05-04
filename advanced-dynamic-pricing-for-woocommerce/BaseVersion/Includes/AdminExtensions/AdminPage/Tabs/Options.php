@@ -182,7 +182,7 @@ class Options implements AdminTabInterface
 		$sections = array(
 			"calculation"     => array(
 				'title'     => __("Calculation", 'advanced-dynamic-pricing-for-woocommerce'),
-                'doc_link'  => 'https://docs.algolplus.com/algol_pricing/settings-algol_pricing/calculation/',
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/calculation/',
 				'templates' => array(
                     10 => "apply_discount_for_onsale_products",
 					20 => "disable_shipping_calc_during_process",
@@ -200,7 +200,7 @@ class Options implements AdminTabInterface
 			),
 			"price_templates" => array(
 				'title'     => __("Product price", 'advanced-dynamic-pricing-for-woocommerce'),
-                'doc_link'  => 'https://docs.algolplus.com/algol_pricing/settings-algol_pricing/product-price/',
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/product-price/',
 				'templates' => array(
 					1  => "show_onsale_badge",
                     6 => "process_product_strategy",
@@ -212,7 +212,7 @@ class Options implements AdminTabInterface
 			),
 			"cart"            => array(
 				'title'     => __("Cart", 'advanced-dynamic-pricing-for-woocommerce'),
-                'doc_link'  => 'https://docs.algolplus.com/algol_pricing/settings-algol_pricing/cart/',
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/cart/',
 				'templates' => array(
                     0  => "show_striked_prices",
                     5  => "show_cross_out_subtotal_in_cart_totals",
@@ -221,7 +221,7 @@ class Options implements AdminTabInterface
 			),
 			"product_page"    => array(
 				'title'     => __("Product page", 'advanced-dynamic-pricing-for-woocommerce'),
-                'doc_link'  => 'https://docs.algolplus.com/algol_pricing/settings-algol_pricing/product-page/',
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/product-page/',
 				'templates' => array(
 					1 => "do_not_modify_price_at_product_page",
 					3 => "use_first_range_as_min_qty",
@@ -230,14 +230,14 @@ class Options implements AdminTabInterface
 			),
 			"category_page"   => array(
 				'title'     => __("Category page", 'advanced-dynamic-pricing-for-woocommerce'),
-                'doc_link'  => 'https://docs.algolplus.com/algol_pricing/settings-algol_pricing/category-page-pro/',
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/category-page-pro/',
 				'templates' => array(
 					4 => "req_variations_for_optimization_at_shop"
                 ),
 			),
 			"bulk_table"      => array(
 				'title'     => __("Bulk table", 'advanced-dynamic-pricing-for-woocommerce'),
-                'doc_link'  => 'https://docs.algolplus.com/algol_pricing/settings-algol_pricing/bulk-table/',
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/bulk-table/',
 				'templates' => array(
 					"show_category_bulk_table",
 					"show_matched_bulk_table",
@@ -247,14 +247,14 @@ class Options implements AdminTabInterface
 			),
 			"free_products"   => array(
 				'title'     => __("Free products", 'advanced-dynamic-pricing-for-woocommerce'),
-                'doc_link'  => 'https://docs.algolplus.com/algol_pricing/settings-algol_pricing/free-products-2/',
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/free-products-2/',
 				'templates' => array(
 					10 => "message_after_add_free_product",
 				),
 			),
 			"coupons"         => array(
 				'title'     => __("Coupons", 'advanced-dynamic-pricing-for-woocommerce'),
-                'doc_link'  => 'https://docs.algolplus.com/algol_pricing/settings-algol_pricing/coupons-3/',
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/coupons-3/',
 				'templates' => array(
 					5  => "external_coupons_behavior",
 					7 => "individual_wc_coupon_suppress_coupons",
@@ -263,19 +263,19 @@ class Options implements AdminTabInterface
 			),
             "advertising" => array(
                 'title'     => __("Advertising", 'advanced-dynamic-pricing-for-woocommerce'),
-                'doc_link'  => 'https://docs.algolplus.com/algol_pricing/settings-algol_pricing/advertising-pro-2/',
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/advertising-pro-2/',
                 'templates' => array(),
             ),
             "order"           => array(
                 'title'     => __("Order", 'advanced-dynamic-pricing-for-woocommerce'),
-                'doc_link'  => 'https://docs.algolplus.com/algol_pricing/settings-algol_pricing/order-pro/',
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/order-pro/',
                 'templates' => array(
                     20 => "order_amount_saved_url_to_customizer"
                 ),
             ),
 			"rules"           => array(
 				'title'     => __("Rules", 'advanced-dynamic-pricing-for-woocommerce'),
-                'doc_link'  => 'https://docs.algolplus.com/algol_pricing/settings-algol_pricing/rules/',
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/rules/',
 				'templates' => array(
 					100 => "rules_per_page",
 					"rule_max_exec_time",
@@ -288,7 +288,7 @@ class Options implements AdminTabInterface
 			),
 			"system"          => array(
 				'title'     => __("System", 'advanced-dynamic-pricing-for-woocommerce'),
-                'doc_link'  => 'https://docs.algolplus.com/algol_pricing/settings-algol_pricing/system/',
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/system/',
 				'templates' => array(
 					"suppress_other_pricing_plugins",
 					"update_prices_while_doing_cron",
@@ -299,7 +299,7 @@ class Options implements AdminTabInterface
 			),
 			"debug"           => array(
 				'title'     => __("Debug", 'advanced-dynamic-pricing-for-woocommerce'),
-                'doc_link'  => 'https://docs.algolplus.com/algol_pricing/debug/',
+                'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/debug/',
 				'templates' => array(
 					"show_debug_bar",
 				),

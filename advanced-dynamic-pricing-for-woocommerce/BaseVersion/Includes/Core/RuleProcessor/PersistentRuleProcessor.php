@@ -255,6 +255,8 @@ class PersistentRuleProcessor implements RuleProcessor
         $this->addGifts($cart, $collection);
 
         $this->exclusivityStrategy->makeAffectedItemAsExclusive($collection->get_items());
+
+        $this->applyChangesToCart($cart, $collection);
     }
 
     /**
@@ -778,5 +780,10 @@ class PersistentRuleProcessor implements RuleProcessor
         }
 
         return $match;
+    }
+
+    protected function applyChangesToCart(&$cart, &$collection)
+    {
+        
     }
 }

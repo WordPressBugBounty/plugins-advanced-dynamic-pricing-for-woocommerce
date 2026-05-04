@@ -8,7 +8,7 @@ use ADP\BaseVersion\Includes\Core\Cart\Cart;
 use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Container\ContainerCartItem;
 use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Container\ContainerPartCartItem;
 use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\ICartItem;
-use ADP\BaseVersion\Includes\Core\RuleProcessor\Listener;
+use ADP\BaseVersion\Includes\Debug\Listener;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\RuleProcessor;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\PersistentRuleProcessor;
 use ADP\BaseVersion\Includes\Database\Repository\PersistentRuleRepository;
@@ -71,6 +71,9 @@ class CartCalculator implements ICartCalculator
         $this->ruleCollection           = $contextOrRuleCollection instanceof RulesCollection ? $contextOrRuleCollection : $ruleCollectionOrListener;
         $this->persistentRuleRepository = new PersistentRuleRepository();
         $this->listener                 = $ruleCollectionOrListener instanceof Listener ? $ruleCollectionOrListener : $deprecated;
+        if(!$this->listener) {
+            $this->listener = new Listener();
+        }
         $this->compareStrategy          = new CompareStrategy();
     }
 
@@ -147,9 +150,7 @@ class CartCalculator implements ICartCalculator
             return false;
         }
 
-        if ($this->listener) {
-            $this->listener->calcProcessStarted();
-        }
+        $this->listener->calcProcessStarted();
 
         $appliedRules = 0;
 
@@ -265,9 +266,7 @@ class CartCalculator implements ICartCalculator
             $cart->setItems($newItems);
         }
 
-        if ($this->listener) {
-            $this->listener->processResult($result);
-        }
+        $this->listener->processResult($result);
 
         return $result;
     }
@@ -360,9 +359,7 @@ class CartCalculator implements ICartCalculator
      */
     protected function announceRuleCalculated($proc)
     {
-        if ($this->listener) {
-            $this->listener->ruleCalculated($proc);
-        }
+        $this->listener->ruleCalculated($proc);
     }
 
     /**

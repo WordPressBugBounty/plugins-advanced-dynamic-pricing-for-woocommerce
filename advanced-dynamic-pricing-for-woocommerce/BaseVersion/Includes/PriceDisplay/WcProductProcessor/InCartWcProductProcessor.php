@@ -5,6 +5,7 @@ namespace ADP\BaseVersion\Includes\PriceDisplay\WcProductProcessor;
 use ADP\BaseVersion\Includes\Cache\CacheHelper;
 use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\Core\Cart\Cart;
+use ADP\BaseVersion\Includes\Debug\Listener;
 use ADP\BaseVersion\Includes\Debug\ProductCalculatorListener;
 use ADP\BaseVersion\Includes\PriceDisplay\ProcessedGroupedProduct;
 use ADP\BaseVersion\Includes\PriceDisplay\ProcessedProductContainer;
@@ -24,7 +25,7 @@ class InCartWcProductProcessor implements IWcProductProcessor
     protected $context;
 
     /**
-     * @var ProductCalculatorListener
+     * @var Listener
      */
     protected $listener;
 
@@ -37,6 +38,9 @@ class InCartWcProductProcessor implements IWcProductProcessor
     {
         $this->context = adp_context();
         $this->listener = new ProductCalculatorListener();
+        if($this->context->isDebug()) {
+            $this->listener->subscribe(new ProductCalculatorListener());
+        }
     }
 
     public function withCart(Cart $cart)

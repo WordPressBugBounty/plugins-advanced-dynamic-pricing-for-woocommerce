@@ -171,6 +171,16 @@ interface Rule
     public function getSaleBadge();
 
     /**
+     * @param string $message
+     */
+    public function setMessageNoticeDiscount($message);
+
+    /**
+     * @return string
+     */
+    public function getMessageNoticeDiscount();
+
+    /**
      * @return \DateTime|null
      */
     public function getDateFrom();

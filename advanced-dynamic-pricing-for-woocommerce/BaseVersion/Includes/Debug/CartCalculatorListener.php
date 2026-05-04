@@ -9,13 +9,11 @@ use ADP\BaseVersion\Includes\CartProcessor\CartCouponsProcessorMerge\MergeCoupon
 use ADP\BaseVersion\Includes\CartProcessor\CartCouponsProcessorMerge\MergeCoupon\IMergeAdpCoupon;
 use ADP\BaseVersion\Includes\CartProcessor\CartCouponsProcessorMerge\MergeCoupon\IMergeCoupon;
 use ADP\BaseVersion\Includes\CartProcessor\CartCouponsProcessorMerge\MergeCoupon\RuleTriggerCoupon;
-use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\Core\Cart\Cart;
 use ADP\BaseVersion\Includes\Core\Cart\Coupon\CouponCart;
 use ADP\BaseVersion\Includes\Core\Cart\Coupon\CouponCartItem;
 use ADP\BaseVersion\Includes\Core\Cart\Coupon\CouponInterface;
 use ADP\BaseVersion\Includes\Core\Cart\Fee;
-use ADP\BaseVersion\Includes\Core\RuleProcessor\Listener;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\RuleProcessor;
 use ADP\BaseVersion\Includes\WC\WcAdpMergedCouponHelper;
 use ADP\BaseVersion\Includes\WC\WcCartItemFacade;
@@ -27,18 +25,8 @@ use WC_Session_Handler;
 
 defined('ABSPATH') or exit;
 
-class CartCalculatorListener implements Listener
+class CartCalculatorListener extends Listener
 {
-    /**
-     * @var Context
-     */
-    protected $context;
-
-    /**
-     * @var array
-     */
-    protected $totals;
-
     /**
      * @var array
      */
@@ -49,14 +37,8 @@ class CartCalculatorListener implements Listener
      */
     public function __construct($deprecated = null)
     {
-        $this->context       = adp_context();
-        $this->totals        = array();
+        parent::__construct($deprecated);
         $this->currentTotals = array();
-    }
-
-    public function withContext(Context $context)
-    {
-        $this->context = $context;
     }
 
     /**
@@ -80,11 +62,6 @@ class CartCalculatorListener implements Listener
      * @param Cart $cart
      */
     public function cartCompleted($cart)
-    {
-
-    }
-
-    public function calcProcessStarted()
     {
 
     }
@@ -537,11 +514,4 @@ class CartCalculatorListener implements Listener
         return array();
     }
 
-    /**
-     * @return array
-     */
-    public function getTotals()
-    {
-        return $this->totals;
-    }
 }

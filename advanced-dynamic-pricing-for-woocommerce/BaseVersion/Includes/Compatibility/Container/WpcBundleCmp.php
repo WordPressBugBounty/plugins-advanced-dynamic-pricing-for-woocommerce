@@ -11,6 +11,7 @@ use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Container\ContainerPriceTyp
 use ADP\BaseVersion\Includes\WC\WcCartItemFacade;
 
 use WPCleverWoosb;
+use WPCleverWoosb_Helper;
 
 defined('ABSPATH') or exit;
 
@@ -147,8 +148,12 @@ class WpcBundleCmp extends AbstractContainerCompatibility
         }
 
         if ($parentProduct instanceof \WC_Product_Woosb && !$parentProduct->is_fixed_price()) {
-            if ((float)$parentProduct->get_sale_price('edit') < (float)$parentProduct->get_regular_price('edit')) {
-                return (float)$parentProduct->get_sale_price('edit') - (float)$parentProduct->get_regular_price('edit');
+            if (WPCleverWoosb_Helper()->get_setting( 'bundled_price_from', 'sale_price' ) === 'regular_price') {
+                $childrenAmount = 0;
+                foreach ($children as $child) {
+                    $childrenAmount += (float)$child->getProduct()->get_regular_price('edit');
+                }
+                return $childrenAmount - (float)$parentProduct->get_regular_price('edit');
             }
             return 0.0;
         }

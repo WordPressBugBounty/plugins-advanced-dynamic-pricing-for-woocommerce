@@ -318,7 +318,7 @@ class RuleStorage
                         $excludeFilter = new SimpleFilter();
                         $excludeFilter->setType($excludeFilterData['type'])
                                     ->setValue($excludeFilterData['value']);
-                        
+
                         $filter->addExcludeFilter($excludeFilter);
                     }
                 }
@@ -523,7 +523,7 @@ class RuleStorage
                     $excludeFilter = new SimpleFilter();
                     $excludeFilter->setType($excludeFilterData['type'])
                                 ->setValue($excludeFilterData['value']);
-                    
+
                     $filter->addExcludeFilter($excludeFilter);
                 }
             }
@@ -1171,6 +1171,10 @@ class RuleStorage
         }
         if (isset($ruleData->advertising['sale_badge'])) {
             $rule->setSaleBadge($ruleData->advertising['sale_badge']);
+        }
+
+        if (isset($ruleData->advertising['message_notice_discount'])) {
+            $rule->setMessageNoticeDiscount($ruleData->advertising['message_notice_discount']);
         }
     }
 

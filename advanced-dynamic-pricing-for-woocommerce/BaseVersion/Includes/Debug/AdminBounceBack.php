@@ -23,6 +23,12 @@ class AdminBounceBack
         $this->profiler = $profiler;
     }
 
+    public static function isEnabled()
+    {
+        //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        return ! empty($_REQUEST[self::REQUEST_KEY]);
+    }
+
     public function catchBounceEvent()
     {
         //phpcs:ignore WordPress.Security.NonceVerification.Recommended

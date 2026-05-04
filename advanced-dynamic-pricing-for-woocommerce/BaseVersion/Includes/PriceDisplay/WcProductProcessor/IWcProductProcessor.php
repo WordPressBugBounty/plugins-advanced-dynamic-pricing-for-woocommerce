@@ -4,7 +4,7 @@ namespace ADP\BaseVersion\Includes\PriceDisplay\WcProductProcessor;
 
 use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\Core\Cart\Cart;
-use ADP\BaseVersion\Includes\Debug\ProductCalculatorListener;
+use ADP\BaseVersion\Includes\Debug\Listener;
 use ADP\BaseVersion\Includes\PriceDisplay\ProcessedGroupedProduct;
 use ADP\BaseVersion\Includes\PriceDisplay\ProcessedProductSimple;
 use ADP\BaseVersion\Includes\PriceDisplay\ProcessedVariableProduct;
@@ -34,7 +34,7 @@ interface IWcProductProcessor
     public function withContext(Context $context);
 
     /**
-     * @return ProductCalculatorListener
+     * @return Listener
      */
     public function getListener();
 

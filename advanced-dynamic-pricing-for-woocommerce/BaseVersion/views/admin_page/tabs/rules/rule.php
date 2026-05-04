@@ -237,7 +237,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                                         .'<br><a href="%s" target="_blank">' .__('Read docs', 'advanced-dynamic-pricing-for-woocommerce') .'</a>',
                                     array('br' => array(), 'a' => array('href' => array(), 'target' => array()))
                                 ),
-                                esc_url('https://docs.algolplus.com/algol_pricing/rules/rules-sections/product-filters/')
+                                esc_url('https://docs.algolplus.com/advanced-dynamic-pricing/rules-sections/product-filters/')
                             );
                         ?>
                     </p>
@@ -252,7 +252,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                                         .'<br><a href="%s" target="_blank">' .__('Read docs', 'advanced-dynamic-pricing-for-woocommerce') .'</a>',
                                     array('br' => array(), 'a' => array('href' => array(), 'target' => array()))
                                 ),
-                                esc_url('https://docs.algolplus.com/algol_pricing/rules/rules-sections/product-filters/')
+                                esc_url('https://docs.algolplus.com/advanced-dynamic-pricing/rules-sections/product-filters/')
                             );
                         ?>
                     </p>
@@ -278,7 +278,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                                     '<br><a href="%s" target="_blank">' .__('Read docs', 'advanced-dynamic-pricing-for-woocommerce') .'</a>',
                                 array('a' => array('href' => array(), 'target' => array()), 'br' => array())
                             ),
-                            esc_url('https://docs.algolplus.com/algol_pricing/rules/rules-sections/product-discounts/')
+                            esc_url('https://docs.algolplus.com/advanced-dynamic-pricing/rules-sections/product-discounts/')
                         );
                     ?>
                 </p>
@@ -370,7 +370,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                                 .'<br><a href="%s" target="_blank">' .__('Read docs', 'advanced-dynamic-pricing-for-woocommerce') .'</a>',
                             array('br' => array(), 'a' => array('href' => array(), 'target' => array()), )
                         ),
-                        esc_url('https://docs.algolplus.com/algol_pricing/rules/rules-sections/free-products/')
+                        esc_url('https://docs.algolplus.com/advanced-dynamic-pricing/rules-sections/free-products/')
                     );
                     ?>
                 </p>
@@ -449,7 +449,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                                 .'<br><a href="%s" target="_blank">' .__('Read docs', 'advanced-dynamic-pricing-for-woocommerce') .'</a>',
                             array('br' => array(), 'a' => array('href' => array(), 'target' => array()), )
                         ),
-                        esc_url('https://docs.algolplus.com/algol_pricing/rules/rules-sections/cart-adjustments/')
+                        esc_url('https://docs.algolplus.com/advanced-dynamic-pricing/rules-sections/cart-adjustments/')
                     );
                     ?>
                 </p>
@@ -474,7 +474,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                                 .'<br><a href="%s" target="_blank">' .__('Read docs', 'advanced-dynamic-pricing-for-woocommerce') .'</a>',
                             array('br' => array(), 'a' => array('href' =>array(), 'target' => array()))
                         ),
-                        esc_url('https://docs.algolplus.com/algol_pricing/rules/rules-sections/cart-conditions/')
+                        esc_url('https://docs.algolplus.com/advanced-dynamic-pricing/rules-sections/cart-conditions/')
                     );
                 ?>
                 <h4 style="margin-bottom: 0px;"><?php esc_html_e('Popular conditions:',
@@ -523,7 +523,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                         <span class="wdp-description-cut-less wdp-link"><?php esc_html_e('Less', 'advanced-dynamic-pricing-for-woocommerce')?></span>
                     </div>
                 </div>
-                <a href="https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/"
+                <a href="https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/?utm_source=plugin&utm_medium=banner&utm_campaign=2026"
                    target=_blank><?php esc_html_e('Need more conditions?', 'advanced-dynamic-pricing-for-woocommerce') ?></a>
             </div>
             <div class="wdp-wrapper wdp-column">
@@ -553,7 +553,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.",
                                 .'<br><a href="%s" target="_balnk">' .__('Read docs', 'advanced-dynamic-pricing-for-woocommerce') .'</a>',
                             array('br' => array(), 'a' => array('href' => array(), 'target' => array()))
                         ),
-                        esc_url('https://docs.algolplus.com/algol_pricing/rules/rules-sections/limits/')
+                        esc_url('https://docs.algolplus.com/advanced-dynamic-pricing/rules-sections/limits/')
                     );
                     ?>
                 </p>

@@ -43,7 +43,7 @@ defined('ABSPATH') or exit;
                                 .'<br><a href="%s" target="_blank">' .__('Read docs','advanced-dynamic-pricing-for-woocommerce') .'</a>',
                             array('br' => array(), 'a' => array('href' => array(), 'target' => array()), )
                         ),
-                        esc_url('https://docs.algolplus.com/algol_pricing/rules/rules-sections/role-discounts/')
+                        esc_url('https://docs.algolplus.com/advanced-dynamic-pricing/rules-sections/role-discounts/')
                     );
                     ?>
                 </p>
@@ -83,7 +83,7 @@ defined('ABSPATH') or exit;
                                 .'<br><a href="%s" target="_blank">' .__('Read docs', 'advanced-dynamic-pricing-for-woocommerce') .'</a>',
                             array('br' => array(), 'a' =>array('href' => array(), 'target' => array()), )
                         ),
-                        esc_url('https://docs.algolplus.com/algol_pricing/rules/rules-sections/bulk-discount/')
+                        esc_url('https://docs.algolplus.com/advanced-dynamic-pricing/rules-sections/bulk-discount/')
                     );
                     ?>
                 </p>
@@ -98,7 +98,7 @@ defined('ABSPATH') or exit;
                                         'advanced-dynamic-pricing-for-woocommerce') .'</a>',
                                     array('a' => array('href' => array(), 'target' => array()), 'br' => array())
                                 ),
-                                esc_url('https://docs.algolplus.com/algol_pricing/rules/rules-sections/bulk-discount/#bulk-tier')
+                                esc_url('https://docs.algolplus.com/advanced-dynamic-pricing/rules-sections/bulk-discount/#bulktier-discount-mode')
                             );
                         ?>
                     </span>

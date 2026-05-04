@@ -98,14 +98,16 @@ class CacheHelper
      */
     public static function loadActiveRules($deprecated = null): RulesCollection
     {
+        /** @var RuleStorage $storage */
+        // must load this class before reading rules from cache, to avoid __PHP_Incomplete_Class for custom conditions
+        $storage         = Factory::get("Database_RuleStorage");
+
         $rulesCollection = self::cacheGet(self::KEY_ACTIVE_RULES_COLLECTION);
 
         if ($rulesCollection instanceof RulesCollection) {
             return $rulesCollection;
         }
 
-        /** @var RuleStorage $storage */
-        $storage         = Factory::get("Database_RuleStorage");
         $ruleRepository = new RuleRepository();
         $rows            = $ruleRepository->getRules(array('active_only' => true, 'rule_types' => array(RuleTypeEnum::COMMON()->getValue(), RuleTypeEnum::EXCLUSIVE()->getValue())));
         $rulesCollection = $storage->buildRules($rows);
@@ -124,6 +126,10 @@ class CacheHelper
      */
     public static function loadRules($ruleIds, ?Context $context = null)
     {
+        /** @var RuleStorage $storage */
+        // must load this class before reading rules from cache, to avoid __PHP_Incomplete_Class for custom conditions
+        $storage         = Factory::get("Database_RuleStorage");
+
         $ruleIds = (array)$ruleIds;
         $ruleIds = array_map('intval', $ruleIds);
 
@@ -152,8 +158,6 @@ class CacheHelper
             $context = new Context();
         }
 
-        /** @var RuleStorage $storage */
-        $storage         = Factory::get("Database_RuleStorage");
         $storage->withContext($context);
         $ruleRepository = new RuleRepository();
         $rows            = $ruleRepository->getRules(array('id' => $notCachedRuleIds));
@@ -172,6 +176,10 @@ class CacheHelper
      */
     public static function loadProductOnlyRules($ruleIds, ?Context $context = null)
     {
+        /** @var RuleStorage $storage */
+        // must load this class before reading rules from cache, to avoid __PHP_Incomplete_Class for custom conditions
+        $storage         = Factory::get("Database_RuleStorage");
+
         $ruleIds = (array)$ruleIds;
         $ruleIds = array_map('intval', $ruleIds);
 
@@ -200,8 +208,6 @@ class CacheHelper
             $context = new Context();
         }
 
-        /** @var RuleStorage $storage */
-        $storage         = Factory::get("Database_RuleStorage");
         $storage->withContext($context);
         $ruleRepository = new RuleRepository();
         $rows            = $ruleRepository->getRules(array('id' => $notCachedRuleIds));

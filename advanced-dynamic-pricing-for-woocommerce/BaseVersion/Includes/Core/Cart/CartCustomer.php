@@ -91,6 +91,8 @@ class CartCustomer
         $this->isVatExempt             = false;
         $this->removedFreeItemsList    = array();
         $this->removedAutoAddItemsList = array();
+        $this->addedRecommendedAutoAddItemsList = array();
+        $this->removedRecommendedPromotions = array();
         $this->meta                    = array();
 
         $this->customerTaxAdj = null;
@@ -517,7 +519,7 @@ class CartCustomer
 
     public function getHash() {
         $data = [
-            // $this->getJson(),
+            $this->getJson(),
 
             'removedFreeItemsList' => array_map(function($item) {
                 return $item->toArray();

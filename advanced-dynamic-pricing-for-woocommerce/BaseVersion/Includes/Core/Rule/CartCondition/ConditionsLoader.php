@@ -172,6 +172,11 @@ class ConditionsLoader
             $condition->setInclTax($inclTax);
         }
 
+        if($condition instanceof Interfaces\PromotionMessageCondition) {
+            $condition->setSubtotalFrom($data['options'][$condition::SUBTOTAL_FROM_KEY] ?? null);
+            $condition->setPromotionMessage($data['options'][$condition::PROMOTION_MESSAGE_KEY] ?? null);
+        }
+
         if ($condition->isValid()) {
             return $condition;
         } else {

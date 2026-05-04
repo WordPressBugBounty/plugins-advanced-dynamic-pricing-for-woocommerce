@@ -1,10 +1,11 @@
 <?php
 
 namespace ADP\BaseVersion\Includes\Context;
+use ADP\BaseVersion\Includes\Helpers\Serializable;
 
 defined('ABSPATH') or exit;
 
-class Currency
+class Currency extends Serializable
 {
     /**
      * @var string

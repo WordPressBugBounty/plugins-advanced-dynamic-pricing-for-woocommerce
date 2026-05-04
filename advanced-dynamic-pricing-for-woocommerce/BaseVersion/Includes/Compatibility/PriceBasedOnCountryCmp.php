@@ -35,11 +35,14 @@ class PriceBasedOnCountryCmp
     public function prepareHooks()
     {
         if ($this->isActive()) {
-            
+
             HighLanderShortcuts::removeFilters(
                 [
                     'woocommerce_package_rates' => [
                         ["WCPBC_Frontend_Pricing", "package_rates"]
+                    ],
+                    'woocommerce_add_cart_item' => [
+                        ['WCPBC_Frontend_Pricing', 'set_cart_item_price']
                     ],
                     'woocommerce_get_cart_item_from_session' => [
                         ['WCPBC_Frontend_Pricing', 'set_cart_item_price']

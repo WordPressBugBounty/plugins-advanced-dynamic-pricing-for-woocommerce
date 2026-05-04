@@ -10,10 +10,10 @@ defined('ABSPATH') or exit;
         <div class="wdp-row wdp-title-wrapper">
             <h3 class="wdp-column wdp-help-title"><?php esc_html_e('Help', 'advanced-dynamic-pricing-for-woocommerce'); ?></h3>
             <div class="wdp-column">
-                <a class="wdp_docs_links" href="<?php echo esc_url('https://docs.algolplus.com/category/algol_pricing/');?>" target="_blank"><?php esc_html_e('Docs site', 'advanced-dynamic-pricing-for-woocommerce'); ?></a>
+                <a class="wdp_docs_links" href="<?php echo esc_url('https://docs.algolplus.com/category/advanced-dynamic-pricing/');?>" target="_blank"><?php esc_html_e('Docs site', 'advanced-dynamic-pricing-for-woocommerce'); ?></a>
             </div>
             <div class="wdp-column">
-                <a class="wdp_docs_links" href="<?php echo esc_url('https://docs.algolplus.com/category/algol_pricing/faq/');?>" target="_blank"><?php esc_html_e('FAQ', 'advanced-dynamic-pricing-for-woocommerce'); ?></a>
+                <a class="wdp_docs_links" href="<?php echo esc_url('https://docs.algolplus.com/category/advanced-dynamic-pricing/faq/');?>" target="_blank"><?php esc_html_e('FAQ', 'advanced-dynamic-pricing-for-woocommerce'); ?></a>
             </div>
             <div class="wdp-column">
                 <a class="wdp_docs_links" href="<?php echo esc_url('https://docs.algolplus.com/support/');?>" target="_blank"><?php esc_html_e('Support', 'advanced-dynamic-pricing-for-woocommerce'); ?></a>

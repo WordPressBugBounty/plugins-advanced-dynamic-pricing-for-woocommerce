@@ -501,39 +501,6 @@ class Context
         return $this->availableTaxClassSlugs;
     }
 
-    public function setMode($mode)
-    {
-        if (self::MODE_PRODUCTION === $mode || self::MODE_DEBUG === $mode) {
-            $this->mode = $mode;
-        }
-    }
-
-    /**
-     * @param string $mode
-     *
-     * @return bool
-     */
-    public function isMode($mode)
-    {
-        return $this->mode === $mode;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isProductionMode()
-    {
-        return $this->mode === self::MODE_PRODUCTION;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isDebugMode()
-    {
-        return $this->mode === self::MODE_DEBUG;
-    }
-
     /**
      * TODO implement
      *
@@ -762,6 +729,18 @@ class Context
 
     public function isBaseVersion(): bool {
         return !defined('WC_ADP_PRO_VERSION_PATH');
+    }
+
+    public function isDebug()
+    {
+        return is_super_admin($this->getCurrentUser()->ID) 
+            && ($this->getOption("show_debug_bar")
+                || Factory::callStaticMethod("Debug_AdminBounceBack", "isEnabled")
+            );
+    }
+
+    public function useCachedCart() {
+        return $this->getOption('dont_recalculate_cart_if_not_changed') && !$this->isDebug();
     }
 
     public function __serialize() {

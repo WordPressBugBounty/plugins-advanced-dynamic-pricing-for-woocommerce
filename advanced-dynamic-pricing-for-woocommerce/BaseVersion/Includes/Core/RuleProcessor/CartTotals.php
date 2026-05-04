@@ -68,12 +68,13 @@ class CartTotals
                     $price = min([$price, $salePrice]);
                 }
             } else {
-                $facade    = $item->getWcItem();
-                if($facade->getNewPrice() !== null) {
-                    $price = $facade->getNewPrice();
-                } else {
-                    $price = $product->is_on_sale('edit') ? (float)$product->get_sale_price('edit') : $item->getPrice();
-                }
+                $price = $product->is_on_sale('edit') ? (float)$product->get_sale_price('edit') : $item->getPrice();
+                // $facade    = $item->getWcItem();
+                // if($facade->getNewPrice() !== null) {
+                //     $price = $facade->getNewPrice();
+                // } else {
+                //     $price = $product->is_on_sale('edit') ? (float)$product->get_sale_price('edit') : $item->getPrice();
+                // }
                 $price *= $item->getQty();
             }
 

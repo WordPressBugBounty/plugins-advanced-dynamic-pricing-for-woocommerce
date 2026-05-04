@@ -56,7 +56,8 @@ class WcsAttCmp
         }
 
         if ($this->isActive() && isset($this->wcsAtt->product_data) ) {
-            $this->wcsAtt->product_data = new ADP_WCS_ATT_Product_Data_Wrapper($this->wcsAtt->product_data);
+            ADP_WCS_ATT_Product_Data_Wrapper::init();
+            $this->wcsAtt->product_data = new ADP_WCS_ATT_Product_Data_Wrapper();
         }
     }
 
@@ -71,66 +72,52 @@ class WcsAttCmp
 
 if (!class_exists('ADP_WCS_ATT_Product_Data_Wrapper')) {
     class ADP_WCS_ATT_Product_Data_Wrapper {
-        private $handle;
-
-        public function __construct($handle) {
-            $this->handle = ($handle instanceof self) ? $handle->handle : $handle;
+        private static $key = '_adp_wcsatt_';
+        public static function init() {
+            self::add_hooks();
         }
 
-        protected function get_id_val($product, $key) {
-            if (!is_object($product) || !method_exists($product, 'get_id')) {
-                return null;
-            }
-
-            return md5($product->get_id() . $key . 'adp_wcsatt_unique');
+        private static function add_hooks() {
+            add_action( 'add_post_metadata', array( __CLASS__, 'ignore_adp_wcsatt_runtime_meta' ), 10, 3 );
+            add_action( 'update_post_metadata', array( __CLASS__, 'ignore_adp_wcsatt_runtime_meta' ), 10, 3 );
         }
-
 
         public function get($product, $key, $default = null) {
-            $id_val = $this->get_id_val($product, $key);
-            if (!$id_val) return $default;
-
             if (method_exists($product, 'get_meta')) {
-                $value = $product->get_meta('_adp_wcsatt_' . $id_val, true);
-                if (!empty($value)) {
-                    return maybe_unserialize($value);
+                $data = $product->get_meta(self::$key, true);
+                if( is_array($data) AND isset($data[$key]) ) {
+                    return $data[$key];
                 }
             }
-
-            if ($this->handle && method_exists($this->handle, 'get')) {
-                return $this->handle->get($product, $key, $default);
-            }
-
             return $default;
         }
 
         public function set($product, $key, $value) {
-            $id_val = $this->get_id_val($product, $key);
-            if (!$id_val) return;
-
+            $data = $product->get_meta(self::$key, true);
+            if( empty($data) )
+                $data = array();
+            $data[$key] = $value;
             if (method_exists($product, 'update_meta_data')) {
-                $product->update_meta_data('_adp_wcsatt_' . $id_val, maybe_serialize($value));
-            }
-
-            if ($this->handle && method_exists($this->handle, 'set')) {
-                $this->handle->set($product, $key, $value);
+                $product->add_meta_data(self::$key, $data);
             }
         }
 
         public function delete($product, $key) {
-            $id_val = $this->get_id_val($product, $key);
-            if (!$id_val) return false;
-
-            if (method_exists($product, 'delete_meta_data')) {
-                $product->delete_meta_data('_adp_wcsatt_' . $id_val);
+            $data = $product->get_meta(self::$key, true);
+            if( empty($data) )
+                $data = array();
+            unset( $data[$key] );
+            if (method_exists($product, 'update_meta_data')) {
+                $product->add_meta_data(self::$key, $data);
             }
-
-            if ($this->handle && method_exists($this->handle, 'delete')) {
-                return $this->handle->delete($product, $key);
-            }
-
             return false;
         }
-    }
 
+        public static function ignore_adp_wcsatt_runtime_meta( $check, $object_id, $meta_key ) {
+            if ( self::$key !== $meta_key ) {
+                return $check;
+            }
+            return 0;
+        }
+    }
 }

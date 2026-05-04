@@ -88,7 +88,7 @@ defined('ABSPATH') or exit;
                 <div>
                     <span class="wdp-need-more-settings">
                         <b><?php esc_html_e('Need more settings?', 'advanced-dynamic-pricing-for-woocommerce') ?>
-                        <a href="https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/"
+                        <a href="https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/?utm_source=plugin&utm_medium=banner&utm_campaign=2026"
                             target=_blank><?php esc_html_e('Buy Pro Version', 'advanced-dynamic-pricing-for-woocommerce') ?></a>
                         </b>
                 </span>

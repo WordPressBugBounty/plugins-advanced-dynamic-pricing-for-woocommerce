@@ -47,8 +47,8 @@ foreach ($groups as $group) {
             <div class="section tools-section" id="<?php echo esc_attr($id); ?>">
                 <div class="section-tab-header" style="display: flex; align-items: center;">
                     <h2><?php echo esc_html($label); ?></h2>
-                    <?php if ($label === "Manage bulk ranges"): ?>
-                        <a href="https://docs.algolplus.com/algol_pricing/manage-bulk-ranges/" style="margin-left: 10px; padding-top: 3px;"
+                    <?php if ($label === "Update bulk ranges (CSV)"): ?>
+                        <a href="https://docs.algolplus.com/advanced-dynamic-pricing/tools/update-bulk-ranges-csv/" style="margin-left: 10px; padding-top: 3px;"
                            target="_blank"><?php esc_html_e('Read short guide', 'advanced-dynamic-pricing-for-woocommerce') ?></a>
                     <?php endif; ?>
                 </div>

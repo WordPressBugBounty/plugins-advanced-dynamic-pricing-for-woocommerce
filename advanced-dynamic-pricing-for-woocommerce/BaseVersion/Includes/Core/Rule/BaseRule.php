@@ -115,6 +115,11 @@ abstract class BaseRule
     /**
      * @var string
      */
+    protected $messageNoticeDiscount;
+
+    /**
+     * @var string
+     */
     protected $saleBadge;
 
     /**
@@ -563,6 +568,21 @@ abstract class BaseRule
     public function getSaleBadge()
     {
         return $this->saleBadge;
+    }
+
+    /**
+     * @param string $message
+     */
+    public function setMessageNoticeDiscount($message)
+    {
+        $this->messageNoticeDiscount = is_string($message) ? esc_html($message) : "";
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessageNoticeDiscount(){
+        return $this->messageNoticeDiscount;
     }
 
     /**

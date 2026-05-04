@@ -5,7 +5,7 @@ Tags: woocommerce, coupons, discounts, dynamic pricing, bulk discount
 Requires PHP: 7.1
 Requires at least: 6.1
 Tested up to: 6.9
-Stable tag: 4.13.0
+Stable tag: 4.13.1
 License: GNU General Public License v3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -13,9 +13,9 @@ The discount plugin for WooCommerce supports any dynamic pricing discount: bulk 
 
 == Description ==
 
-Free version of [Advanced Dynamic Pricing for WooCommerce](https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/)  supports all discount types  -  bulk discounts,  **role discounts, bulk discounts for roles**, cart discounts based on conditions, product discounts based on categories, and etc. You can even  set up **bogo and gifts**. [Check out examples of rules supported by the free version](https://docs.algolplus.com/algol_pricing/rules/examples-of-rules-supported-by-the-free-version/).
+Free version of [Advanced Dynamic Pricing for WooCommerce](https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/?utm_source=wordpress&utm_medium=banner&utm_campaign=2026)  supports all discount types  -  bulk discounts,  **role discounts, bulk discounts for roles**, cart discounts based on conditions, product discounts based on categories, and etc. You can even  set up **bogo and gifts**. [Check out examples of rules supported by the free version](https://docs.algolplus.com/advanced-dynamic-pricing/rules/examples-of-rules-supported-by-the-free-version/).
 
-Pro version offers advanced features, including **gift selection** for customers, customizable promotional discount messages, coupon activation by URL, product **filtering by multiple parameters** (such as category and color), discounts based on purchase history,  discounts only for selected customers, and much more. [Check out examples of rules implemented using pro version](https://docs.algolplus.com/algol_pricing/rules/examples-of-rules-implemented-using-pro-version/).
+Pro version offers advanced features, including **gift selection** for customers, customizable promotional discount messages, coupon activation by URL, product **filtering by multiple parameters** (such as category and color), discounts based on purchase history,  discounts only for selected customers, and much more. [Check out examples of rules implemented using pro version](https://docs.algolplus.com/advanced-dynamic-pricing/rules/examples-of-rules-implemented-using-pro-version/).
 
 = Features of Free Plugin =
 * Multiple product pricing, cart conditions, adjustments, and discounts — Create all possible discount strategies: from simple product discount to BOGO with condition.
@@ -28,7 +28,7 @@ Let's review the most used types of discounts.
 
 = Product Discount =
 Product discounts in online stores refer to a reduction in the original pricing of items, offered for a limited time or under specific conditions.
-[Examples of the simple discount rules](https://docs.algolplus.com/algol_pricing/rules/frequently-created-rules/product-discounts-2/)
+[Examples of the simple discount rules](https://docs.algolplus.com/advanced-dynamic-pricing/rules/frequently-created-rules/product-discounts-2/)
 
 * Black Friday / Cyber Monday weekend (Percentage discount to the whole shop)
 * Set discount on product
@@ -39,8 +39,8 @@ Product discounts in online stores refer to a reduction in the original pricing 
 * 3+ products by the fixed price per item
 
 = Bulk Discount =
-Advanced Dynamic Pricing for WooCommerce provides a convenient and effective solution for implementing [bulk or tier discounts](https://docs.algolplus.com/algol_pricing/rules/rules-sections/bulk-discount/) in an online store.
-[Example of the rules:](https://docs.algolplus.com/algol_pricing/rules/frequently-created-rules/bulk/)
+Advanced Dynamic Pricing for WooCommerce provides a convenient and effective solution for implementing [bulk or tier discounts](https://docs.algolplus.com/advanced-dynamic-pricing/rules/rules-sections/bulk-discount/) in an online store.
+[Example of the rules:](https://docs.algolplus.com/advanced-dynamic-pricing/rules/frequently-created-rules/bulk/)
 
 * Bulk Discounts based on quantities
 * Bulk discount for Specific Categories
@@ -52,7 +52,7 @@ Advanced Dynamic Pricing for WooCommerce provides a convenient and effective sol
 
 = Role Discount =
 Role discounts, which offer price reductions based on customer status or roles (such as employees, students, wholesalers or loyal customers), can enhance profits by fostering stronger customer relationships and encouraging repeat purchases.
-[Example of the rules:](https://docs.algolplus.com/algol_pricing/rules/frequently-created-rules/role-discount/)
+[Example of the rules:](https://docs.algolplus.com/advanced-dynamic-pricing/rules/frequently-created-rules/role-discount/)
 
 * Discount for First Orders (Registered Users only)
 * Simplest rule for customer
@@ -60,7 +60,7 @@ Role discounts, which offer price reductions based on customer status or roles (
 
 = Cart Discount =
 A cart discount helps increase profits by encouraging customers to buy more items to get a price reduction.
-[Example of the rules:](https://docs.algolplus.com/algol_pricing/rules/frequently-created-rules/cart-discount/)
+[Example of the rules:](https://docs.algolplus.com/advanced-dynamic-pricing/rules/frequently-created-rules/cart-discount/)
 
 * 10% discount if subtotal is greater than $100
 * 15% discount if total number of quantities in the cart is above 6 nos
@@ -73,7 +73,7 @@ A cart discount helps increase profits by encouraging customers to buy more item
 
 = Buy One — Get One =
 The BOGO (Buy One — Get One) offer can boost profits by increasing total sales volume and attracting more customers.
-[Example of the rules:](https://docs.algolplus.com/algol_pricing/rules/frequently-created-rules/bogo-discount/)
+[Example of the rules:](https://docs.algolplus.com/advanced-dynamic-pricing/rules/frequently-created-rules/bogo-discount/)
 
 * Buy 2 and get the same third with 50%
 * Buy any 1 from Category A and get 1 from Category B
@@ -86,7 +86,7 @@ The BOGO (Buy One — Get One) offer can boost profits by increasing total sales
 
 = Gifts =
 Using gifts as part of a pricing strategy works like a discount but without lowering the product’s price directly.
-[Example of the rules:](https://docs.algolplus.com/algol_pricing/rules/frequently-created-rules/gifts/)
+[Example of the rules:](https://docs.algolplus.com/advanced-dynamic-pricing/rules/frequently-created-rules/gifts/)
 
 * Add free products based on subtotal amount
 * Gift for selected model and colors
@@ -97,25 +97,25 @@ Using gifts as part of a pricing strategy works like a discount but without lowe
 Offering a discount on some products sold together at a fixed price can significantly increase profits by encouraging customers to purchase more items at once
 Example of the rules:
 
-* [3 any products for 100](https://docs.algolplus.com/algol_pricing/rules/frequently-created-rules/product-discounts-2/#s13)
+* [3 any products for 100](https://docs.algolplus.com/advanced-dynamic-pricing/rules/frequently-created-rules/product-discounts-2/#s13)
 
 = Discount cheapest product 50% (Pro) =
 The discount on the second cheapest product helps increase profits by encouraging customers to buy this item instead of only choosing the cheapest one.
 Examples of the rules:
 
-* [Get 50% discount on the cheapest item in the cart (Pro)](https://docs.algolplus.com/algol_pricing/rules/frequently-created-rules/product-discounts-2/#s2)
-* [50% off for every 2nd item (Pro)](https://docs.algolplus.com/algol_pricing/rules/frequently-created-rules/product-discounts-2/#s14)
+* [Get 50% discount on the cheapest item in the cart (Pro)](https://docs.algolplus.com/advanced-dynamic-pricing/rules/frequently-created-rules/product-discounts-2/#s2)
+* [50% off for every 2nd item (Pro)](https://docs.algolplus.com/advanced-dynamic-pricing/rules/frequently-created-rules/product-discounts-2/#s14)
 
 = PRO version of the plugin has an ultimate sets of the pricing features for your store! =
-* [Advertising section of the rule](https://docs.algolplus.com/algol_pricing/rules/rules-sections/advertising-pro/) — boost up your sales and announce about the discount and the gifts using the power of the advertising!
-* [Allow to choose the gifts](https://docs.algolplus.com/algol_pricing/rules/rules-sections/free-products/) to your customers from the products’ list or even from the whole product category.
-* Add the product automatically with the discount — [Auto Add to Cart section](https://docs.algolplus.com/algol_pricing/rules/rules-sections/auto-add-to-cart-pro/) helps you to create the rule with the recommended product in the cart or add the product with the discounted price to the cart automatically.
-* Use a lot of possibilities of the [cart discounts](https://docs.algolplus.com/algol_pricing/rules/rules-sections/cart-adjustments/) — add the free shipping method, percentage fee, disable the appliance of the WooCommerce coupons or make a tax exemption.
-* [Advanced discount conditions](https://docs.algolplus.com/algol_pricing/rules/rules-sections/cart-conditions/) — create the discount by the cart condition on the subtotal, shipping method, or customer’s properties such as orders amount and sum of the spent amount by the customer.
+* [Advertising section of the rule](https://docs.algolplus.com/advanced-dynamic-pricing/rules/rules-sections/advertising-pro/) — boost up your sales and announce about the discount and the gifts using the power of the advertising!
+* [Allow to choose the gifts](https://docs.algolplus.com/advanced-dynamic-pricing/rules/rules-sections/free-products/) to your customers from the products’ list or even from the whole product category.
+* Add the product automatically with the discount — [Auto Add to Cart section](https://docs.algolplus.com/advanced-dynamic-pricing/rules/rules-sections/auto-add-to-cart-pro/) helps you to create the rule with the recommended product in the cart or add the product with the discounted price to the cart automatically.
+* Use a lot of possibilities of the [cart discounts](https://docs.algolplus.com/advanced-dynamic-pricing/rules/rules-sections/cart-adjustments/) — add the free shipping method, percentage fee, disable the appliance of the WooCommerce coupons or make a tax exemption.
+* [Advanced discount conditions](https://docs.algolplus.com/advanced-dynamic-pricing/rules/rules-sections/cart-conditions/) — create the discount by the cart condition on the subtotal, shipping method, or customer’s properties such as orders amount and sum of the spent amount by the customer.
 * [Activating rule by the coupon and URL coupons](https://algolplus.com/blog/10-of-the-most-inspiring-advanced-dynamic-pricing-ideas/#Get_customers_to_be_active) — Activate any of your rule by the inputting the coupon code in the cart or on the checkout. Also there’s a possibility to  activate the rules by the URL. That makes more easy sending the coupons to the customers by the email.
-* [Product Collection](https://docs.algolplus.com/algol_pricing/exclusively-in-pro/product-collections-pro/) — convenient way to filter out the products on your store to create more discount strategies on your site such as a discount for the storage remains, zero-sales products and [moreover](https://docs.algolplus.com/algol_pricing/exclusively-in-pro/product-collection-examples/).
-* More ways to adjust your [product filter](https://docs.algolplus.com/algol_pricing/rules/rules-sections/product-filters/) — create the 100% discount on the second cheapest product.
-* [Exclusive rules type](https://docs.algolplus.com/algol_pricing/rules/type-of-rules/) that allows to apply one of many discounts to the products.
+* [Product Collection](https://docs.algolplus.com/advanced-dynamic-pricing/exclusively-in-pro/product-collections-pro/) — convenient way to filter out the products on your store to create more discount strategies on your site such as a discount for the storage remains, zero-sales products and [moreover](https://docs.algolplus.com/advanced-dynamic-pricing/exclusively-in-pro/product-collection-examples/).
+* More ways to adjust your [product filter](https://docs.algolplus.com/advanced-dynamic-pricing/rules/rules-sections/product-filters/) — create the 100% discount on the second cheapest product.
+* [Exclusive rules type](https://docs.algolplus.com/advanced-dynamic-pricing/rules/type-of-rules/) that allows to apply one of many discounts to the products.
 * A lot of new flexible options in the plugin’s settings — Adjust your discount as you need it
 That’s not all possible functions of the PRO version of the Advanced Dynamic Pricing plugin! Check our [demo site](http://demo.algolplus.com/wp-admin) to check it all!
 
@@ -157,19 +157,19 @@ It's a PRO feature. You should turn on option "Calculate 'On Sale' badge for var
 = Is it compatible with WPML? WOOCS ? =
 Yes.
 = Compatibility with my theme/plugin =
-Free and pro versions use same core, so you can test it using free version. [Please, visit the link to see detailed reply](https://docs.algolplus.com/algol_pricing/faq/common-3/)
+Free and pro versions use same core, so you can test it using free version. [Please, visit the link to see detailed reply](https://docs.algolplus.com/advanced-dynamic-pricing/faq/common-3/)
 = How to allow customer to select free product =
-You should create package rule and set zero price for free product. [Please, check 2nd example](https://docs.algolplus.com/algol_pricing/rules/frequently-created-rules/bogo-discount/)
+You should create package rule and set zero price for free product. [Please, check 2nd example](https://docs.algolplus.com/advanced-dynamic-pricing/rules/frequently-created-rules/bogo-discount/)
 = How to customize bulk tables or row "amount saved" =
 You should copy necessary file from folder “BaseVersion/templates” to folder “advanced-dynamic-pricing-for-woocommerce” (create it in active theme)
 = The rules are not applied to orders if I use button "Add order" (>WooCommerce>Orders) =
 This form adds new order directly to the database. But all pricing plugins work with cart items. Use our plugin [Phone Orders](https://wordpress.org/plugins/phone-orders-for-woocommerce/) to add backend orders.
 = I can't change quantity or delete item from cart =
-It's a conflict with another plugin which modifies cart items too. You should turn on debugbar and send us report/json file. [Read short guide.](https://docs.algolplus.com/algol_pricing/settings-algol_pricing/debug/)
+It's a conflict with another plugin which modifies cart items too. You should turn on debugbar and send us report/json file. [Read short guide.](https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol_pricing/debug/)
 = I marked checkbox "Add products to cart at normal cost and add coupon...", but I don't see any coupons in the cart =
 You should visit >WooCommerce>Settings and mark "Enable the use of coupon codes".
 = I need custom cart condition =
-You should be PHP programmer to do it. [Please, review sample addon and adapt it for your needs](https://docs.algolplus.com/algol_pricing/developers-algol_pricing/custom-code-developers-algol_pricing/program-custom-condition/)
+You should be PHP programmer to do it. [Please, review sample addon and adapt it for your needs](https://docs.algolplus.com/advanced-dynamic-pricing/developers-algol_pricing/custom-code-developers-algol_pricing/program-custom-condition/)
 = I don't see my question   =
 [Please, review full FAQ](https://docs.algolplus.com/category/faq/)
 
@@ -182,6 +182,17 @@ You should be PHP programmer to do it. [Please, review sample addon and adapt it
 
 
 == Changelog ==
+
+= 4.13.1 - 2026-05-04 =
+* Fixed bug - new option (added in 4.13.0) ignored currency/language/payment method change
+* Fixed bug - debug information was gathered even if option "Show debug panel" was inactive
+* Fixed bug - extra lookup requests were started even if option "Support Product only rules" was inactive
+* Fixed bug - new option (added in 4.13.0) caused fatal error in WooCommerce Store API
+* Updated compatibility with "WooCommerce All Products for Subscriptions"
+* Updated compatibility with "WooCommerce Subscriptions"
+* Updated compatibility with "WooCommerce Price Based on Country"
+* Updated compatibility with "YayCurrency"
+* Updated compatibility with "WPC Product Bundles for WooCommerce"
 
 = 4.13.0 - 2026-04-14 =
 * Added option "Don't recalculate  cart if cart items don't have changed" (>Settings>Calculation)
@@ -209,10 +220,10 @@ You should be PHP programmer to do it. [Please, review sample addon and adapt it
 * This release dedicated to speed
 * Added another cache, to avoid unnecessary coupon calculations
 * Fixed bug - wrong key when caching shipping rates
-* WooCommerce [products on_sale] shortcode displays products modified by our plugin, but you must enable shortcode [adp_products_on_sale](https://docs.algolplus.com/algol_pricing/settings-algol_pricing/rules/)
-* If you want sort products by price at shop page - please use [Product Only](https://docs.algolplus.com/algol_pricing/rules/product-only-rule-type/) rules
+* WooCommerce [products on_sale] shortcode displays products modified by our plugin, but you must enable shortcode [adp_products_on_sale](https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol_pricing/rules/)
+* If you want sort products by price at shop page - please use [Product Only](https://docs.algolplus.com/advanced-dynamic-pricing/rules/product-only-rule-type/) rules
 * If you want sort products by "On Sale first" at shop page - please install [Extra Product Sorting Options for WooCommerce
-](https://wordpress.org/plugins/woocommerce-extra-product-sorting-options/) and use [Product Only](https://docs.algolplus.com/algol_pricing/rules/product-only-rule-type/) rules
+](https://wordpress.org/plugins/woocommerce-extra-product-sorting-options/) and use [Product Only](https://docs.algolplus.com/advanced-dynamic-pricing/rules/product-only-rule-type/) rules
 * Updated compatibility with "WPC Product Bundles for WooCommerce"
 * Updated compatibility with "WooCommerce Product Bundles"
 * Updated compatibility with "YITH WooCommerce Product Bundles"
@@ -221,7 +232,7 @@ You should be PHP programmer to do it. [Please, review sample addon and adapt it
 * Updated compatibility with "Aelia Currency Switcher"
 * Updated compatibility with "TM Extra product options"
 * Updated compatibility with "Yoast SEO: WooCommerce"
-* DEV - new helper function [getOnSaleProducts](https://docs.algolplus.com/algol_pricing/developers-algol_pricing/helpers/)
+* DEV - new helper function [getOnSaleProducts](https://docs.algolplus.com/advanced-dynamic-pricing/developers-algol_pricing/helpers/)
 * DEV - added hooks "adp_rule_added", "adp_rule_updated", "adp_rule_deleted"
 
 = 4.10.5 - 2025-12-09 =
@@ -339,7 +350,7 @@ You should be PHP programmer to do it. [Please, review sample addon and adapt it
 * Added "Exclude products" selectors to section "Filter by products"
 * Added button "Reset to default settings" (>Settings>System), highlight the changed options
 * Optimized calculations for variable products
-* WooCommerce shortcode [products on_sale="true"] displays products modified by [Product Only rules](https://docs.algolplus.com/algol_pricing/rules/product-only-rule-type/)
+* WooCommerce shortcode [products on_sale="true"] displays products modified by [Product Only rules](https://docs.algolplus.com/advanced-dynamic-pricing/rules/product-only-rule-type/)
 * Bulk table hides footer if there's no bulk table message in the rule
 * Fixed bug - shipping cost was not added to  total , if our rules were NOT applied  and option "disable shipping calculation" was active
 * Fixed bug - bulk mode "Based on variation" handled different simple products as ONE variation
@@ -566,7 +577,7 @@ We are happy to announce the restyled version of our plugin! Advanced Dynamic Pr
 * internal, not published
 
 = 4.3.1 - 2023-04-04 =
-* Added selector "When the striked price should be shown" to section >Settings>Product Price. [More details](https://docs.algolplus.com/algol_pricing/settings-algol_pricing/when-the-striked-price-should-be-shown/)
+* Added selector "When the striked price should be shown" to section >Settings>Product Price. [More details](https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol_pricing/when-the-striked-price-should-be-shown/)
 * Added/updated sections in Customizer
 * Bug fixed - wrong "Amount Saved" displayed if option "Override the cents on the calculated price" was active
 * Bug fixed - WooCommerce REST API failed with error 500 in ShippingController.php

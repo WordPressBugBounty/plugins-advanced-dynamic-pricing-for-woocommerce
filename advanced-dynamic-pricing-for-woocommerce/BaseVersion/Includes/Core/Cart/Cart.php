@@ -678,6 +678,10 @@ class Cart
             'couponsAdjustments' => array_map(function($item) {
                 return $item->toArray();
             }, $this->couponsAdjustments),
+
+            'notices' => array_map(function($item) {
+                return $item->toArray();
+            }, $this->notices),
         ];
     }
 
@@ -712,6 +716,10 @@ class Cart
         // $this->couponsAdjustments = array_map(function($data) {
         //     return Fee::fromArray($data);
         // }, $data['couponsAdjustments'] ?? []);
+
+        $this->notices = array_map(function($data) {
+            return Notice::fromArray($data);
+        }, $data['notices'] ?? []);
 
     }
 }

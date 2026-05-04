@@ -143,6 +143,22 @@ class CartCouponsProcessor implements ICartCouponsProcessor
         $this->cartContext = $cart->getContext();
     }
 
+    public function processCouponAdjustments(Cart $cart, WC_Cart $wcCart)
+    {
+        $this->cartContext = $cart->getContext();
+
+        $this->disabledWcCoupons = [];
+        $this->disableAllWcCoupons = false;
+        foreach ($cart->getCouponsAdjustments() as $coupon) {
+            if ($coupon instanceof DisableWcCouponsCart) {
+                $this->disabledWcCoupons[] = $coupon->getCode();
+            } elseif ($coupon instanceof DisableAllWcCouponsCart) {
+                $this->disableAllWcCoupons = true;
+            }
+        }
+    }
+
+
     /**
      * @param WC_Cart $wcCart
      */

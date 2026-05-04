@@ -2,6 +2,7 @@
 
 namespace ADP\BaseVersion\Includes\PriceDisplay\ConcreteProductPriceHtml;
 
+use ADP\BaseVersion\Includes\Compatibility\WcsAttCmp;
 use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\PriceDisplay\ConcreteProductPriceHtml;
 use ADP\BaseVersion\Includes\PriceDisplay\PriceFormatters\DefaultFormatter;
@@ -10,6 +11,8 @@ use ADP\BaseVersion\Includes\PriceDisplay\ProcessedProductSimple;
 use ADP\BaseVersion\Includes\SpecialStrategies\OverrideCentsStrategy;
 use ADP\BaseVersion\Includes\WC\PriceFunctions;
 use ADP\Factory;
+use WCS_ATT_Product;
+use WCS_ATT_Product_Schemes;
 
 defined('ABSPATH') or exit;
 
@@ -189,6 +192,15 @@ class SimpleProductPriceHtml implements ConcreteProductPriceHtml
             $product
         );
 
+        //WcsAttCmp compatibility
+        if(class_exists("\WCS_ATT") && WCS_ATT_Product::is_subscription( $product )){
+            $scheme = WCS_ATT_Product_Schemes::get_base_subscription_scheme( $product );
+            $scheme_discount = $scheme->get_discount();
+            if ($scheme_discount) {
+                $calcPrice = round($calcPrice - ((float)$calcPrice * (float)$scheme_discount / 100), wc_get_price_decimals());
+            }
+        }
+
         $priceSuffix = $addPriceSuffix ? $product->get_price_suffix($processedProduct->getCalculatedPrice()) : "";
         $settings = $this->context->getSettings();
         $useRegularPrice = $settings->getOption('regular_price_for_striked_price');
@@ -196,11 +208,11 @@ class SimpleProductPriceHtml implements ConcreteProductPriceHtml
             $price = $useRegularPrice ? $product->get_regular_price('edit') : $processedProduct->getOriginalPriceToDisplay();
 
             if(apply_filters('adp_use_sale_price_in_package', false)
-                && $product->is_on_sale('edit') 
+                && $product->is_on_sale('edit')
                 && $product->get_sale_price('edit') !== '') {
                     $price = floatval($product->get_sale_price('edit'));
             }
-            
+
             $origPrice = $priceFunc->getPriceToDisplay(
                 $product,
                 array(

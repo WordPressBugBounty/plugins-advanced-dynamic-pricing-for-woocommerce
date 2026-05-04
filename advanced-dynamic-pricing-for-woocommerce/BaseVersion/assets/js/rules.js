@@ -569,13 +569,14 @@ jQuery(document).ready(function ($) {
                   elements = elements.concat($textAreas);
                 }
                 elements.filter(x => diff.includes(x));
+                elements = elements.filter(el => el.is(':visible'));
                 elements.forEach(function (el) {
                   if (el[0].localName !== 'input' && el[0].localName !== 'textarea') {
                     if (! el[0].textContent.length || el[0].textContent === 'Select value') {
                       beforeSendValidation = false;
                       attachErrorTo.push(el);
                     }
-                  } else if (! el.val().length) {
+                  } else if (! el.val().length && !el.hasClass('not-required')) {
                     beforeSendValidation = false;
                     attachErrorTo.push(el);
                   } else if(el.hasClass('hasDatepicker') && !el.val().match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/)) {
@@ -2535,7 +2536,12 @@ jQuery(document).ready(function ($) {
 	    $container.find( '.wdp-condition-field-method select' ).change( function () {
 		    var enable_last = 'in_range' === $( this ).val();
 		    $container.find( '.wdp-condition-field-value-last' ).toggle( enable_last );
+
+        $container.find('.wdp-condition-promotion-message').toggle(['>', '>='].includes($( this ).val()));
 	    } );
+      $container.find('.wdp-condition-promotion-message')
+        .toggle(['>', '>=']
+          .includes($container.find( '.wdp-condition-field-method select' ).val()));
 
 	    $container.find( '.wdp-condition-field-method select' ).each( function () {
 		    var enable_last = 'in_range' === $( this ).val();
@@ -2606,6 +2612,10 @@ jQuery(document).ready(function ($) {
 
         if ( data.sale_badge ) {
           $container.find('[name="rule[advertising][sale_badge]"]').val(data.sale_badge);
+        }
+
+        if ( data.message_notice_discount ) {
+          $container.find('[name="rule[advertising][message_notice_discount]"]').val(data.message_notice_discount);
         }
       }
     }

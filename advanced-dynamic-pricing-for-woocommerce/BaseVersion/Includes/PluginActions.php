@@ -48,7 +48,7 @@ class PluginActions
                 __('Support', 'advanced-dynamic-pricing-for-woocommerce')
             ],
             [
-                'https://docs.algolplus.com/category/algol_pricing/',
+                'https://docs.algolplus.com/category/advanced-dynamic-pricing/',
                 __('Plugin documentation', 'advanced-dynamic-pricing-for-woocommerce'),
                 __('Docs', 'advanced-dynamic-pricing-for-woocommerce')
             ],
@@ -71,7 +71,7 @@ class PluginActions
         if (!defined('WC_ADP_PRO_VERSION_PATH')) {
             $goToProLink = sprintf(
                 '<a target="_blank" style="font-weight: bold" href=%s title="%s">%s</a>',
-                'https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/',
+                'https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/?utm_source=plugin&utm_medium=banner&utm_campaign=2026',
                 __('Upgrade to Advanced Dynamic Pricing Pro', 'advanced-dynamic-pricing-for-woocommerce'),
                 __('Go to Pro', 'advanced-dynamic-pricing-for-woocommerce')
             );

@@ -102,6 +102,12 @@ class WcCartItemDisplayExtensions
         $oldPrice = $this->getOriginalPriceToDisplayForCartItem($facade, $displayPricesIncludingTax);
         $newPrice = $this->getCalculatedPriceToDisplayForCartItem($facade, $displayPricesIncludingTax);
 
+        $signUpFee = $subsCmp->isSubscriptionProduct($facade->getProduct()) ? (float)$subsCmp->maybeGetSignUpFee($facade->getProduct()) : null;
+        if (!is_null($signUpFee) && $signUpFee > 0) {
+            $oldPrice -= $signUpFee;
+            $newPrice -= $signUpFee;
+        }
+
         if ($oldPrice === null || $newPrice === null) {
             return $price;
         }
@@ -162,6 +168,12 @@ class WcCartItemDisplayExtensions
         $displayPricesIncludingTax = 'incl' === $context->getTaxDisplayCartMode();
         $oldPrice = $this->getOriginalPriceToDisplayForCartItem($facade, $displayPricesIncludingTax);
         $newPrice = $this->getCalculatedPriceToDisplayForCartItem($facade, $displayPricesIncludingTax);
+
+        $signUpFee = $subsCmp->isSubscriptionProduct($facade->getProduct()) ? (float)$subsCmp->maybeGetSignUpFee($facade->getProduct()) : null;
+        if (!is_null($signUpFee) && $signUpFee > 0) {
+            $oldPrice -= $signUpFee;
+            $newPrice -= $signUpFee;
+        }
 
         $newPrice *= $facade->getQty();
         $oldPrice *= $facade->getQty();

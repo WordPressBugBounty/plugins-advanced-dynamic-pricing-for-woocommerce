@@ -110,6 +110,22 @@ class WcSubscriptionsCmp
             array('price' => $priceHtml, 'tax_calculation' => $this->context->getTaxDisplayCartMode()));
     }
 
+
+    /**
+     * @param \WC_Product $product
+     * @param string $priceHtml
+     *
+     * @return int|string
+     */
+    public function maybeGetSignUpFee($product)
+    {
+        if ( ! class_exists('WC_Subscriptions_Product')) {
+            return 0;
+        }
+
+        return WC_Subscriptions_Product::get_sign_up_fee($product);
+    }
+
     public static function setRecurringCalculationType()
     {
         self::$calculation_type = 'recurring_total';
@@ -171,5 +187,5 @@ class WcSubscriptionsCmp
         }
         return $wcSalePrice;
     }
-    
+
 }

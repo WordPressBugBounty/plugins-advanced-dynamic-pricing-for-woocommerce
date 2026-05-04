@@ -7,7 +7,7 @@ defined('ABSPATH') or exit;
     <th scope="row" class="titledesc">
     </th>
     <td class="forminp forminp-checkbox">
-        <a href="https://docs.algolplus.com/algol_pricing/faq/common-3/"
+        <a href="https://docs.algolplus.com/advanced-dynamic-pricing/faq/common-3/"
            target="_blank">
             <?php esc_html_e('Guide for supported tags', 'advanced-dynamic-pricing-for-woocommerce') ?>
         </a>
@@ -35,8 +35,8 @@ defined('ABSPATH') or exit;
                     <textarea class="wdp-settings-template-textarea"
                         name="replace_price_with_min_bulk_price_category_template"
                         id="replace_price_with_min_bulk_price_category_template"
-                        ><?php 
-							echo esc_attr($options['replace_price_with_min_bulk_price_category_template']) 
+                        ><?php
+							echo esc_attr($options['replace_price_with_min_bulk_price_category_template'])
 					?></textarea>
                 </label>
             </div>

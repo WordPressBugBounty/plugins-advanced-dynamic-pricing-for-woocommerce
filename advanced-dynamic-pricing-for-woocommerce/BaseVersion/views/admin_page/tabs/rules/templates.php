@@ -634,9 +634,9 @@ defined('ABSPATH') or exit;
                                 'Choose the products that would be automatically added into the cart, discount type and amount.',
                                 'advanced-dynamic-pricing-for-woocommerce'
                             ); ?>
-                            <a href="https://docs.algolplus.com/algol_pricing/rules/rules-sections/auto-add-to-cart-pro/" target="_blank"><?php esc_html_e('Read docs', 'advanced-dynamic-pricing-for-woocommerce')?></a>
+                            <a href="https://docs.algolplus.com/advanced-dynamic-pricing/rules-sections/auto-add-to-cart-pro/" target="_blank"><?php esc_html_e('Read docs', 'advanced-dynamic-pricing-for-woocommerce')?></a>
                         </p>
-                        <a href="https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/"
+                        <a href="https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/?utm_source=plugin&utm_medium=banner&utm_campaign=2026"
                             target=_blank><?php esc_html_e('Buy a pro version of our plugin and get an access to this section',
                                     'advanced-dynamic-pricing-for-woocommerce') ?></a>
                     </article>
@@ -668,11 +668,11 @@ defined('ABSPATH') or exit;
                                         .' <a href="%s" target="_blank">' .__('Read docs', 'advanced-dynamic-pricing-for-woocommerce') .'</a>',
                                     array('br' => array(), 'a' => array('href' => array(), 'target' => array()))
                                 ),
-                                esc_url('https://docs.algolplus.com/algol_pricing/rules/rules-sections/advertising-pro/')
+                                esc_url('https://docs.algolplus.com/advanced-dynamic-pricing/rules-sections/advertising-pro/')
                             );
                             ?>
                         </p>
-                        <a href="https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/"
+                        <a href="https://algolplus.com/plugins/downloads/advanced-dynamic-pricing-woocommerce-pro/?utm_source=plugin&utm_medium=banner&utm_campaign=2026"
                             target=_blank><?php esc_html_e('Buy a pro version of our plugin and get an access to this section',
                                     'advanced-dynamic-pricing-for-woocommerce') ?></a>
                     </article>

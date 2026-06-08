@@ -14,6 +14,7 @@ use ADP\BaseVersion\Includes\Database\Repository\RuleRepository;
 use ADP\BaseVersion\Includes\Database\Repository\RuleRepositoryInterface;
 use ADP\BaseVersion\Includes\Core\Rule\CartCondition\Interfaces\ListComparisonCondition;
 use ADP\BaseVersion\Includes\Helpers\Helpers;
+use ADP\BaseVersion\Includes\Core\Rule\CartCondition\Impl\ProductBrandsAll;
 
 defined('ABSPATH') or exit;
 
@@ -61,7 +62,7 @@ class AdminPageFilterTitles
             'giftable_categories'   => array(),
             'auto_add_products'     => array(),
             'product_tags'          => array(),
-            'product_brand'         => array(),
+            'product_brands'         => array(),
             'product_categories'    => array(),
             'product_category_slug' => array(),
             'product_attributes'    => array(),
@@ -107,7 +108,7 @@ class AdminPageFilterTitles
                     if ( ! empty($excludeFilter['value'])) {
                         $type  = $excludeFilter['type'];
                         $value = $excludeFilter['value'];
-    
+
                         if (isset($filtersByType[$type])) {
                             $filtersByType[$type] = array_merge($filtersByType[$type], (array)$value);
                         }
@@ -189,6 +190,10 @@ class AdminPageFilterTitles
                     } elseif ($condition['type'] === ProductTagsAll::getType() && isset($condition['options'][ListComparisonCondition::COMPARISON_LIST_KEY])) {
                         $value                         = $condition['options'][ListComparisonCondition::COMPARISON_LIST_KEY];
                         $filtersByType['product_tags'] = array_merge($filtersByType['product_tags'],
+                            (array)$value);
+                    } elseif ($condition['type'] === ProductBrandsAll::getType() && isset($condition['options'][ListComparisonCondition::COMPARISON_LIST_KEY])) {
+                        $value                         = $condition['options'][ListComparisonCondition::COMPARISON_LIST_KEY];
+                        $filtersByType['product_brands'] = array_merge($filtersByType['product_brands'],
                             (array)$value);
                     } elseif ($condition['type'] === ProductsAll::getType() && isset($condition['options'][ListComparisonCondition::COMPARISON_LIST_KEY])) {
                         $value                     = $condition['options'][ListComparisonCondition::COMPARISON_LIST_KEY];
@@ -296,9 +301,9 @@ class AdminPageFilterTitles
         }
 
         // type 'product_brand'
-        $result['product_brand'] = array();
-        foreach ($filtersByType['product_brand'] as $id) {
-            $result['product_brand'][$id] = '#' . $id . ' ' . Helpers::getCategoryTitle($id);
+        $result['product_brands'] = array();
+        foreach ($filtersByType['product_brands'] as $id) {
+            $result['product_brands'][$id] = '#' . $id . ' ' . Helpers::getBrandTitle($id);
         }
 
         // type 'product_categories'

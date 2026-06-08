@@ -4,8 +4,8 @@ Donate link: https://paypal.me/ipprokaev/0usd
 Tags: woocommerce, coupons, discounts, dynamic pricing, bulk discount
 Requires PHP: 7.1
 Requires at least: 6.1
-Tested up to: 6.9
-Stable tag: 4.13.1
+Tested up to: 7.0
+Stable tag: 4.13.2
 License: GNU General Public License v3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -182,6 +182,17 @@ You should be PHP programmer to do it. [Please, review sample addon and adapt it
 
 
 == Changelog ==
+
+= 4.13.2 - 2026-06-08 =
+* Added cart condition "Product brands"
+* Fixed UI bugs for WordPress 7.0
+* Fixed bug - option "Show striked subtotal in cart totals" didn't work in blocks cart
+* Fixed bug - wrong tax was applied to "Local Pickup" in blocks cart
+* Fixed bug - message was not displayed if coupon can't be applied to blocks cart
+* Fixed bug - discount was not applied when change payment method in blocks cart
+* Updated compatibility with "WPC Composite Products for WooCommerce"
+* Updated compatibility with "YITH WooCommerce Product Bundles"
+* Updated compatibility with "YayCurrency" (pro version)
 
 = 4.13.1 - 2026-05-04 =
 * Fixed bug - new option (added in 4.13.0) ignored currency/language/payment method change

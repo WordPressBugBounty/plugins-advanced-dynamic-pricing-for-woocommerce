@@ -51,7 +51,7 @@ class WcCustomerConverter
         $wcSessionFacade = Factory::get("WC_WcCustomerSessionFacade", $wcSession);
         if ($wcSessionFacade->isValid()) {
             if ($context->isUseSelectedPaymentMethodEverywhere()
-                || $context->is($context::WC_CHECKOUT_PAGE)
+                || $context->is($context::WC_CHECKOUT_PAGE ) || $context->isWCStoreAPIRequest()
             ) {
                 $customer->setSelectedPaymentMethod($wcSessionFacade->getChosenPaymentMethod());
             }

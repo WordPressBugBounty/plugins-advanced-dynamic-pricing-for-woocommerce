@@ -49,7 +49,6 @@ jQuery(document).ready(function ($) {
         }).trigger('change');
     }, 0);
 
-    $('.wdp-settings-search-wrapper').css('max-width', $('.wcp_tabs_container_list').width())
     $('.wdp-settings-button').css('max-width', $('.wdp-settings-wrapper form').width() - ($('.wcp_tabs_container').outerWidth(true) - $('.wcp_tabs_container_list').width()))
 
     $('.wdp-settings-search input').on('input', function () {

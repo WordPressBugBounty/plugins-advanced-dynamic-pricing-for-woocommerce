@@ -48,8 +48,8 @@ class AsanaEasyBundlesCmp extends AbstractContainerCompatibility
                         return wc_format_sale_price($cart_item["asnp_wepb_reg_price"], $cart_item["asnp_wepb_price"]);
                     }
 
-                    $del = is_numeric($cart_item["asnp_wepb_reg_price"]) ? $this->format($cart_item["asnp_wepb_reg_price"]) : $cart_item["asnp_wepb_reg_price"];
-                    $ins = is_numeric($cart_item["asnp_wepb_price"]) ? $this->format($cart_item["asnp_wepb_price"]) : $cart_item["asnp_wepb_price"];
+                    $del = is_numeric($cart_item["asnp_wepb_reg_price"]) ? wc_price($cart_item["asnp_wepb_reg_price"]) : $cart_item["asnp_wepb_reg_price"];
+                    $ins = is_numeric($cart_item["asnp_wepb_price"]) ? wc_price($cart_item["asnp_wepb_price"]) : $cart_item["asnp_wepb_price"];
 
                     return '<del>' . $del . '</del> <ins>' . $ins . '</ins>';
                 }
@@ -69,8 +69,8 @@ class AsanaEasyBundlesCmp extends AbstractContainerCompatibility
                         return wc_format_sale_price($reg_sub, $cart_item["line_subtotal"]);
                     }
 
-                    $del = is_numeric($reg_sub) ? $this->format($reg_sub) : $reg_sub;
-                    $ins = is_numeric($cart_item["line_subtotal"]) ? $this->format($cart_item["line_subtotal"]) : $cart_item["line_subtotal"];
+                    $del = is_numeric($reg_sub) ? wc_price($reg_sub) : $reg_sub;
+                    $ins = is_numeric($cart_item["line_subtotal"]) ? wc_price($cart_item["line_subtotal"]) : $cart_item["line_subtotal"];
 
                     return '<del>' . $del . '</del> <ins>' . $ins . '</ins>';
                 }

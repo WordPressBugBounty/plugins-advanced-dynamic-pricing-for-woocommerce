@@ -390,6 +390,13 @@ class Helpers
         return ! empty($term) && ! is_wp_error($term) ? $term->name : "";
     }
 
+    public static function getBrandTitle($id)
+    {
+        $term = get_term($id, 'product_brand');
+
+        return ! empty($term) && ! is_wp_error($term) ? $term->name : "";
+    }
+
     public static function getCategorySlugTitle($slug)
     {
         $term = get_term_by('slug', $slug, 'product_cat');

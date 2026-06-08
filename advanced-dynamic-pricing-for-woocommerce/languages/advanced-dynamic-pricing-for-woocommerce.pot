@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Advanced Dynamic Pricing for WooCommerce (Pro)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-30 04:39+0000\n"
+"POT-Creation-Date: 2026-06-08 05:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -123,19 +123,19 @@ msgstr ""
 msgid "[Rest of the World]"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:198
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:270
 msgid "Above add to cart"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:194
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:266
 msgid "Above product"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:202
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:274
 msgid "Above product meta"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:190
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:262
 msgid "Above product summary"
 msgstr ""
 
@@ -295,7 +295,7 @@ msgstr ""
 msgid "Affected rules"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:678
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:750
 msgid "After cart contents"
 msgstr ""
 
@@ -304,12 +304,12 @@ msgstr ""
 msgid "After matching condition"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:657
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:729
 msgid "After mini cart contents"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:636
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:684
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:708
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:756
 msgid "After order total"
 msgstr ""
 
@@ -361,7 +361,7 @@ msgstr ""
 msgid "amount"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:615
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:687
 #: BaseVersion/Includes/Advertising/DiscountMessage.php:52
 msgid "Amount Saved"
 msgstr ""
@@ -371,7 +371,7 @@ msgstr ""
 msgid "Amount saved"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:614
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:686
 msgid "Amount saved label"
 msgstr ""
 
@@ -450,7 +450,7 @@ msgstr ""
 msgid "As appears in the cart"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:444
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:516
 msgid "At bottom of the page"
 msgstr ""
 
@@ -458,7 +458,7 @@ msgstr ""
 msgid "at least one of selected"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:442
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:514
 msgid "At top of the page"
 msgstr ""
 
@@ -468,7 +468,7 @@ msgstr ""
 msgid "Attributes"
 msgstr ""
 
-#: BaseVersion/Includes/Helpers/Helpers.php:575
+#: BaseVersion/Includes/Helpers/Helpers.php:582
 #: BaseVersion/views/admin_page/tabs/rules/rule.php:585
 msgid "Auto add to cart"
 msgstr ""
@@ -488,14 +488,14 @@ msgstr ""
 msgid "Available tags: {{qty}}, {{product}}, {{discount}}, {{cart_condition}}"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:338
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:379
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:559
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:577
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:410
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:451
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:631
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:649
 msgid "Background color"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:350
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:422
 msgid "Background higlight color"
 msgstr ""
 
@@ -556,7 +556,7 @@ msgstr ""
 msgid "Based on variation"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:676
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:748
 msgid "Before cart contents"
 msgstr ""
 
@@ -565,33 +565,33 @@ msgstr ""
 msgid "Before matching condition"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:655
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:727
 msgid "Before mini cart contents"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:634
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:682
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:706
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:754
 msgid "Before order total"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:632
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:680
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:704
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:752
 msgid "Before shipping"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:200
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:272
 msgid "Below add to cart"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:196
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:268
 msgid "Below product"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:204
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:276
 msgid "Below product meta"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:192
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:264
 msgid "Below product summary"
 msgstr ""
 
@@ -609,6 +609,7 @@ msgid "BOGO(free)"
 msgstr ""
 
 #: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:100
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:172
 msgid "Bold text"
 msgstr ""
 
@@ -622,12 +623,12 @@ msgstr ""
 msgid "Bulk actions"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:268
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:498
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:340
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:570
 msgid "Bulk deal"
 msgstr ""
 
-#: BaseVersion/Includes/Helpers/Helpers.php:573
+#: BaseVersion/Includes/Helpers/Helpers.php:580
 msgid "Bulk mode"
 msgstr ""
 
@@ -740,15 +741,15 @@ msgstr ""
 msgid "Can't open file."
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:623
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:695
 #: BaseVersion/Includes/Debug/DebugBar.php:67
 #: BaseVersion/templates/reporter/main.php:20
-#: BaseVersion/Includes/Core/Rule/CartCondition/ConditionsLoader.php:75
+#: BaseVersion/Includes/Core/Rule/CartCondition/ConditionsLoader.php:77
 #: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Options.php:214
 msgid "Cart"
 msgstr ""
 
-#: BaseVersion/Includes/Helpers/Helpers.php:576
+#: BaseVersion/Includes/Helpers/Helpers.php:583
 msgid "Cart adjustments"
 msgstr ""
 
@@ -769,7 +770,7 @@ msgstr ""
 msgid "Cart is empty"
 msgstr ""
 
-#: BaseVersion/Includes/Core/Rule/CartCondition/ConditionsLoader.php:74
+#: BaseVersion/Includes/Core/Rule/CartCondition/ConditionsLoader.php:76
 msgid "Cart items"
 msgstr ""
 
@@ -787,7 +788,7 @@ msgstr ""
 msgid "Category bulk table (Pricing)"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:435
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:507
 msgid "Category Bulk Table position"
 msgstr ""
 
@@ -801,7 +802,7 @@ msgstr ""
 msgid "Category slugs"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:419
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:491
 msgid "Category table layout"
 msgstr ""
 
@@ -830,7 +831,7 @@ msgstr ""
 msgid "Cheapest"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:667
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:739
 msgid "Checkout"
 msgstr ""
 
@@ -881,7 +882,7 @@ msgstr ""
 msgid "Compatibility"
 msgstr ""
 
-#: BaseVersion/Includes/Helpers/Helpers.php:577
+#: BaseVersion/Includes/Helpers/Helpers.php:584
 msgid "Conditions"
 msgstr ""
 
@@ -991,7 +992,7 @@ msgstr ""
 msgid "Custom fields"
 msgstr ""
 
-#: BaseVersion/Includes/Core/Rule/CartCondition/ConditionsLoader.php:76
+#: BaseVersion/Includes/Core/Rule/CartCondition/ConditionsLoader.php:78
 msgid "Customer"
 msgstr ""
 
@@ -1007,7 +1008,7 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: BaseVersion/Includes/Core/Rule/CartCondition/ConditionsLoader.php:77
+#: BaseVersion/Includes/Core/Rule/CartCondition/ConditionsLoader.php:79
 msgid "Date & time"
 msgstr ""
 
@@ -1123,21 +1124,21 @@ msgstr ""
 msgid "Disable shipping calculation"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:301
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:311
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:531
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:541
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:373
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:383
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:603
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:613
 #: BaseVersion/Includes/Core/Rule/CartAdjustment/CartAdjustmentsLoader.php:49
 msgid "Discount"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:300
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:530
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:372
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:602
 msgid "Discount column title"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:309
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:539
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:381
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:611
 msgid "Discount column title, for fixed price"
 msgstr ""
 
@@ -1145,7 +1146,7 @@ msgstr ""
 msgid "Discount message (Pricing)"
 msgstr ""
 
-#: BaseVersion/Includes/Helpers/Helpers.php:578
+#: BaseVersion/Includes/Helpers/Helpers.php:585
 msgid "Discount messages"
 msgstr ""
 
@@ -1163,27 +1164,27 @@ msgstr ""
 msgid "Discount sale price"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:330
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:402
 #: BaseVersion/templates/reporter/tabs/products.php:13
 msgid "Discounted price"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:329
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:401
 msgid "Discounted price column title"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:319
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:549
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:391
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:621
 msgid "Discounted price column title, for fixed price"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:174
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:425
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:246
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:497
 msgid "Display ranges as headers"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:172
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:423
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:244
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:495
 msgid "Display ranges as rows"
 msgstr ""
 
@@ -1352,7 +1353,7 @@ msgid "File must contain one rule or more."
 msgstr ""
 
 #. not used in code, we need it to make .pot correctly
-#: BaseVersion/Includes/Helpers/Helpers.php:570
+#: BaseVersion/Includes/Helpers/Helpers.php:577
 msgid "Filter by products"
 msgstr ""
 
@@ -1407,8 +1408,8 @@ msgstr ""
 msgid "Fixed fee, once"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:321
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:551
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:393
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:623
 #: BaseVersion/views/admin_page/tabs/rules/templates.php:472
 #: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:187
 #: BaseVersion/views/admin_page/tabs/rules/rule.php:319
@@ -1453,7 +1454,7 @@ msgstr ""
 msgid "Force displaying variation price"
 msgstr ""
 
-#: BaseVersion/Includes/Helpers/Helpers.php:574
+#: BaseVersion/Includes/Helpers/Helpers.php:581
 #: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Options.php:249
 #: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:537
 #: BaseVersion/views/admin_page/tabs/rules/rule.php:582
@@ -1519,7 +1520,7 @@ msgstr ""
 msgid "Give gift from the list (1st available)"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:610
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:682
 msgid "Global options"
 msgstr ""
 
@@ -1545,13 +1546,13 @@ msgid ""
 "feeds)?"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:267
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:497
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:339
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:569
 msgid "Header bulk title"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:276
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:506
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:348
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:578
 msgid "Header tier title"
 msgstr ""
 
@@ -1676,6 +1677,7 @@ msgstr ""
 #: BaseVersion/views/conditions/products/product-taxonomy.php:24
 #: BaseVersion/views/conditions/products/product-attributes.php:21
 #: BaseVersion/views/conditions/products/product-categories.php:21
+#: BaseVersion/views/conditions/products/product-brands.php:21
 #: BaseVersion/views/conditions/products/product-sku.php:21
 #: BaseVersion/views/conditions/products/products.php:21
 #: BaseVersion/views/conditions/products/product-tags.php:21
@@ -1725,7 +1727,8 @@ msgstr ""
 msgid "Is logged in"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:113
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:114
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:185
 msgid "Italic text"
 msgstr ""
 
@@ -1768,7 +1771,7 @@ msgstr ""
 msgid "Limit discount to amount"
 msgstr ""
 
-#: BaseVersion/Includes/Helpers/Helpers.php:580
+#: BaseVersion/Includes/Helpers/Helpers.php:587
 #: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:543
 #: BaseVersion/views/admin_page/tabs/rules/rule.php:598
 msgid "Limits"
@@ -1835,7 +1838,7 @@ msgstr ""
 msgid "Migrate rules"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:646
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:718
 msgid "Mini Cart"
 msgstr ""
 
@@ -1957,6 +1960,7 @@ msgstr ""
 #: BaseVersion/views/conditions/products/product-taxonomy.php:26
 #: BaseVersion/views/conditions/products/product-attributes.php:23
 #: BaseVersion/views/conditions/products/product-categories.php:23
+#: BaseVersion/views/conditions/products/product-brands.php:23
 #: BaseVersion/views/conditions/products/product-sku.php:23
 #: BaseVersion/views/conditions/products/products.php:23
 #: BaseVersion/views/conditions/products/product-tags.php:23
@@ -1971,6 +1975,7 @@ msgstr ""
 #: BaseVersion/views/conditions/products/product-taxonomy.php:25
 #: BaseVersion/views/conditions/products/product-attributes.php:22
 #: BaseVersion/views/conditions/products/product-categories.php:22
+#: BaseVersion/views/conditions/products/product-brands.php:22
 #: BaseVersion/views/conditions/products/product-sku.php:22
 #: BaseVersion/views/conditions/products/products.php:22
 #: BaseVersion/views/conditions/products/product-tags.php:22
@@ -1982,7 +1987,7 @@ msgstr ""
 msgid "Offer message."
 msgstr ""
 
-#: BaseVersion/Includes/Helpers/Helpers.php:579
+#: BaseVersion/Includes/Helpers/Helpers.php:586
 msgid "Offer to buy more"
 msgstr ""
 
@@ -2028,8 +2033,8 @@ msgstr ""
 msgid "only selected"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:164
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:415
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:236
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:487
 #: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Tools.php:62
 #: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Tools.php:330
 #: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Tools.php:335
@@ -2118,9 +2123,9 @@ msgstr ""
 msgid "Popular conditions:"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:627
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:650
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:671
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:699
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:722
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:743
 msgid "Position of amount saved"
 msgstr ""
 
@@ -2143,11 +2148,15 @@ msgstr ""
 msgid "Product attributes"
 msgstr ""
 
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductBrandsAll.php:22
+msgid "Product brands"
+msgstr ""
+
 #: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:64
 msgid "Product bulk table (Pricing)"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:184
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:256
 msgid "Product Bulk Table position"
 msgstr ""
 
@@ -2179,7 +2188,7 @@ msgstr ""
 msgid "Product Discount"
 msgstr ""
 
-#: BaseVersion/Includes/Helpers/Helpers.php:571
+#: BaseVersion/Includes/Helpers/Helpers.php:578
 #: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:531
 #: BaseVersion/views/admin_page/tabs/rules/rule.php:576
 msgid "Product discounts"
@@ -2276,7 +2285,7 @@ msgstr ""
 msgid "Product SKU"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:168
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:240
 msgid "Product table layout"
 msgstr ""
 
@@ -2360,15 +2369,16 @@ msgid "Products"
 msgstr ""
 
 #: BaseVersion/Includes/AdminExtensions/AdminPage/Tabs/Rules.php:855
-#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductAttributesAll.php:42
-#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductSKUAll.php:42
-#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductsAll.php:42
-#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductCustomAttributesAll.php:42
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductAttributesAll.php:47
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductSKUAll.php:47
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductsAll.php:47
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductCustomAttributesAll.php:47
 #: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductTaxonomyAll.php:28
-#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductCategorySlugAll.php:42
-#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductCategoriesAll.php:42
-#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductCustomFieldsAll.php:42
-#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductTagsAll.php:42
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductCategorySlugAll.php:47
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductCategoriesAll.php:47
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductCustomFieldsAll.php:47
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductTagsAll.php:47
+#: BaseVersion/Includes/Core/Rule/CartCondition/Impl/ProductBrandsAll.php:50
 msgid "Qty"
 msgstr ""
 
@@ -2384,6 +2394,8 @@ msgstr ""
 #: BaseVersion/views/conditions/products/product-attributes.php:16
 #: BaseVersion/views/conditions/products/product-categories.php:10
 #: BaseVersion/views/conditions/products/product-categories.php:16
+#: BaseVersion/views/conditions/products/product-brands.php:10
+#: BaseVersion/views/conditions/products/product-brands.php:16
 #: BaseVersion/views/conditions/products/product-sku.php:10
 #: BaseVersion/views/conditions/products/product-sku.php:16
 #: BaseVersion/views/conditions/products/products.php:10
@@ -2404,14 +2416,14 @@ msgstr ""
 msgid "qty to"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:292
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:522
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:364
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:594
 #: BaseVersion/templates/reporter/tabs/cart.php:31
 msgid "Quantity"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:291
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:521
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:363
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:593
 msgid "Quantity column title"
 msgstr ""
 
@@ -2525,7 +2537,7 @@ msgstr ""
 msgid "Role Discount"
 msgstr ""
 
-#: BaseVersion/Includes/Helpers/Helpers.php:572
+#: BaseVersion/Includes/Helpers/Helpers.php:579
 #: BaseVersion/views/admin_page/tabs/rules/persistent_rule.php:533
 #: BaseVersion/views/admin_page/tabs/rules/rule.php:578
 msgid "Role discounts"
@@ -2657,6 +2669,7 @@ msgstr ""
 #: BaseVersion/views/conditions/products/product-taxonomy.php:37
 #: BaseVersion/views/conditions/products/product-attributes.php:33
 #: BaseVersion/views/conditions/products/product-categories.php:33
+#: BaseVersion/views/conditions/products/product-brands.php:33
 #: BaseVersion/views/conditions/products/product-sku.php:33
 #: BaseVersion/views/conditions/products/products.php:33
 #: BaseVersion/views/conditions/products/product-tags.php:33
@@ -2754,7 +2767,7 @@ msgstr ""
 
 #: BaseVersion/Includes/Debug/DebugBar.php:77
 #: BaseVersion/Includes/Core/Rule/CartAdjustment/CartAdjustmentsLoader.php:52
-#: BaseVersion/Includes/Core/Rule/CartCondition/ConditionsLoader.php:78
+#: BaseVersion/Includes/Core/Rule/CartCondition/ConditionsLoader.php:80
 msgid "Shipping"
 msgstr ""
 
@@ -2809,7 +2822,7 @@ msgstr ""
 msgid "Show debug panel at bottom of the page"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:214
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:286
 msgid "Show discounted price"
 msgstr ""
 
@@ -2819,13 +2832,13 @@ msgstr ""
 msgid "Show first X results in autocomplete"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:225
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:455
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:297
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:527
 msgid "Show fixed discount column"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:237
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:467
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:309
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:539
 msgid "Show footer"
 msgstr ""
 
@@ -2901,8 +2914,8 @@ msgstr ""
 msgid "SKUs"
 msgstr ""
 
-#: BaseVersion/Includes/AdminExtensions/Ajax.php:194
-#: BaseVersion/Includes/AdminExtensions/AdminPage/AdminPageFilterTitles.php:313
+#: BaseVersion/Includes/AdminExtensions/Ajax.php:201
+#: BaseVersion/Includes/AdminExtensions/AdminPage/AdminPageFilterTitles.php:318
 msgid "Slug"
 msgstr ""
 
@@ -2938,23 +2951,23 @@ msgstr ""
 msgid "Statistics"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:375
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:573
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:447
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:645
 msgid "Style body"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:287
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:517
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:359
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:589
 msgid "Style columns"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:393
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:591
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:465
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:663
 msgid "Style footer"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:251
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:481
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:323
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:553
 msgid "Style header"
 msgstr ""
 
@@ -3033,15 +3046,17 @@ msgstr ""
 msgid "Tags"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:126
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:128
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:198
 msgid "Text align"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:137
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:140
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:209
 msgid "Text color"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:362
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:434
 msgid "Text higlight color"
 msgstr ""
 
@@ -3086,8 +3101,8 @@ msgstr ""
 msgid "Tier"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:277
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:507
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:349
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:579
 msgid "Tier deal"
 msgstr ""
 
@@ -3176,8 +3191,8 @@ msgstr ""
 msgid "Usage restrictions"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:255
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:485
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:327
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:557
 msgid "Use bulk table message as table header"
 msgstr ""
 
@@ -3301,8 +3316,8 @@ msgstr ""
 msgid "You can use shortcode [adp_category_bulk_rules_table]"
 msgstr ""
 
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:185
-#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:437
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:257
+#: BaseVersion/Includes/CustomizerExtensions/CustomizerExtensions.php:509
 msgid ""
 "You can use shortcode [adp_product_bulk_rules_table] in product template."
 msgstr ""

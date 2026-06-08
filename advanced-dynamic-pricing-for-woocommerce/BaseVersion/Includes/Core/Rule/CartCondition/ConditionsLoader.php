@@ -58,7 +58,9 @@ class ConditionsLoader
                     $this->items[$className::getType() . '_' . $taxonomy->name] = $className;
                 }
             } else {
-                $this->items[$className::getType()] = $className;
+                if ( $className::isEnabled() ) {
+                    $this->items[$className::getType()] = $className;
+                }
             }
         }
 
@@ -272,7 +274,7 @@ class ConditionsLoader
                 if ($aVal == $bVal) {
                     return 0;
                 }
-            
+
                 return ($aVal < $bVal) ? -1 : 1;
             });
             $list[$group] = $items;

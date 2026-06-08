@@ -864,8 +864,12 @@ div.wdp-row.wdp-options select {
   height: max-content;
   min-height: 35px;
   float: left;
-  margin: 6px 0 5px 1px;
+  margin: 6px 0 5px 2px;
   font-weight: 600;
+}
+
+.add-product-collection {
+  margin-left: 2px !important;
 }
 
 /* prevent select2 to increase width */
@@ -1383,6 +1387,10 @@ div.wdp-row.wdp-options select {
 .wdp-repeat label select,
 .wdp-apply-to label select{
 	flex: 1
+}
+
+#product-collections-container {
+  margin-left: 2px;
 }
 
 #product-collections-container .wdp-filter-field-method {

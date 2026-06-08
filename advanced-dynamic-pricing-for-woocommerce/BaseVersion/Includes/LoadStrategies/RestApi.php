@@ -60,7 +60,12 @@ class RestApi implements LoadStrategy
          *
          * @see WpCron::start() explanation here!
          */
-        add_filter('woocommerce_apply_base_tax_for_local_pickup', "__return_false");
+        if (apply_filters('adp_disable_local_pickup_base_tax', false)) {
+            add_filter(
+                'woocommerce_apply_base_tax_for_local_pickup',
+                '__return_false'
+            );
+        }
 
         /**
          * @var Engine $engine
@@ -74,9 +79,10 @@ class RestApi implements LoadStrategy
         $wcCartStatsCollector = new WcCartStatsCollector();
         $wcCartStatsCollector->setActionCheckoutOrderProcessedDuringRestApi();
 
-        add_action('woocommerce_before_calculate_totals', function($wcCart) use ($engine){
+        add_action('woocommerce_cart_loaded_from_session', function($wcCart) use ($engine){
             if(did_action('adp_rest_api_engine_reinitialized'))
                 return ;// only once!
+
             $engine->getCartProcessor()->withCart($wcCart);
             $engine->getCartProcessor()->installActionFirstProcess($skip_cartCouponsProcessor=true);
             $engine->firstTimeProcessCart();

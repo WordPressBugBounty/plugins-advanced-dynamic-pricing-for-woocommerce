@@ -345,6 +345,7 @@ class SingleItemRuleProcessor implements RuleProcessor
      */
     public function getItemsToDiscount($cart)
     {
+        $context = adp_context();
         $collection = new CartItemsCollection($this->rule->getId());
 
         if ( ! $cartMutableItems = $cart->getMutableItems()) {
@@ -443,6 +444,31 @@ class SingleItemRuleProcessor implements RuleProcessor
                     }
                 }
 
+                if (
+                    $context->getOption('allow_customers_choose_between_discounts')
+                    && $this->rule->isExclusive()
+                ) {
+
+                    $excludeIds = $this->getExcludeProductIds($this->rule->getId());
+
+                    if (!empty($excludeIds)) {
+
+                        $productFiltering->prepare(
+                            $filter::TYPE_PRODUCT,
+                            $excludeIds,
+                            $filter::METHOD_IN_LIST
+                        );
+
+                        if ($productFiltering->checkProductSuitability(
+                            $product,
+                            $wcCartItemFacade->getData()
+                        )) {
+                            $match = false;
+                            break;
+                        }
+                    }
+                }
+
                 $productFiltering->prepare($filter->getType(), $filter->getValue(), $filter->getMethod());
                 if ( ! $productFiltering->checkProductSuitability($product, $wcCartItemFacade->getData())) {
                     $match = false;
@@ -502,6 +528,25 @@ class SingleItemRuleProcessor implements RuleProcessor
 
         return $collection;
     }
+
+    public function getExcludeProductIds($ruleId = null)
+    {
+        $excludeProduct = array();
+        if ($ruleId != null) {
+            $session_key    = WC()->session ? WC()->session->get_customer_id() : session_id();
+            $transient_key  = 'adp_selected_rules_' . $session_key;
+            $selectedRules  = get_transient($transient_key) ?: [];
+
+            foreach ($selectedRules as $productId => $tmpRuleId) {
+                if ($ruleId != $tmpRuleId) {
+                    $excludeProduct[] = (string)$productId;
+                }
+            }
+        }
+
+        return $excludeProduct;
+    }
+
 
     /**
      * @param ICartItem $item1
@@ -906,7 +951,7 @@ class SingleItemRuleProcessor implements RuleProcessor
             return false;
         }
 
-        if($checkConditions && 
+        if($checkConditions &&
             $this->rule->getRoleDiscounts()
             && !$this->roleDiscountStrategy->findMatchedRoleDiscounts($cart->getContext()->getCustomer())
             && !$this->rule->getProductRangeAdjustmentHandler()

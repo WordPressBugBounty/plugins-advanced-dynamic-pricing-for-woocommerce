@@ -6,20 +6,20 @@ use ADP\BaseVersion\Includes\Core\Rule\CartCondition\ConditionsLoader;
 use ADP\BaseVersion\Includes\Core\Rule\CartCondition\Interfaces\ProductAll;
 use ADP\BaseVersion\Includes\Core\Rule\Enums\ProductMeasure;
 
-class ProductCustomAttributesAll extends AbstractCondition implements ProductAll
+class ProductBrandsAll extends AbstractCondition implements ProductAll
 {
     use ProductAllCheck;
 
-    protected $filterType = 'product_custom_attributes';
+    protected $filterType = 'product_brand';
 
     public static function getType()
     {
-        return 'product_custom_attributes_all';
+        return 'product_brands_all';
     }
 
     public static function getLabel()
     {
-        return __('Product custom attributes', 'advanced-dynamic-pricing-for-woocommerce');
+        return __('Product brands', 'advanced-dynamic-pricing-for-woocommerce');
     }
 
     public static function getTemplatePath()
@@ -32,14 +32,17 @@ class ProductCustomAttributesAll extends AbstractCondition implements ProductAll
         return ConditionsLoader::GROUP_CART_ITEMS;
     }
 
-    public static function getIndex()
-    {
-        return 20;
-    }
+    public static function isEnabled()  {  return taxonomy_exists('product_brand'); }
+
 
     public function isValid()
     {
         return true;
+    }
+
+    public static function getIndex()
+    {
+        return 40;
     }
 
     public static function getMeasures() {
@@ -51,7 +54,7 @@ class ProductCustomAttributesAll extends AbstractCondition implements ProductAll
     public static function getSubConditionTemplatePaths()
     {
         return array(
-            'product_custom_attributes' => WC_ADP_PLUGIN_VIEWS_PATH . 'conditions/products/product-custom-attributes.php',
+            'product_brands' => WC_ADP_PLUGIN_VIEWS_PATH . 'conditions/products/product-brands.php',
         );
     }
 }

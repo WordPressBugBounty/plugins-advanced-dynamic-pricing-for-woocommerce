@@ -85,7 +85,7 @@ class AdminAjax implements LoadStrategy
         $adminPage->registerAjax();
 
         /** @var $ajax Ajax */
-        $ajax = Factory::get('AdminExtensions_Ajax');
+        $ajax = Factory::get('AdminExtensions_Ajax', $customizer, $engine);
         $ajax->register();
 
         $tableAjax = new RangeDiscountTableAjax($customizer, $engine);

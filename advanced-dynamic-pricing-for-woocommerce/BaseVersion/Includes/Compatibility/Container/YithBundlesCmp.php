@@ -40,11 +40,9 @@ class YithBundlesCmp extends AbstractContainerCompatibility
     {
         add_filter( 'yith_wcpb_woocommerce_get_price_html', [$this, 'fixBundlePriceHtml'], 999, 2 );
 
-        if($this->context->getOption('suppress_other_pricing_plugins')) {
-            add_filter('yith_wcpb_ajax_update_price_enabled', function ($enabled) {
-                return false;
-            }, 999);
-        }
+        add_filter('yith_wcpb_ajax_update_price_enabled', function ($enabled) {
+            return false;
+        }, 999);
 
         add_filter(
             'yith_wcpb_ajax_get_bundle_total_price',

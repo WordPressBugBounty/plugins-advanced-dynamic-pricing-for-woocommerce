@@ -39,14 +39,20 @@ class Ajax
      */
     protected $persistentRuleRepository;
 
+    protected $customizer;
+
+    protected $engine;
+
     /**
      * @param null $deprecated
      */
-    public function __construct($deprecated = null)
+    public function __construct($customizer, $engine, $deprecated = null)
     {
         $this->context                  = adp_context();
         $this->ruleRepository           = new RuleRepository();
         $this->persistentRuleRepository = new PersistentRuleRepository();
+        $this->customizer = $customizer;
+        $this->engine = $engine;
 
         $this->limit = $this->context->getOption('limit_results_in_autocomplete');
         if (empty($this->limit)) {
@@ -72,6 +78,7 @@ class Ajax
     public function register()
     {
         add_action('wp_ajax_' . self::ACTION_PREFIX, array($this, 'ajaxRequests'));
+        add_action('wp_ajax_nopriv_' . self::ACTION_PREFIX, array($this, 'ajaxRequests'));
     }
 
     public function ajaxRequests()
@@ -332,7 +339,7 @@ class Ajax
         }, $terms);
     }
 
-    public function ajax_product_brand()
+    public function ajax_product_brands()
     {
         //phpcs:ignore WordPress.Security.ValidatedSanitizedInput, WordPress.Security.NonceVerification.Missing
         $query = htmlspecialchars($_POST['query'] ?? "", ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401);

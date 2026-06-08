@@ -76,7 +76,7 @@ class FiltersFormatter
                 'not_in_list' => __('Product with tags not from list: %s', 'advanced-dynamic-pricing-for-woocommerce'),
             ),
 
-            'product_brand' => array(
+            'product_brands' => array(
                 /* translators: Product with brands from list*/
                 'in_list'     => __('Product with brands from list: %s', 'advanced-dynamic-pricing-for-woocommerce'),
                 /* translators:Product with brands not from list*/

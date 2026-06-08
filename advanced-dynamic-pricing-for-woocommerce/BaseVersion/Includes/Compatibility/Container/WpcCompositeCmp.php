@@ -2,6 +2,7 @@
 
 namespace ADP\BaseVersion\Includes\Compatibility\Container;
 
+use ADP\BaseVersion\Includes\Cache\CacheHelper;
 use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Container\ContainerCartItem;
 use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Container\ContainerPartCartItem;
@@ -77,6 +78,11 @@ class WpcCompositeCmp extends AbstractContainerCompatibility
 
     public function calculatePartOfContainerPrice(WcCartItemFacade $facade): float
     {
+        $trdPartyData = $facade->getThirdPartyData();
+        $parentProduct = CacheHelper::getWcProduct($trdPartyData['wooco_parent_id']);
+        if ($parentProduct instanceof \WC_Product_Composite && $parentProduct->get_pricing() === 'include'){
+            return (float)$facade->getProduct()->get_price('edit');
+        }
         return floatval(0);
     }
 
@@ -138,6 +144,11 @@ class WpcCompositeCmp extends AbstractContainerCompatibility
 
     public function isPartOfContainerFacadePricedIndividually(WcCartItemFacade $facade): ?bool
     {
+        $trdPartyData = $facade->getThirdPartyData();
+        $parentProduct = CacheHelper::getWcProduct($trdPartyData['wooco_parent_id']);
+        if ($parentProduct instanceof \WC_Product_Composite && $parentProduct->get_pricing() === 'include'){
+            return true;
+        }
         return false;
     }
 

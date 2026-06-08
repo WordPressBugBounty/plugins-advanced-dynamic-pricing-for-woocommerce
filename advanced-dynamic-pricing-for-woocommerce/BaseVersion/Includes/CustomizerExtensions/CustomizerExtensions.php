@@ -81,6 +81,78 @@ class CustomizerExtensions
         );
     }
 
+    protected function initChooseProductDiscountFontOptions($panelId, $section)
+    {
+        $mapSectionAndCssSelector = array(
+            "$panelId-table_header" => '.adp-choose-product-discount-title',
+            "$panelId-table_discount_title" => '.adp-choose-card-header',
+            "$panelId-table_discount_description_title" => '.adp-choose-card-description',
+        );
+
+        if (empty($mapSectionAndCssSelector[$section])) {
+            return false;
+        }
+
+        $selector = $mapSectionAndCssSelector[$section];
+
+        $fontOptions = array(
+            "$panelId-emphasis_bold" => array(
+                'label'             => __('Bold text', 'advanced-dynamic-pricing-for-woocommerce'),
+                'default'           => false,
+                'sanitize_callback' => 'wc_bool_to_string',
+                'control_class'     => 'ADP\BaseVersion\Includes\CustomizerExtensions\Controls\FontEmphasisBold',
+                'priority'          => 10,
+
+                'apply_type'       => 'css',
+                'selector'         => $selector,
+                'css_option_name'  => 'font-weight',
+                'css_option_value' => 'bold',
+                'layout'           => 'any',
+            ),
+
+            "$panelId-emphasis_italic" => array(
+                'label'             => __('Italic text', 'advanced-dynamic-pricing-for-woocommerce'),
+                'default'           => false,
+                'sanitize_callback' => 'wc_bool_to_string',
+                'control_class'     => 'ADP\BaseVersion\Includes\CustomizerExtensions\Controls\FontEmphasisItalic',
+                'priority'          => 20,
+
+                'apply_type'       => 'css',
+                'selector'         => $selector,
+                'css_option_name'  => 'font-style',
+                'css_option_value' => 'italic',
+                'layout'           => 'any',
+            ),
+
+            "$panelId-text_align" => array(
+                'label'         => __('Text align', 'advanced-dynamic-pricing-for-woocommerce'),
+                'default'       => '',
+                'control_class' => 'ADP\BaseVersion\Includes\CustomizerExtensions\Controls\TextAlign',
+                'priority'      => 30,
+
+                'apply_type'      => 'css',
+                'selector'        => $selector,
+                'css_option_name' => 'justify-content',
+                'layout'          => 'any',
+            ),
+
+            "$panelId-text_color" => array(
+                'label'             => __('Text color', 'advanced-dynamic-pricing-for-woocommerce'),
+                'default'           => '#6d6d6d',
+                'sanitize_callback' => 'sanitize_hex_color',
+                'control_class'     => '\WP_Customize_Color_Control',
+                'priority'          => 40,
+
+                'apply_type'      => 'css',
+                'selector'        => $selector,
+                'css_option_name' => 'color',
+                'layout'          => 'any',
+            ),
+        );
+
+        return $fontOptions;
+    }
+
     protected function initFontOptions($panelId, $section)
     {
         $mapSectionAndCssSelector = array(

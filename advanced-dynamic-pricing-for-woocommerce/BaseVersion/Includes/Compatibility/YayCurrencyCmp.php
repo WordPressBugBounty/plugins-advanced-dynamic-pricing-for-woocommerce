@@ -81,7 +81,11 @@ class YayCurrencyCmp
                     $yayCurrency = \Yay_Currency\Engine\FEPages\WooCommerceCurrency::get_instance();
 
                     $hooks = \Yay_Currency\Helpers\YayCurrencyHelper::get_product_price_hooks();
-                    $price_priority = \Yay_Currency\Helpers\SupportHelper::get_filters_priority();
+
+                    if (method_exists(\Yay_Currency\Helpers\SupportHelper::class, 'get_filters_priority'))
+                        $price_priority = \Yay_Currency\Helpers\SupportHelper::get_filters_priority();
+                    else
+                        $price_priority = \Yay_Currency\Helpers\SupportHelper::get_product_prices_filters_priority();
 
                     foreach ($hooks as $hook) {
                         remove_filter($hook, [$yayCurrency, 'custom_raw_price'], $price_priority, 2);

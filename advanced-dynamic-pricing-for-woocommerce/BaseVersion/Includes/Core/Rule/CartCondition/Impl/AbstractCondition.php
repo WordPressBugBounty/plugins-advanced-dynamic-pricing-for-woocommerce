@@ -35,6 +35,8 @@ abstract class AbstractCondition implements RuleCondition
         return false;
     }
 
+    static function isEnabled()  {  return true;}
+
     public function getInvolvedCartItems()
     {
         return null;

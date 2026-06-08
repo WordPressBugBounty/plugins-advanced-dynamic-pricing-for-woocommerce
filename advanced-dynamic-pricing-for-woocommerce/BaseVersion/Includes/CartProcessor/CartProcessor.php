@@ -783,7 +783,7 @@ class CartProcessor
         $this->listener->processFinished($wcCart, WC()->session);
 
         do_action('wdp_process_complete', $wcCart, $result, $cart, $this);
-        
+
         return $cart;
     }
 
@@ -1157,6 +1157,14 @@ class CartProcessor
 
     protected function addNoticeIfNotExists($message, $type = 'success', $data = array())
     {
+        if (
+            wp_doing_ajax()
+            && isset($_REQUEST['wc-ajax'])
+            && $_REQUEST['wc-ajax'] === 'update_order_review'
+        ) {
+            return;
+        }
+
         $exists = false;
         $notices = wc_get_notices($type);
 

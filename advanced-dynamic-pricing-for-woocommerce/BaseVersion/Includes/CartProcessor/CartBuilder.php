@@ -58,7 +58,9 @@ class CartBuilder
 
             $reflection = new \ReflectionClass($newWcCustomer);
             $property = $reflection->getProperty('changes');
-            $property->setAccessible(true);
+            if (\PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
             $property->setValue($newWcCustomer, $wcCustomer->get_changes());
 
             $customer = $converter->convertFromWcCustomer($newWcCustomer, $wcSession);

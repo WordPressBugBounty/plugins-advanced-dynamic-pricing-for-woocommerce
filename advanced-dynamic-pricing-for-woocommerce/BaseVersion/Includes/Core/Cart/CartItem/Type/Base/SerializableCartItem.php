@@ -6,13 +6,27 @@ use WC_Product;
 /** @phpstan-consistent-constructor */
 class SerializableCartItem
 {
+    /**
+     * Defines the constructor contract that all subclasses must stay compatible with.
+     *
+     * @param WC_Product $product
+     * @param float $qty
+     * @param int $ruleId
+     * @param string $associatedHash
+     */
+    public function __construct($product, $qty, $ruleId, $associatedHash)
+    {
+    }
+
     public function toArray() {
         $reflect = new \ReflectionClass($this);
         $props   = $reflect->getProperties();
 
         $obj = [];
         foreach ( $props as $prop ) {
-            $prop->setAccessible(true);
+            if (\PHP_VERSION_ID < 80100) {
+                $prop->setAccessible(true);
+            }
             $value = $prop->getValue($this);
 
             if ( is_object($value) ) {
@@ -38,7 +52,9 @@ class SerializableCartItem
         $props = $reflect->getProperties();
 
         foreach ($props as $prop) {
-            $prop->setAccessible(true);
+            if (\PHP_VERSION_ID < 80100) {
+                $prop->setAccessible(true);
+            }
 
             if (isset($data[$prop->getName()])) {
                 $value = $data[$prop->getName()];

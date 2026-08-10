@@ -207,6 +207,7 @@ class WcProductPageExtensions
         CacheHelper::cacheFlushGroup( CacheHelper::GROUP_WC_PRODUCT );
         CacheHelper::cacheDelete( CacheHelper::KEY_ALREADY_LOADED_VARIABLES );
         CacheHelper::cacheFlushGroup( CacheHelper::GROUP_VARIATION_PROD_DATA_CACHE );
+        CacheHelper::cacheFlushGroup( CacheHelper::GROUP_PROCESSED_PRODUCTS_TO_DISPLAY );
 
         $this->persistentRuleRepository->recalculateCacheForProduct($this->context, $product);
     }

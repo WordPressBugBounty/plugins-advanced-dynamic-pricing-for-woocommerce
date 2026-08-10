@@ -183,8 +183,10 @@ class SqlGeneratorPersistent
         }
 
         $sql = $this->getSql();
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
+        // Values embedded via compareToSql() are already escaped with esc_sql(); query shape is dynamic and not expressible with $wpdb->prepare() placeholders.
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $products = $wpdb->get_results($sql);
+        // phpcs:enable
 
         if($mode == 'on_sale' || $mode == 'bogo') {
             $productIds = wp_parse_id_list(array_merge(wp_list_pluck($products, 'id'),
@@ -309,7 +311,7 @@ class SqlGeneratorPersistent
 
         foreach ($custom_fields as $key => $value) {
             $tmp_where   = [
-                "{$table}.meta_key = '{$key}'",
+                $this->compareToSql("{$table}.meta_key", ComparisonMethods::EQ, $key),
                 $this->compareToSql("{$table}.meta_value", ComparisonMethods::EQ, $value),
             ];
 
@@ -326,12 +328,14 @@ class SqlGeneratorPersistent
 
         $ids = implode(', ', $termIds);
         $where = $this->compareToSql("{$wpdb->terms}.term_id", ComparisonMethods::IN_LIST, $termIds);
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        // $where is already escaped via compareToSql()/esc_sql(); query shape is dynamic and not expressible with $wpdb->prepare() placeholders.
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $items = $wpdb->get_results("SELECT taxonomy, {$wpdb->terms}.slug, {$wpdb->terms}.term_id
-                                    FROM {$wpdb->term_taxonomy} 
-                                    INNER JOIN {$wpdb->terms} 
-                                    USING (term_id) 
+                                    FROM {$wpdb->term_taxonomy}
+                                    INNER JOIN {$wpdb->terms}
+                                    USING (term_id)
                                     WHERE {$where}");
+        // phpcs:enable
 
         $where = [];
         foreach ($items as $item) {
@@ -343,9 +347,11 @@ class SqlGeneratorPersistent
             $where[] = "(" . implode(" AND ", $tmp_where) . ")";
         }
         $where = "( " . implode(' OR ', $where) . " )";
-        
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+        // $where is already escaped via compareToSql()/esc_sql(); query shape is dynamic and not expressible with $wpdb->prepare() placeholders.
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $productIds = $wpdb->get_col("SELECT post_id FROM {$wpdb->postmeta} WHERE {$where}");
+        // phpcs:enable
 
         return  $this->compareToSql('post_children.ID', $comparisonMethod, $productIds);
     }
@@ -392,7 +398,9 @@ class SqlGeneratorPersistent
         foreach ($values as $value) {
             //for variations products
             [$k, $v] = explode(':', $value);
-            $where[] = "{$table}.meta_key = 'attribute_{$k}' AND ({$table}.meta_value = '{$v}' OR {$table}.meta_value = '')";
+            $where[] = $this->compareToSql("{$table}.meta_key", ComparisonMethods::EQ, "attribute_{$k}")
+                . " AND (" . $this->compareToSql("{$table}.meta_value", ComparisonMethods::EQ, $v)
+                . " OR " . $this->compareToSql("{$table}.meta_value", ComparisonMethods::EQ, '') . ")";
 
             $tmp_where   = [
                 "{$table}.meta_key LIKE 'adp_custom_product_attribute_%'",
@@ -410,11 +418,14 @@ class SqlGeneratorPersistent
     protected function getSqlByPostmeta($where, $comparisonMethod, $table = 'postmeta_1') {
         global $wpdb;
         if(ComparisonMethods::NOT_IN_LIST === $comparisonMethod) {
+            // This returns a WHERE fragment (not executed here); $where is already escaped via compareToSql()/esc_sql() and $table is always a hardcoded literal from callers.
+            // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
             return "post_children.ID NOT IN(
                 SELECT post_id
                 FROM {$wpdb->postmeta} as {$table}
                 WHERE $where
             )";
+            // phpcs:enable
         }
 
         $this->addJoin("LEFT JOIN {$wpdb->postmeta} as {$table} ON post_children.ID = {$table}.post_id");

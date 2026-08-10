@@ -98,14 +98,22 @@ class OriginalPriceCalculation
             try {
                 $reflection = new ReflectionClass($product);
                 $property   = $reflection->getProperty('changes');
-                $property->setAccessible(true);
+                if (\PHP_VERSION_ID < 80100) {
+                    $property->setAccessible(true);
+                }
                 $changes = $property->getValue($product);
                 $property->setValue($product, array());
             } catch (ReflectionException $exception) {
                 $property = null;
             }
 
-            $cleanPrice                      = $this->getPrice($product, $wcCartItem, false, false);
+            $priceMod = $context->getOption('discount_for_onsale');
+
+            if($priceMod === self::DISCOUNT_REGULAR_PRICE || $priceMod === self::COMPARE_WC_AND_ADP) {
+                $cleanPrice                      = $this->getRegularPrice($product, $wcCartItem, false, false);
+            } else
+                $cleanPrice                      = $this->getPrice($product, $wcCartItem, false, false);
+
             $this->trdPartyAdjustmentsAmount = $this->priceToAdjust - $cleanPrice;
             $this->basePrice                 = $cleanPrice;
 
@@ -113,7 +121,9 @@ class OriginalPriceCalculation
                 $property->setValue($product, $changes);
             }
         } elseif ($this->getIsOnSale($product, $wcCartItem, $prodPropsWithFilters, true)) {
-            if ($priceMod === self::USE_SALE_PRICE || $priceMod === self::DISCOUNT_SALE_PRICE) {
+            $rulesCanBeApplied = ! ($context->isRuleSuppressed() || $context->getOption('rules_apply_mode') === 'none');
+
+            if ($priceMod === self::USE_SALE_PRICE || $priceMod === self::DISCOUNT_SALE_PRICE || ! $rulesCanBeApplied) {
                 $this->priceToAdjust             = $this->getSalePrice($product, $wcCartItem, $prodPropsWithFilters,
                     true);
                 $cleanPrice                      = $this->getSalePrice($product, $wcCartItem, false, false);

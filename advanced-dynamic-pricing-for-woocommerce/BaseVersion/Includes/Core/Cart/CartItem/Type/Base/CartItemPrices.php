@@ -30,7 +30,6 @@ class CartItemPrices
         return md5(serialize([
             $this->originalPrice,
             $this->originalPriceToDisplay,
-            $this->minDiscountRangePrice,
             $this->trdPartyAdjustmentsTotal
         ]));
     }

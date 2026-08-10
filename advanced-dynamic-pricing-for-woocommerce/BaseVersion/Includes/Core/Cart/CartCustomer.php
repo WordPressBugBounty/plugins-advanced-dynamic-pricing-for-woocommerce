@@ -321,6 +321,10 @@ class CartCustomer
         return isset($this->billingAddress['city']) ? $this->billingAddress['city'] : "";
     }
 
+    public function getBillingEmail()
+    {
+        return isset($this->billingAddress['email']) ? $this->billingAddress['email'] : "";
+    }
     /**
      * @return array<int, RemovedFreeItems>
      */

@@ -178,7 +178,9 @@ class YithBundlesCmp extends AbstractContainerCompatibility
         $product = $facade->getProduct();
         $reflection = new \ReflectionClass($product);
         $property = $reflection->getProperty('data');
-        $property->setAccessible(true);
+        if (\PHP_VERSION_ID < 80100) {
+            $property->setAccessible(true);
+        }
         $price = $property->getValue($product)['price'];
         if(isset($thirdPartyData['discount'])){
             $discount = floatval($thirdPartyData['discount']);

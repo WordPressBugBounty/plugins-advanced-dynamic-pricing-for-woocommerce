@@ -156,29 +156,40 @@ class CartCustomerHelper
         }
 
         $tableStats = $wpdb->prefix . 'wdp_orders';
-        $orderIds = \implode(', ', $orderIds);
+        $orderIds     = array_map('absint', $orderIds);
+        $placeholders = implode(', ', array_fill(0, count($orderIds), '%d'));
 
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-        $ids = $wpdb->get_col("SELECT DISTINCT rule_id FROM {$tableStats} WHERE order_id IN ({$orderIds})");
+        // $tableStats is a hardcoded internal table name; $placeholders contains only repeated %d tokens, built at runtime so PHPCS can't see them statically.
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, PluginCheck.Security.DirectDB.UnescapedDBParameter
+        $ids = $wpdb->get_col($wpdb->prepare(
+            "SELECT DISTINCT rule_id FROM {$tableStats} WHERE order_id IN ({$placeholders})",
+            $orderIds
+        ));
+        // phpcs:enable
 
         return $ids;
     }
 
     public function getOrderedProductIds()
     {
+        $args = array();
+
         if ($this->cartCustomer->isGuest()) {
-            return array();
+            if(!$this->cartCustomer->getBillingEmail() )
+                return array();
+            $args['billing_email'] = $this->cartCustomer->getBillingEmail();
+        } else {
+            $args['customer_id'] = $this->cartCustomer->getId();
         }
 
-        $args = array(
+        $args = array_merge(array(
             'numberposts' => -1,
             'orderby'     => 'date',
             'order'       => 'DESC',
-            'customer_id' => $this->cartCustomer->getId(),
             'post_type'   => wc_get_order_types(),
             'post_status' => $this->getPreparedIsPaidOrderStatuses(),
             'limit'   => -1,
-        );
+        ), $args);
 
         $orders = wc_get_orders($args);
 
@@ -296,15 +307,19 @@ class CartCustomerHelper
      */
     protected function getOrderIds($args = array()): array
     {
+
         if ($this->cartCustomer->isGuest()) {
-            return array();
+            if(!$this->cartCustomer->getBillingEmail() )
+                return array();
+            $args['billing_email'] = $this->cartCustomer->getBillingEmail();
+        } else {
+            $args['customer_id'] = $this->cartCustomer->getId();
         }
 
         $args = array_merge(array(
             'numberposts' => -1,
             'orderby'     => 'date',
             'order'       => 'DESC',
-            'customer_id' => $this->cartCustomer->getId(),
             'post_type'   => wc_get_order_types(),
             'post_status' => array_keys(wc_get_order_statuses()),
             'return'      => 'ids',

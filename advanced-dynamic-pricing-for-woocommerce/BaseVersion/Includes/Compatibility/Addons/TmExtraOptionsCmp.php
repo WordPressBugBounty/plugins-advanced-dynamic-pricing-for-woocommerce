@@ -16,6 +16,7 @@ use ADP\BaseVersion\Includes\Core\RuleProcessor\RoleDiscountStrategy;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\SingleItemRuleProcessor;
 use ADP\BaseVersion\Includes\Database\Repository\PersistentRuleRepository;
 use ADP\BaseVersion\Includes\WC\WcCartItemFacade;
+use Exception;
 
 defined('ABSPATH') or exit;
 
@@ -37,6 +38,30 @@ class TmExtraOptionsCmp
 
     public function register()
     {
+    }
+
+    public function installRenderHooks() {
+        if ($this->isActive()) {
+            add_filter('woocommerce_cart_item_price', [$this, 'getCartItemPrice'], PHP_INT_MAX, 2);
+        }
+    }
+
+    public function getCartItemPrice($price, $cart_item)
+    {
+        try {
+            if(isset($cart_item["tm_epo_options_prices"]) && isset($cart_item["tm_epo_product_original_price"]) && $cart_item["tm_epo_options_prices"] == 0){
+                if ((float)$cart_item["tm_epo_product_original_price"] > (float)$cart_item["line_subtotal"]) {
+                    $del = is_numeric($cart_item["tm_epo_product_original_price"]) ? wc_price($cart_item["tm_epo_product_original_price"]) : $cart_item["tm_epo_product_original_price"];
+                    $ins = is_numeric($cart_item["line_subtotal"]) ? wc_price($cart_item["line_subtotal"]) : $cart_item["line_subtotal"];
+
+                    return '<del>' . $del . '</del> <ins>' . $ins . '</ins>';
+
+                }
+            }
+        } catch (Exception $e) {
+            wp_send_json_error($e->getMessage());
+        }
+        return $price;
     }
 
     public function isActive()

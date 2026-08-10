@@ -58,6 +58,24 @@ class WcsAttCmp
         if ($this->isActive() && isset($this->wcsAtt->product_data) ) {
             ADP_WCS_ATT_Product_Data_Wrapper::init();
             $this->wcsAtt->product_data = new ADP_WCS_ATT_Product_Data_Wrapper();
+            $this->pinProductData($this->wcsAtt->product_data);
+        }
+    }
+
+    protected function pinProductData($wrapper)
+    {
+        if ( ! class_exists('\WCS_ATT_Product_Data')) {
+            return;
+        }
+
+        try {
+            $property = new \ReflectionProperty('WCS_ATT_Product_Data', '_instance');
+            if (\PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
+            $property->setValue(null, $wrapper);
+        } catch (\ReflectionException $e) {
+
         }
     }
 

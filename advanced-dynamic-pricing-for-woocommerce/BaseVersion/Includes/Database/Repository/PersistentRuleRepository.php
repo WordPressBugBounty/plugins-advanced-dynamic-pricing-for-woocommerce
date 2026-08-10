@@ -414,7 +414,7 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
             AND (persistent_rules_cache.qty_finish IS NULL OR persistent_rules_cache.qty_finish >= %s)",
             array($qty, $qty)
         );
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- query built with $wpdb->prepare() above
         $rows  = $wpdb->get_results($query, ARRAY_A);
 
         if (count($rows) === 0) {
@@ -562,9 +562,11 @@ class PersistentRuleRepository implements PersistentRuleRepositoryInterface
         add_filter( 'woocommerce_get_catalog_ordering_args', function ($sort_args) {
             $orderby_value = null;
 
+            // phpcs:disable WordPress.Security.NonceVerification.Recommended -- read-only catalog sort parameter, no state change
             if ( isset( $_GET['orderby'] ) ) {
-                $orderby_value = wc_clean( $_GET['orderby'] );
+                $orderby_value = sanitize_text_field( wp_unslash( $_GET['orderby'] ) );
             }
+            // phpcs:enable
 
             if (!empty($orderby_value) && $orderby_value === 'on_sale_first') {
                 add_filter(

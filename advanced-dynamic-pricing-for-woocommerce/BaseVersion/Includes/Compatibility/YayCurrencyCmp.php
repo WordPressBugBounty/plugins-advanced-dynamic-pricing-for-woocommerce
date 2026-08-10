@@ -142,12 +142,14 @@ class YayCurrencyCmp
             return true;
         }
 
-        if (isset($_GET['wc-ajax']) && $_GET['wc-ajax'] === 'update_order_review') {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only check of which WooCommerce internal ajax action is running, no data is processed
+        if (isset($_GET['wc-ajax']) && sanitize_text_field(wp_unslash($_GET['wc-ajax'])) === 'update_order_review') {
             return true;
         }
 
         $checkout_page_id = wc_get_page_id('checkout');
-        if ($checkout_page_id && strpos($_SERVER['REQUEST_URI'], get_page_uri($checkout_page_id)) !== false) {
+        $request_uri = isset($_SERVER['REQUEST_URI']) ? esc_url_raw(wp_unslash($_SERVER['REQUEST_URI'])) : '';
+        if ($checkout_page_id && strpos($request_uri, get_page_uri($checkout_page_id)) !== false) {
             return true;
         }
 

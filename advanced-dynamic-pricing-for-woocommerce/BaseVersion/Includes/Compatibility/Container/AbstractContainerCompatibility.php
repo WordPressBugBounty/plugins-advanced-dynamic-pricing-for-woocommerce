@@ -58,7 +58,9 @@ abstract class AbstractContainerCompatibility implements ContainerCompatibility
         $product = $facade->getProduct();
         $reflection = new \ReflectionClass($product);
         $property = $reflection->getProperty('data');
-        $property->setAccessible(true);
+        if (\PHP_VERSION_ID < 80100) {
+            $property->setAccessible(true);
+        }
         $basePrice = $property->getValue($product)['price'];
 
         $initialPrice = $this->calculatePartOfContainerPrice($facade);
@@ -159,5 +161,9 @@ abstract class AbstractContainerCompatibility implements ContainerCompatibility
             $containerPartProduct->getPrice(),
             $containerPartProduct->getQty()
         );
+    }
+
+    public function getContainerBasePriceForDiscountRegular( ContainerCartItem $item, float $salePrice): float {
+        return $salePrice;
     }
 }

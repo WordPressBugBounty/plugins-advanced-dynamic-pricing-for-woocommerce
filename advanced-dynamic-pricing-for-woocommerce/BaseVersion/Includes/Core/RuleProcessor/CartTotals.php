@@ -291,6 +291,10 @@ class CartTotals
 
     public function calculateTotalDiscounts($inclTax = false)
     {
+        if (!(WC()->cart instanceof \WC_Cart)) {
+            return 0.0;
+        }
+
         $itemsSubtotals = $this->getSubtotalWithoutImmutable($inclTax);
 
         $items = array();

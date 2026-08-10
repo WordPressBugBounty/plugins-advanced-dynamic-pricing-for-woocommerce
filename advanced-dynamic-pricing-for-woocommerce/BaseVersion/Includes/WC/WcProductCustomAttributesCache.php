@@ -32,8 +32,13 @@ class WcProductCustomAttributesCache
         if ( $atLeastOneExists === null ) {
             $this->updateAllProductsCustomAttributes();
         }
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-        return $wpdb->get_col("SELECT DISTINCT meta_value FROM {$wpdb->postmeta} WHERE meta_key LIKE 'adp_custom_product_attribute_%' AND meta_value LIKE '%$query%'");
+        $like = '%' . $wpdb->esc_like($query) . '%';
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+        return $wpdb->get_col($wpdb->prepare(
+            "SELECT DISTINCT meta_value FROM {$wpdb->postmeta} WHERE meta_key LIKE %s AND meta_value LIKE %s",
+            'adp_custom_product_attribute_%',
+            $like
+        ));
     }
 
     /**

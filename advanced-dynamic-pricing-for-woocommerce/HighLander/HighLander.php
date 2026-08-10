@@ -213,7 +213,9 @@ class HighLander
         try {
             $reflection = new \ReflectionClass($hookObj);
             $property = $reflection->getProperty('priorities');
-            $property->setAccessible(true);
+            if (\PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
             $property->setValue($hookObj, array_keys($hookObj->callbacks));
         } catch (\ReflectionException $e) {
 

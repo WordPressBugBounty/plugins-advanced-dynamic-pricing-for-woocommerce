@@ -193,7 +193,9 @@ class PriceBasedOnCountryCmp
         try {
             $reflection = new \ReflectionClass($product);
             $property   = $reflection->getProperty('data');
-            $property->setAccessible(true);
+            if (\PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
         } catch (\ReflectionException $e) {
             $property = null;
         }

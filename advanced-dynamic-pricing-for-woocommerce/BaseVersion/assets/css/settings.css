@@ -1408,3 +1408,7 @@ div.wdp-row.wdp-options select {
 .wdp-modal .wc-backbone-modal-main {
 	padding-bottom: 45px;
 }
+
+.wdp-ruleitem.disabled {
+  pointer-events: auto !important;
+}

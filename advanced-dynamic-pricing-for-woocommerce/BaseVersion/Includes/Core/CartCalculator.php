@@ -324,12 +324,17 @@ class CartCalculator implements ICartCalculator
                 return $newItem;
             }, $item->getItems());
 
+            $wcSalePriceBase = $wcSalePrice;
+            if ('discount_regular' === adp_context()->getOption('discount_for_onsale')) {
+                $wcSalePriceBase = $item->getCompatibility()->getContainerBasePriceForDiscountRegular( $item, $wcSalePrice);
+            }
+
             $newItem = new ContainerCartItem(
                 $item->getWcItem(),
                 $item->getCompatibility(),
                 $item->getContainerPriceTypeEnum(),
                 $wcSalePrice,
-                $wcSalePrice,
+                $wcSalePriceBase,
                 $subItems,
                 $item->getQty(),
                 $item->getInitialCartPosition()

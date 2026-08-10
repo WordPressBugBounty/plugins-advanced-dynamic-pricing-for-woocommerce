@@ -150,7 +150,9 @@ class CartItemConverter
         try {
             $reflection = new ReflectionClass($product);
             $property = $reflection->getProperty('changes');
-            $property->setAccessible(true);
+            if (\PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
             $property->setValue($product, array());
         } catch (Exception $e) {
 
@@ -232,7 +234,9 @@ class CartItemConverter
         try {
             $reflection = new ReflectionClass($product);
             $property = $reflection->getProperty('changes');
-            $property->setAccessible(true);
+            if (\PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
             $property->setValue($product, array());
         } catch (Exception $e) {
 

@@ -170,9 +170,14 @@ class Ajax
     {
         global $wpdb;
         //phpcs:ignore WordPress.Security.ValidatedSanitizedInput, WordPress.Security.NonceVerification.Missing
-        $query = htmlspecialchars($_POST['query'] ?? "", ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401);
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-        $queryResults = $wpdb->get_results("SELECT DISTINCT meta_value, post_id FROM $wpdb->postmeta WHERE meta_key = '_sku' AND meta_value  like '%$query%' LIMIT $this->limit");
+        $query = isset($_POST['query']) ? sanitize_text_field(wp_unslash($_POST['query'])) : "";
+        $like  = '%' . $wpdb->esc_like($query) . '%';
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $queryResults = $wpdb->get_results($wpdb->prepare(
+            "SELECT DISTINCT meta_value, post_id FROM {$wpdb->postmeta} WHERE meta_key = '_sku' AND meta_value LIKE %s LIMIT %d",
+            $like,
+            $this->limit
+        ));
 
         $results = array_map(function ($result) {
             return array(
@@ -272,14 +277,21 @@ class Ajax
     {
         global $wc_product_attributes, $wpdb;
         //phpcs:ignore WordPress.Security.ValidatedSanitizedInput, WordPress.Security.NonceVerification.Missing
-        $query = htmlspecialchars($_POST['query'] ?? "", ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401);
+        $query = isset($_POST['query']) ? sanitize_text_field(wp_unslash($_POST['query'])) : "";
+        $like  = '%' . $wpdb->esc_like($query) . '%';
 
         $taxonomies = array_map(function ($item) {
-            return "'$item'";
+            return "'" . esc_sql($item) . "'";
         }, array_keys($wc_product_attributes));
         $taxonomies = implode(', ', $taxonomies);
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-        $items = $wpdb->get_results("SELECT $wpdb->terms.term_id, $wpdb->terms.name, taxonomy FROM $wpdb->term_taxonomy INNER JOIN $wpdb->terms USING (term_id) WHERE taxonomy in ($taxonomies) AND $wpdb->terms.name  like '%$query%' LIMIT $this->limit");
+        // $taxonomies entries are escaped with esc_sql(); table/placeholder interpolation can't be expressed via $wpdb->prepare() placeholders.
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+        $items = $wpdb->get_results($wpdb->prepare(
+            "SELECT {$wpdb->terms}.term_id, {$wpdb->terms}.name, taxonomy FROM {$wpdb->term_taxonomy} INNER JOIN {$wpdb->terms} USING (term_id) WHERE taxonomy in ($taxonomies) AND {$wpdb->terms}.name LIKE %s LIMIT %d",
+            $like,
+            $this->limit
+        ));
+        // phpcs:enable
 
 
         return array_map(function ($term) use ($wc_product_attributes) {
@@ -365,10 +377,14 @@ class Ajax
     {
         global $wpdb;
         //phpcs:ignore WordPress.Security.ValidatedSanitizedInput, WordPress.Security.NonceVerification.Missing
-        $query = htmlspecialchars($_POST['query'] ?? "", ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401);
-        $like  = $wpdb->esc_like($query);
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-        $wpFields = $wpdb->get_col("SELECT DISTINCT CONCAT(fields.meta_key,'=',fields.meta_value) FROM {$wpdb->postmeta} AS fields JOIN {$wpdb->posts} AS products ON products.ID = fields.post_id WHERE products.post_type IN ('product','product_variation') AND CONCAT(fields.meta_key,'=',fields.meta_value) LIKE '%{$like}%' ORDER BY meta_key LIMIT $this->limit");
+        $query = isset($_POST['query']) ? sanitize_text_field(wp_unslash($_POST['query'])) : "";
+        $like  = '%' . $wpdb->esc_like($query) . '%';
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $wpFields = $wpdb->get_col($wpdb->prepare(
+            "SELECT DISTINCT CONCAT(fields.meta_key,'=',fields.meta_value) FROM {$wpdb->postmeta} AS fields JOIN {$wpdb->posts} AS products ON products.ID = fields.post_id WHERE products.post_type IN ('product','product_variation') AND CONCAT(fields.meta_key,'=',fields.meta_value) LIKE %s ORDER BY meta_key LIMIT %d",
+            $like,
+            $this->limit
+        ));
 
         return array_map(function ($custom_field) {
             return array(

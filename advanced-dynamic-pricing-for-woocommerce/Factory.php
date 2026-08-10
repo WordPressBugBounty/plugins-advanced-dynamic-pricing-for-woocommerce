@@ -2,6 +2,10 @@
 
 namespace ADP;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Factory
 {
     const PROJECT_NAMESPACE = __NAMESPACE__;

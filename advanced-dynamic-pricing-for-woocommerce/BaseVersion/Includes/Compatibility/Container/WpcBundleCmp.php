@@ -97,7 +97,9 @@ class WpcBundleCmp extends AbstractContainerCompatibility
         $product = $facade->getProduct();
         $reflection = new \ReflectionClass($product);
         $property = $reflection->getProperty('data');
-        $property->setAccessible(true);
+        if (\PHP_VERSION_ID < 80100) {
+            $property->setAccessible(true);
+        }
 
         if(isset($this->settings['bundled_price_from']) && $this->settings['bundled_price_from'] === 'regular_price') {
             $basePrice = (float)$property->getValue($product)['regular_price'];
@@ -270,5 +272,13 @@ class WpcBundleCmp extends AbstractContainerCompatibility
         }
 
         return $subContainerItem;
+    }
+
+    public function getContainerBasePriceForDiscountRegular( ContainerCartItem $item, float $salePrice): float {
+
+        if ($item->getContainerPriceTypeEnum()->equals(ContainerPriceTypeEnum::BASE_PLUS_SUM_OF_SUB_ITEMS())) {
+            return $item->getBasePrice();
+        }
+        return $salePrice;
     }
 }

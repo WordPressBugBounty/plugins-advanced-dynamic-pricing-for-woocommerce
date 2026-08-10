@@ -42,9 +42,15 @@ class Helpers
             return array();
         }
 
-        $ids = implode(', ', $ids);
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-        $items = $wpdb->get_results("SELECT $wpdb->terms.term_id, $wpdb->terms.name, taxonomy FROM $wpdb->term_taxonomy INNER JOIN $wpdb->terms USING (term_id) WHERE $wpdb->terms.term_id in ($ids)");
+        $ids          = array_map('absint', $ids);
+        $placeholders = implode(', ', array_fill(0, count($ids), '%d'));
+        // $placeholders contains only repeated %d tokens; PHPCS cannot statically see them since they're built at runtime.
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+        $items = $wpdb->get_results($wpdb->prepare(
+            "SELECT {$wpdb->terms}.term_id, {$wpdb->terms}.name, taxonomy FROM {$wpdb->term_taxonomy} INNER JOIN {$wpdb->terms} USING (term_id) WHERE {$wpdb->terms}.term_id in ({$placeholders})",
+            $ids
+        ));
+        // phpcs:enable
 
         return array_values(array_filter(array_map(function ($term) use ($wc_product_attributes) {
             if ( ! isset($wc_product_attributes[$term->taxonomy])) {

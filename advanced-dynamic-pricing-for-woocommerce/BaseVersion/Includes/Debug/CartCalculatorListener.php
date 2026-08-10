@@ -231,7 +231,9 @@ class CartCalculatorListener extends Listener
         if ($this->context->getOption("disable_shipping_calc_during_process", false)) {
             $reflection = new \ReflectionClass($wcCart);
             $property   = $reflection->getProperty('shipping_methods');
-            $property->setAccessible(true);
+            if (\PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
             if ( ! ($shippingRates = $property->getValue($wcCart))) {
                 $shippingRates = array();
             }

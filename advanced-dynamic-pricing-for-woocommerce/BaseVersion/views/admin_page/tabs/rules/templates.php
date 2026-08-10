@@ -305,7 +305,8 @@ defined('ABSPATH') or exit;
 
     <div id="product_exclude_filter_template">
         <select multiple
-            data-list="{type}"
+            data-list="{list}"
+            data-taxonomy="{taxonomy}"
             data-field="autocomplete"
             data-placeholder="<?php esc_attr_e( "Select exact products to exclude", "advanced-dynamic-pricing-for-woocommerce" ) ?>"
             name="rule[filters][{filterId}][excludes][{excludeId}][value][]">

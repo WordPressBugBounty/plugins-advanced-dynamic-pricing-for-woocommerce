@@ -2274,6 +2274,13 @@ jQuery(document).ready(function ($) {
       });
     }
 
+    var EXCLUDE_FILTER_BUILTIN_TYPES = [
+      'products', 'product_sku', 'product_categories', 'product_category_slug',
+      'product_attributes', 'product_custom_attributes', 'product_tags',
+      'product_custom_fields', 'product_sellers', 'product_collections',
+      'any', 'same_previous_filter'
+    ];
+
     function addExcludeAutocomplete($item, type, value, excludeId) {
       let $value = $item.find('.wdp-filter-exlclude-value');
 
@@ -2285,10 +2292,15 @@ jQuery(document).ready(function ($) {
           return '<option selected data-link="' + link + '" value="' + id + '">' + title + '</option>';
       }).join('');
 
+      // custom product taxonomies (e.g. brands) don't have a dedicated ajax_<type> handler,
+      // they must go through the generic product_taxonomies autocomplete instead
+      let isTaxonomy = EXCLUDE_FILTER_BUILTIN_TYPES.indexOf(type) === -1;
+
       let html = get_template('product_exclude_filter', {
         filterId: get_current_product_filter_index($item),
         excludeId: excludeId,
-        type,
+        list: isTaxonomy ? 'product_taxonomies' : type,
+        taxonomy: isTaxonomy ? type : '',
         options
       });
 

@@ -112,7 +112,8 @@ class Processor implements IWcProductProcessor
      */
     public function calculateProduct($theProduct, $qty = 1.0, $cartItemData = array())
     {
-        if (is_admin() && wp_doing_ajax() && isset($_POST['action']) && $_POST['action'] === 'inline-save') {
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- read-only check of which WP-Admin inline-edit action is running, no data is processed
+        if (is_admin() && wp_doing_ajax() && isset($_POST['action']) && sanitize_text_field(wp_unslash($_POST['action'])) === 'inline-save') {
             return null;
         }
 
@@ -204,6 +205,7 @@ class Processor implements IWcProductProcessor
             $context = $this->context;
             $req_variations = $this->context->getOption('req_variations_for_optimization_at_shop');
             if( $req_variations AND count($children) >= $req_variations AND
+                !is_product() AND
                 ( is_shop() OR is_product_category() OR is_product_tag() OR $context->is($context::PRODUCT_LOOP) ) ) {
                 $children = $this->getMinMaxCostChilds($children,$product);
             }
@@ -412,6 +414,10 @@ class Processor implements IWcProductProcessor
         }
 
         $cart = clone $this->cart;
+
+        foreach ($cart->getItems() as $existingItem) {
+            $existingItem->cleanAllAdjustments();
+        }
 
         $item = (new ToPricingCartItemAdapter())->adaptWcProduct($wrapper);
         $item->setQty($qty);

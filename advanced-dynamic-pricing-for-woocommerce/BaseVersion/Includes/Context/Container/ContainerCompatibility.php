@@ -48,4 +48,6 @@ interface ContainerCompatibility
         WcCartItemFacade $partOfContainerFacade,
         WcCartItemFacade $containerFacade
     );
+
+    public function getContainerBasePriceForDiscountRegular( ContainerCartItem $item, float $salePrice);
 }

@@ -31,6 +31,10 @@
     background: #efefef;
 }
 
+img.spinner_img:not([src]) {
+  visibility: visible;
+}
+
 .spinner_img {
     content:url(../images/spinner-2x.gif);
     display: block;

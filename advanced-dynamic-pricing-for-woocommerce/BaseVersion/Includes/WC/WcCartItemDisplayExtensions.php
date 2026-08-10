@@ -57,6 +57,10 @@ class WcCartItemDisplayExtensions
      */
     public function wcCartItemPrice($price, $cartItem, $cartItemKey)
     {
+        if (!is_array($cartItem)) {
+            return $price;
+        }
+
         if ($this->context->getOption('show_striked_prices')) {
             $price = $this->wcMainCartItemPrice($price, $cartItem, $cartItemKey);
         }
@@ -73,6 +77,10 @@ class WcCartItemDisplayExtensions
      */
     public function wcCartItemSubtotal($price, $cartItem, $cartItemKey)
     {
+        if (!is_array($cartItem)) {
+            return $price;
+        }
+
         if ($this->context->getOption('show_striked_prices')) {
             $price = $this->wcMainCartItemSubtotal($price, $cartItem, $cartItemKey);
         }

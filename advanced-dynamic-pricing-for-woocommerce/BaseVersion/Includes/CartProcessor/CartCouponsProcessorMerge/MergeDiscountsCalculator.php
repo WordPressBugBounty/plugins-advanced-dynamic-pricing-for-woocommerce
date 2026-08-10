@@ -68,16 +68,16 @@ class MergeDiscountsCalculator
 
         $reflection = new \ReflectionClass($this->wcDiscounts);
         $this->discountsProperty = $reflection->getProperty('discounts');
-        $this->discountsProperty->setAccessible(true);
-
         $this->getItemsToApplyCouponMethod = $reflection->getMethod('get_items_to_apply_coupon');
-        $this->getItemsToApplyCouponMethod->setAccessible(true);
-
         $this->applyCouponPercentMethod = $reflection->getMethod('apply_coupon_percent');
-        $this->applyCouponPercentMethod->setAccessible(true);
-
         $this->applyCouponFixedCartMethod = $reflection->getMethod('apply_coupon_fixed_cart');
-        $this->applyCouponFixedCartMethod->setAccessible(true);
+
+        if (\PHP_VERSION_ID < 80100) {
+            $this->discountsProperty->setAccessible(true);
+            $this->getItemsToApplyCouponMethod->setAccessible(true);
+            $this->applyCouponPercentMethod->setAccessible(true);
+            $this->applyCouponFixedCartMethod->setAccessible(true);
+        }
 
         $this->coupons = [];
 
@@ -189,15 +189,28 @@ class MergeDiscountsCalculator
 
         $itemToApply = array_filter($items, function ($item) use ($coupon) {
             $facade = new WcCartItemFacade($item->object, $item->key);
+            $ruleHistory = $facade->getHistory()[$coupon->getRuleId()] ?? [];
+            $consumed = $this->splitCartItemCouponApply[$facade->getKey()][$coupon->getRuleId()] ?? 0;
 
-            return $facade->getHistory()
-                && isset($facade->getHistory()[$coupon->getRuleId()])
-                && !isset($this->splitCartItemCouponApply[$facade->getKey()][$coupon->getRuleId()])
+            return $ruleHistory
+                && $consumed < count($ruleHistory)
                 && (
                     $coupon->getAffectedCartItemKey() === $facade->getKey()
                     || $coupon->getAffectedCartItemKey() === $facade->getOriginalKey()
                 );
         });
+
+        if (count($itemToApply) > 1) {
+            $withNonZeroHistory = array_filter($itemToApply, function ($item) use ($coupon) {
+                $facade = new WcCartItemFacade($item->object, $item->key);
+
+                return array_sum($facade->getHistory()[$coupon->getRuleId()] ?? []) != 0;
+            });
+
+            if (count($withNonZeroHistory) > 0) {
+                $itemToApply = $withNonZeroHistory;
+            }
+        }
 
         if (count($itemToApply) === 0) {
             throw new \Exception("Affected cart item was not found.");
@@ -207,10 +220,15 @@ class MergeDiscountsCalculator
 
         $facade = new WcCartItemFacade($item->object, $item->key);
         $ruleId = $coupon->getRuleId();
+        $ruleHistory = $facade->getHistory()[$ruleId] ?? [];
+        $consumedIndex = $this->splitCartItemCouponApply[$facade->getKey()][$ruleId] ?? 0;
 
         if ($coupon->getType() === $coupon::TYPE_ITEM_DISCOUNT) {
-            $newAmount = floatval(0);
-            $newAmount += array_sum($facade->getHistory()[$ruleId] ?? []) * $coupon->getAffectedCartItemQty();
+            $perUnitAmount = array_key_exists($consumedIndex, $ruleHistory)
+                ? $ruleHistory[$consumedIndex]
+                : array_sum($ruleHistory);
+
+            $newAmount = $perUnitAmount * $coupon->getAffectedCartItemQty();
 
             if ($newAmount > 0) {
                 $args = array('price' => $newAmount);
@@ -233,9 +251,9 @@ class MergeDiscountsCalculator
         $mergeCouponBuilder->affectedCartItem($facade);
 
         if ( isset($this->splitCartItemCouponApply[$facade->getKey()]) ) {
-            $this->splitCartItemCouponApply[$facade->getKey()][$ruleId] = $newAmount;
+            $this->splitCartItemCouponApply[$facade->getKey()][$ruleId] = $consumedIndex + 1;
         } else {
-            $this->splitCartItemCouponApply[$facade->getKey()] = [$ruleId => $newAmount];
+            $this->splitCartItemCouponApply[$facade->getKey()] = [$ruleId => $consumedIndex + 1];
         }
 
         $newAmount = round(wc_add_number_precision_deep($newAmount), wc_get_rounding_precision());

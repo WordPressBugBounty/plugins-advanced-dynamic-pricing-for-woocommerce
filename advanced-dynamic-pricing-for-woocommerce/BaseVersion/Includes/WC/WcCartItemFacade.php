@@ -370,7 +370,9 @@ class WcCartItemFacade
             try {
                 $reflection = new ReflectionClass($this->product);
                 $property   = $reflection->getProperty('changes');
-                $property->setAccessible(true);
+                if (\PHP_VERSION_ID < 80100) {
+                    $property->setAccessible(true);
+                }
                 $property->setValue($this->product, array());
             } catch (Exception $e) {
 

@@ -42,7 +42,9 @@ class ProductExtension
         try {
             $reflection = new \ReflectionClass($this->product);
             $property = $reflection->getProperty('changes');
-            $property->setAccessible(true);
+            if (\PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
             $changes = $property->getValue($this->product);
 
             return $changes['adpCustomInitialPrice'] ?? null;
@@ -58,7 +60,9 @@ class ProductExtension
         try {
             $reflection = new \ReflectionClass($this->product);
             $property = $reflection->getProperty('changes');
-            $property->setAccessible(true);
+            if (\PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
             $changes = $property->getValue($this->product);
 
             $price = $price !== null ? (float)$price : null;
@@ -78,7 +82,9 @@ class ProductExtension
         try {
             $reflection = new \ReflectionClass($product);
             $property = $reflection->getProperty('changes');
-            $property->setAccessible(true);
+            if (\PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
             $changes = $property->getValue($product);
             if ( isset($changes['price']) ) {
                 $initialPrice = $changes['price'];

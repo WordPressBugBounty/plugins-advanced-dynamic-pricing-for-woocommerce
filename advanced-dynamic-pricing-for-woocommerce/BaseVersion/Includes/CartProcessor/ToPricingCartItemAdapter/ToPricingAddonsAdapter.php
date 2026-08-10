@@ -127,7 +127,6 @@ class ToPricingAddonsAdapter
         CartItemAddonsCollection $addonsCollection
     ) {
         $initialCost = $origPriceCalc->basePrice;
-
         $initialCost += array_sum(array_column($addonsCollection->toList(), 'price'));
 
         if ($facade->isImmutable() && $facade->getHistory()) {

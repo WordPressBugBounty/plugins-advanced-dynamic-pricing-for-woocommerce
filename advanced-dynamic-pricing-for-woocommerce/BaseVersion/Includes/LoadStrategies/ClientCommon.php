@@ -4,6 +4,7 @@ namespace ADP\BaseVersion\Includes\LoadStrategies;
 
 use ADP\BaseVersion\Includes\Advertising\DiscountMessage;
 use ADP\BaseVersion\Includes\CartExtensions\CartExtensions;
+use ADP\BaseVersion\Includes\Compatibility\Addons\TmExtraOptionsCmp;
 use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\CustomizerExtensions\CustomizerExtensions;
 use ADP\BaseVersion\Includes\Database\Repository\OrderItemRepository;
@@ -121,6 +122,9 @@ class ClientCommon implements LoadStrategy
 
         $wcffCmp = new WcffCmp();
         $wcffCmp->installRenderHooks();
+
+        $tmExtraOptions = new TmExtraOptionsCmp($this->context);
+        $tmExtraOptions->installRenderHooks();
 
         Utils::addPersistentProductsToSaleQuery();
     }

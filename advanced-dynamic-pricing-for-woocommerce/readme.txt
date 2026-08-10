@@ -5,7 +5,7 @@ Tags: woocommerce, coupons, discounts, dynamic pricing, bulk discount
 Requires PHP: 7.1
 Requires at least: 6.1
 Tested up to: 7.0
-Stable tag: 4.13.2
+Stable tag: 4.13.3
 License: GNU General Public License v3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -182,6 +182,17 @@ You should be PHP programmer to do it. [Please, review sample addon and adapt it
 
 
 == Changelog ==
+
+= 4.13.3 - 2026-08-10 =
+* Fixed bug - wrong coupon amount for option "Don’t change product price and show discount as coupon"
+* Fixed bug - wrong product price displayed at product page for rules like "3 for xxx"
+* Fixed bug - wrong product price displayed at product page if option "Show approximate price range if product has X variations or more" was active
+* Fixed bug - can't exclude Brands in product filter
+* Fixed bug - cache was not reset when product edited in backend
+* Fixed bug - fatal error when WP-Cron started jobs to make product feed
+* Fixed bug - deprecation warnings PHP 8.5
+* Updated compatibility with "TM Extra product options"
+* Updated compatibility with "WooCommerce Subscriptions" to support version 9.0
 
 = 4.13.2 - 2026-06-08 =
 * Added cart condition "Product brands"

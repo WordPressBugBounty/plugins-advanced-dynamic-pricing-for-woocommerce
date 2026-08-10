@@ -270,7 +270,7 @@ class RuleRepository implements RuleRepositoryInterface {
 
         $sql = apply_filters("adp_get_rule_sql", $sql, $args);
 
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- dynamic parts are either hardcoded ints/booleans or already run through $wpdb->prepare() above
         $rows = $wpdb->get_results($sql);
 
         $rows = array_map(function ($item) {

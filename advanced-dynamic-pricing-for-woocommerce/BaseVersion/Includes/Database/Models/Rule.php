@@ -320,7 +320,7 @@ class Rule
         $rule = $this->buildRule();
         $data['summary'] = $this->buildSummary();
         $data['hash'] = $rule->getHash();
-        $data['date'] = date('Y-m-d H:i:s', time());
+        $data['date'] = gmdate('Y-m-d H:i:s', time());
 
         return $data;
     }

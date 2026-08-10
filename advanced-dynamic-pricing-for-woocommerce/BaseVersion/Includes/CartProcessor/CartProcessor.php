@@ -22,6 +22,8 @@ use ADP\BaseVersion\Includes\Compatibility\RoleBasedPricingCmp;
 use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\Core\Cart\Cart;
 use ADP\BaseVersion\Includes\Core\Cart\CartItem\CartItemConverter;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\CartItemPriceAdjustment\CartItemPriceAdjustment;
+use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Base\CartItemAttributeEnum;
 use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Basic\BasicCartItem;
 use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Container\ContainerCartItem;
 use ADP\BaseVersion\Includes\Core\Cart\CartItem\Type\Free\FreeCartItem;
@@ -966,7 +968,120 @@ class CartProcessor
      */
     protected function getCommonItemsFromCart($cart)
     {
-        return apply_filters('wdp_internal_cart_items_before_apply', $cart->getItems(), $this);
+        /** @var array<int, ICartItem> $items */
+        $items = apply_filters('wdp_internal_cart_items_before_apply', $cart->getItems(), $this);
+        $is_replaced_by_coupon = false;
+
+        foreach ($items as $item) {
+            foreach ($item->getPriceAdjustments() as $priceAdjustment) {
+                if ($priceAdjustment && $priceAdjustment->getType() && $priceAdjustment->getType()->getValue() === 'replaced_by_coupon') {
+                    $is_replaced_by_coupon = true;
+                    break 2;
+                }
+            }
+        }
+
+        if ($this->shouldMergeSameCostItems($is_replaced_by_coupon)) {
+            $mergedItemsNodes = [];
+            $mergedItemsHistory = [];
+
+            foreach ($items as $i => $item) {
+                $thirdPartyData = $item->getWcItem()->getThirdPartyData();
+                if (isset($thirdPartyData['woosb_ids'])) {
+                    continue;
+                }
+
+                if ( ! $item->isHistoryEqualsDiscounts()) {
+                    continue;
+                }
+
+                if (!isset($mergedItemsNodes[$item->getMergeHash()])) {
+                    $mergedItemsNodes[$item->getMergeHash()] = $item;
+                } else {
+                    unset($items[$i]);
+                }
+
+                if (!isset($mergedItemsHistory[$item->getMergeHash()])) {
+                    $mergedItemsHistory[$item->getMergeHash()] = [];
+                }
+
+                $mergedItemsHistory[$item->getMergeHash()][] = [
+                    'adjs' => $item->getPriceAdjustments(),
+                    'qty' => $item->getQty(),
+                    'minPrice' => $item->prices()->getMinDiscountRangePrice(),
+                    'maxPrice' => $item->prices()->getMaxDiscountRangePrice(),
+                ];
+            }
+
+            foreach ($items as &$item) {
+                if (!isset($mergedItemsHistory[$item->getMergeHash()])) {
+                    continue;
+                }
+
+                $mergedItemHistory = $mergedItemsHistory[$item->getMergeHash()];
+                $totalQty = array_sum(array_column($mergedItemHistory, 'qty'));
+
+                $newItem = clone $item;
+                $newItem->cleanAllAdjustments();
+                $newItem->setQty($totalQty);
+
+                $isImmutable = false;
+                if ( $newItem->hasAttr(CartItemAttributeEnum::IMMUTABLE()) ) {
+                    $isImmutable = true;
+                    $newItem->removeAttr(CartItemAttributeEnum::IMMUTABLE());
+                }
+
+                foreach ($mergedItemHistory as $priceAdjustmentAndQty) {
+                    /** @var array<int, CartItemPriceAdjustment> $priceAdjustments */
+                    $priceAdjustments = $priceAdjustmentAndQty['adjs'];
+                    $qty = $priceAdjustmentAndQty['qty'];
+
+                    foreach ($priceAdjustments as $priceAdjustment) {
+                        if ($priceAdjustment->getType()->getValue() === 'replaced_by_coupon') {
+                            $newAmount = $priceAdjustment->getAmount();
+                        } else {
+                            $newAmount = $priceAdjustment->getAmount() * $qty / $totalQty;
+                        }
+                        $newItem->applyPriceAdjustment(
+                            $priceAdjustment
+                                ->toBuilder()
+                                ->amount($newAmount)
+                                ->newPrice($priceAdjustment->getOriginalPrice() - $priceAdjustment->getAmount() * $qty / $item->getQty())
+                                ->build()
+                        );
+                    }
+
+                    if ($priceAdjustmentAndQty['minPrice'] !== null) {
+                        $newItem->prices()->setDiscountRangePrice($priceAdjustmentAndQty['minPrice']);
+                    }
+                    if ($priceAdjustmentAndQty['maxPrice'] !== null) {
+                        $newItem->prices()->setDiscountRangePrice($priceAdjustmentAndQty['maxPrice']);
+                    }
+                }
+
+                if ( $isImmutable ) {
+                    $newItem->addAttr(CartItemAttributeEnum::IMMUTABLE());
+                }
+
+                $item = $newItem;
+            }
+        }
+
+        return $items;
+    }
+
+    /**
+     * Whether cart rows for the same product that ended up at the same price should be
+     * collapsed into one row. Free always merges rows replaced by a coupon (their displayed
+     * price never differs); there is no "split_same_product_if_diff_costs" setting here.
+     *
+     * @param bool $is_replaced_by_coupon
+     *
+     * @return bool
+     */
+    protected function shouldMergeSameCostItems($is_replaced_by_coupon)
+    {
+        return $is_replaced_by_coupon;
     }
 
     /**
@@ -1157,13 +1272,15 @@ class CartProcessor
 
     protected function addNoticeIfNotExists($message, $type = 'success', $data = array())
     {
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended -- read-only check of which WooCommerce internal ajax action is running, no data is processed
         if (
             wp_doing_ajax()
             && isset($_REQUEST['wc-ajax'])
-            && $_REQUEST['wc-ajax'] === 'update_order_review'
+            && sanitize_text_field(wp_unslash($_REQUEST['wc-ajax'])) === 'update_order_review'
         ) {
             return;
         }
+        // phpcs:enable
 
         $exists = false;
         $notices = wc_get_notices($type);
@@ -1246,7 +1363,9 @@ class CartProcessor
         try {
             $reflection = new ReflectionClass($product);
             $property = $reflection->getProperty('changes');
-            $property->setAccessible(true);
+            if (\PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
             $changesToRestore = $property->getValue($product);
 
             $changes = $property->getValue($product);

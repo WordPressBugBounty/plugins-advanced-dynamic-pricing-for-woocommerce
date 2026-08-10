@@ -124,7 +124,7 @@ class FreeCartItemChoices implements \Serializable
             $tmpMode = "false";
         }
 
-        $pieces = array($rule->getHash(), strval($index), strval($tmpMode), $this->serialize());
+        $pieces = array(strval($index), strval($tmpMode), $this->serialize());
 
         return md5(join("_", $pieces));
     }

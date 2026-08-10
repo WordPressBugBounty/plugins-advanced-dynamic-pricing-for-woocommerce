@@ -75,7 +75,9 @@ class WcProductProcessorHelper
             try {
                 $reflection = new \ReflectionClass($product);
                 $property = $reflection->getProperty('changes');
-                $property->setAccessible(true);
+                if (\PHP_VERSION_ID < 80100) {
+                    $property->setAccessible(true);
+                }
                 $changes = $product->get_changes();
 
                 $changes = array_filter([

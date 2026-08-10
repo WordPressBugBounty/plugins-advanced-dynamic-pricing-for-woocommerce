@@ -100,8 +100,15 @@ class OrderRepository implements OrderRepositoryInterface {
         if (empty($customerOrdersIds)) {
             return 0;
         }
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-        $value = $wpdb->get_var("SELECT COUNT(*) FROM {$tableOrderRules} WHERE rule_id = $ruleId  AND order_id IN (" . implode(',', $customerOrdersIds) . ")");
+        $customerOrdersIds = array_map('absint', $customerOrdersIds);
+        $placeholders      = implode(',', array_fill(0, count($customerOrdersIds), '%d'));
+        // $tableOrderRules is a hardcoded internal table name; $placeholders contains only repeated %d tokens for the variable-length IN() list.
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $value = $wpdb->get_var($wpdb->prepare(
+            "SELECT COUNT(*) FROM {$tableOrderRules} WHERE rule_id = %d AND order_id IN ({$placeholders})",
+            array_merge([$ruleId], $customerOrdersIds)
+        ));
+        // phpcs:enable
 
         return (int)$value;
     }
@@ -159,8 +166,15 @@ class OrderRepository implements OrderRepositoryInterface {
         if (empty($customerOrdersIds)) {
             return 0;
         }
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-        $value = $wpdb->get_var("SELECT COUNT(*) FROM {$tableOrderRules} WHERE rule_id = $ruleId  AND order_id IN (" . implode(',', $customerOrdersIds) . ")");
+        $customerOrdersIds = array_map('absint', $customerOrdersIds);
+        $placeholders      = implode(',', array_fill(0, count($customerOrdersIds), '%d'));
+        // $tableOrderRules is a hardcoded internal table name; $placeholders contains only repeated %d tokens for the variable-length IN() list.
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $value = $wpdb->get_var($wpdb->prepare(
+            "SELECT COUNT(*) FROM {$tableOrderRules} WHERE rule_id = %d AND order_id IN ({$placeholders})",
+            array_merge([$ruleId], $customerOrdersIds)
+        ));
+        // phpcs:enable
 
         return (int)$value;
     }

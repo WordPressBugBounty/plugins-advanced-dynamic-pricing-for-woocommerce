@@ -12,7 +12,9 @@ class Serializable
 
         $obj = [];
         foreach ( $props as $prop ) {
-            $prop->setAccessible(true);
+            if (\PHP_VERSION_ID < 80100) {
+                $prop->setAccessible(true);
+            }
             $value = $prop->getValue($this);
 
             $obj[$prop->getName()] = $value;
@@ -29,7 +31,9 @@ class Serializable
         $new = $reflect->newInstanceWithoutConstructor();
         
         foreach ($props as $prop) {
-            $prop->setAccessible(true);
+            if (\PHP_VERSION_ID < 80100) {
+                $prop->setAccessible(true);
+            }
 
             if (isset($data[$prop->getName()])) {
                 $value = $data[$prop->getName()];

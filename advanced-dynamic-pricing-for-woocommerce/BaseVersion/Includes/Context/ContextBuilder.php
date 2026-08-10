@@ -20,6 +20,7 @@ use ADP\BaseVersion\Includes\Compatibility\WoocsCmp;
 use ADP\BaseVersion\Includes\Compatibility\YayCurrencyCmp;
 use ADP\BaseVersion\Includes\Context;
 use ADP\Factory;
+use ADP\ProVersion\Includes\Compatibility\Addons\WpcGroupedProductCmp;
 
 class ContextBuilder
 {
@@ -106,5 +107,11 @@ class ContextBuilder
         /** @var TmExtraOptionsCmp $tmExtraOptionsCmp */
         $tmExtraOptionsCmp = Factory::get("Compatibility_Addons_TmExtraOptionsCmp", $context);
         $tmExtraOptionsCmp->register();
+
+        if (class_exists(Factory::getClassName("Compatibility_Addons_WpcGroupedProductCmp"))) {
+            /** @var WpcGroupedProductCmp $wpcGroupedProductCmp */
+            $wpcGroupedProductCmp = Factory::get("Compatibility_Addons_WpcGroupedProductCmp", $context);
+            $wpcGroupedProductCmp->register();
+        }
     }
 }

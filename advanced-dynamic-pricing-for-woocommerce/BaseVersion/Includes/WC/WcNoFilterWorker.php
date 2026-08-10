@@ -32,7 +32,9 @@ class WcNoFilterWorker
         try {
             $reflection = new ReflectionClass($wcCart);
             $property   = $reflection->getMethod('reset_totals');
-            $property->setAccessible(true);
+            if (\PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
             $property->invoke($wcCart);
         } catch (ReflectionException $e) {
             return;

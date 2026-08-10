@@ -153,7 +153,9 @@ class CartCouponsProcessorMerge implements ICartCouponsProcessor
 
         $reflection = new \ReflectionClass($wcDiscounts);
         $discountsProperty = $reflection->getProperty('discounts');
-        $discountsProperty->setAccessible(true);
+        if (\PHP_VERSION_ID < 80100) {
+            $discountsProperty->setAccessible(true);
+        }
         $adpCoupons = [];
 
         foreach ($wcCart->get_coupons() as $wcCoupon) {

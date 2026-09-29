@@ -246,6 +246,29 @@ class WcCartItemFacade
     /** @var array */
     protected $containeredData;
 
+    const NOT_CACHED_PROPERTIES = array('context', 'compareStrategy');
+
+    public function __serialize()
+    {
+        return array_diff_key(get_object_vars($this), array_flip(self::NOT_CACHED_PROPERTIES));
+    }
+
+    public function __unserialize($data)
+    {
+        foreach ($data as $property => $value) {
+            $pos      = strrpos($property, "\0");
+            $property = $pos === false ? $property : substr($property, $pos + 1);
+
+            if ( ! in_array($property, self::NOT_CACHED_PROPERTIES, true)) {
+                $this->$property = $value;
+            }
+        }
+
+        $this->context         = adp_context();
+        $this->compareStrategy = new CompareStrategy();
+    }
+
+
     /**
      * @param Context|array $context
      * @param array|string $wcCartItemOrKey

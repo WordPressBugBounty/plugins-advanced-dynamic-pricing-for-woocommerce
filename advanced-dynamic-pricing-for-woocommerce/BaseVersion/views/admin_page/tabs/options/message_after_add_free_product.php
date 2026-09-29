@@ -5,7 +5,7 @@ defined('ABSPATH') or exit;
 
 <tr valign="top">
     <th scope="row" class="titledesc">
-        <?php esc_html_e('Show message after adding free product', 'advanced-dynamic-pricing-for-woocommerce') ?></th>
+        <?php esc_html_e('Show message after adding gift', 'advanced-dynamic-pricing-for-woocommerce') ?></th>
     <td class="forminp forminp-checkbox">
         <fieldset>
             <div>

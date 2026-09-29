@@ -49,14 +49,22 @@ class TmExtraOptionsCmp
     public function getCartItemPrice($price, $cart_item)
     {
         try {
-            if(isset($cart_item["tm_epo_options_prices"]) && isset($cart_item["tm_epo_product_original_price"]) && $cart_item["tm_epo_options_prices"] == 0){
-                if ((float)$cart_item["tm_epo_product_original_price"] > (float)$cart_item["line_subtotal"]) {
-                    $del = is_numeric($cart_item["tm_epo_product_original_price"]) ? wc_price($cart_item["tm_epo_product_original_price"]) : $cart_item["tm_epo_product_original_price"];
-                    $ins = is_numeric($cart_item["line_subtotal"]) ? wc_price($cart_item["line_subtotal"]) : $cart_item["line_subtotal"];
+            if (!isset($cart_item["tm_epo_options_prices"], $cart_item["tm_epo_product_original_price"], $cart_item["data"]) || $cart_item["tm_epo_options_prices"] != 0
+                || !is_numeric($cart_item["tm_epo_product_original_price"]) || !($cart_item["data"] instanceof \WC_Product)) {
+                return $price;
+            }
 
-                    return '<del>' . $del . '</del> <ins>' . $ins . '</ins>';
+            /** @var \WC_Product $product */
+            $product = $cart_item["data"];
+            $cart    = WC()->cart;
 
-                }
+            $originalPrice = (float)$cart_item["tm_epo_product_original_price"];
+            $qty = max(1, (float)$cart_item['quantity']);
+            $currentPrice = $cart->display_prices_including_tax() ? ($cart_item['line_subtotal'] + $cart_item['line_subtotal_tax']) / $qty : $cart_item['line_subtotal'] / $qty;
+
+            $decimals = wc_get_price_decimals();
+            if (round($originalPrice, $decimals) > round($currentPrice, $decimals)) {
+                return '<del>' . wc_price($originalPrice) . '</del> <ins>' . wc_price($currentPrice) . '</ins>';
             }
         } catch (Exception $e) {
             wp_send_json_error($e->getMessage());

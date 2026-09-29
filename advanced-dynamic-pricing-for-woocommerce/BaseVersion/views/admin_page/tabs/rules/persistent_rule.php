@@ -234,7 +234,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.", 'adv
 
         <div class="wdp-block wdp-get-products-block wdp-get-products-options wdp-row" style="display: none;">
             <div class="wdp-column wdp-column-help">
-                <label><?php Helpers::ruleFilterLabel('Free products', 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
+                <label><?php Helpers::ruleFilterLabel('Gifts', 'advanced-dynamic-pricing-for-woocommerce'); ?></label>
                 <p class="wdp-rule-help">
                 <?php
                     echo sprintf(
@@ -290,7 +290,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.", 'adv
                             <label>
                                 <input <?php echo $isCouponEnabled ? "" : "disabled"; ?> type="checkbox"
                                                                                         name="rule[additional][is_replace_free_products_with_discount]">
-                                <?php esc_html_e("Add free items at regular price and show discount as coupon",
+                                <?php esc_html_e("Add items at regular price and show discount as coupon",
                                     'advanced-dynamic-pricing-for-woocommerce') ?>
                             </label>
                             <input <?php echo $isCouponEnabled ? "" : "disabled"; ?> type="text"
@@ -534,7 +534,7 @@ $pleaseEnableText = __("Please, enable coupons to use price replacements.", 'adv
                         'advanced-dynamic-pricing-for-woocommerce'); ?></button>
                 <button type="button" class="button wdp-btn-add-bulk"><?php esc_html_e('Bulk rules',
                         'advanced-dynamic-pricing-for-woocommerce'); ?></button>
-                <button type="button" class="button wdp-btn-add-getproduct"><?php esc_html_e('Free products',
+                <button type="button" class="button wdp-btn-add-getproduct"><?php esc_html_e('Gifts',
                         'advanced-dynamic-pricing-for-woocommerce'); ?></button>
             </div>
             <div>

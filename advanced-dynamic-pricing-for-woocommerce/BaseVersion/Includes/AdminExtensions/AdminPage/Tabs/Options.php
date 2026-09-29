@@ -246,7 +246,7 @@ class Options implements AdminTabInterface
 				),
 			),
 			"free_products"   => array(
-				'title'     => __("Free products", 'advanced-dynamic-pricing-for-woocommerce'),
+				'title'     => __("Gifts", 'advanced-dynamic-pricing-for-woocommerce'),
                 'doc_link'  => 'https://docs.algolplus.com/advanced-dynamic-pricing/settings-algol-pricing/free-products-2/',
 				'templates' => array(
 					10 => "message_after_add_free_product",

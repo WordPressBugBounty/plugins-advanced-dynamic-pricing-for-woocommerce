@@ -1242,7 +1242,7 @@ class CartProcessor
         $template = $this->context->getOption('message_template_after_add_free_product');
         //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
         $template = _x( $template,
-            "Show message after adding free product|Output template",
+            "Show message after adding gift|Output template",
             "advanced-dynamic-pricing-for-woocommerce"
         );
         $arguments = array(
@@ -1556,6 +1556,12 @@ class CartProcessor
                     } else {
                         $couponAmount = $hostFacade->getOriginalPriceWithoutTax();
                     }
+
+
+                    if ($freeItem->getInitialPrice() > 0) {
+                        $couponAmount = $couponAmount * ($freeItem->getDiscountAmount() / $freeItem->getInitialPrice());
+                    }
+
                     $couponAmount = $couponAmount * $freeItem->getQty();
 
                     $coupon = new CouponCartItem(

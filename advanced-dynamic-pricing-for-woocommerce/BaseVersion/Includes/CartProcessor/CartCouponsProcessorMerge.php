@@ -220,6 +220,10 @@ class CartCouponsProcessorMerge implements ICartCouponsProcessor
         }
 
         foreach ($cart->getRuleTriggerCoupons() as $couponCode) {
+            if ($this->disableAllInRuleWcCoupons || in_array($couponCode, $this->disabledWcCoupons, true)) {
+                continue;
+            }
+
             $this->addToMerged(
                 $couponCode,
                 new CouponRuleTrigger($couponCode, $ruleIdByActivationCouponCode[$couponCode] ?? 0)
@@ -536,8 +540,10 @@ class CartCouponsProcessorMerge implements ICartCouponsProcessor
         }
 
         if (in_array($wcCoupon->get_code(), $this->disabledWcCoupons, true)) {
-            WC()->cart->remove_coupon($wcCoupon->get_code());
-            $this->replaceDisabledCouponNotices();
+            if (in_array($wcCoupon->get_code(), WC()->cart->get_applied_coupons(), true)) {
+                WC()->cart->remove_coupon($wcCoupon->get_code());
+                $this->replaceDisabledCouponNotices();
+            }
             throw new \Exception(
                 esc_html__('Sorry, this coupon is not applicable to cart.', 'advanced-dynamic-pricing-for-woocommerce')
             );
@@ -602,9 +608,17 @@ class CartCouponsProcessorMerge implements ICartCouponsProcessor
 
     public function checkDisabledCoupons(Cart $cart, WC_Cart $wcCart)
     {
-        if(count($this->disabledWcCoupons)) {
-            throw new \Exception(
-                esc_html__('Sorry, this coupon is not applicable to cart.', 'advanced-dynamic-pricing-for-woocommerce')
+        $appliedDisabledCoupons = array_intersect($this->disabledWcCoupons, $wcCart->get_applied_coupons());
+
+        if (count($appliedDisabledCoupons)) {
+            foreach ($appliedDisabledCoupons as $couponCode) {
+                $wcCart->remove_coupon($couponCode);
+            }
+
+            $this->replaceDisabledCouponNotices();
+            wc_add_notice(
+                esc_html__('Sorry, this coupon is not applicable to cart.', 'advanced-dynamic-pricing-for-woocommerce'),
+                'error'
             );
         }
     }

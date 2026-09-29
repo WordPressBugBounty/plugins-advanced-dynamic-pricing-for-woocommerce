@@ -196,12 +196,12 @@ class OptionsInstaller
             $builder::boolean(
                 'show_message_after_add_free_product',
                 false,
-                __('Show message after adding free product|Enable', 'advanced-dynamic-pricing-for-woocommerce')
+                __('Show message after adding gift|Enable', 'advanced-dynamic-pricing-for-woocommerce')
             ),
             $builder::shortText(
                 'message_template_after_add_free_product',
                 __("Added {{qty}} free {{product_name}}", 'advanced-dynamic-pricing-for-woocommerce'),
-                __('Show message after adding free product|Output template', 'advanced-dynamic-pricing-for-woocommerce')
+                __('Show message after adding gift|Output template', 'advanced-dynamic-pricing-for-woocommerce')
             ),
             $builder::boolean(
                 'is_calculate_based_on_wc_precision',
@@ -474,7 +474,7 @@ class OptionsInstaller
             $builder::boolean(
                 'readonly_price_for_free_products',
                 true,
-                __('Read-only quantity for free products', 'advanced-dynamic-pricing-for-woocommerce')
+                __('Read-only quantity for gifts', 'advanced-dynamic-pricing-for-woocommerce')
             ),
             $builder::boolean(
                 'highlight_range_qty_changed',

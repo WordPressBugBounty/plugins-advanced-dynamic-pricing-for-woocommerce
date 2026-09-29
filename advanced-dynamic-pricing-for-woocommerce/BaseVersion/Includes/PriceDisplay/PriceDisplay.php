@@ -472,7 +472,7 @@ class PriceDisplay
             $args['min_value']   = $range->getFrom(); // Min quantity (default = 0)
         }
 
-        return $args;
+        return apply_filters( 'adp_quantity_input_args', $args, $product);
     }
 
     /**

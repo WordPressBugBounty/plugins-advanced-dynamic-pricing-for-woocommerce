@@ -51,7 +51,7 @@
 
 .wdp-list-container .wdp-field-title label {
 	font-weight: bold;
-	line-height: 2em;
+	line-height: 3em;
 }
 
 .wdp-list-container .wdp-block input[type='text'],
@@ -1411,4 +1411,22 @@ div.wdp-row.wdp-options select {
 
 .wdp-ruleitem.disabled {
   pointer-events: auto !important;
+}
+
+.displaying-num {
+  margin-right: 5px;
+}
+
+.tablenav-pages {
+  display: flex;
+  align-items: center;
+}
+
+.tablenav-pages .current-page {
+  min-height: 40px;
+}
+
+.tablenav-paging-text {
+  display: inline-block;
+  margin-top: 10px;
 }

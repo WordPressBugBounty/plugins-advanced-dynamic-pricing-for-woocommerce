@@ -96,6 +96,12 @@ class RuleTranslator
 
         if ($rule instanceof SingleItemRule || $rule instanceof PackageRule) {
             $rule->setItemGiftSubtotalDivider($rule->getItemGiftSubtotalDivider() * $rate);
+
+            $giftsDiscount = $rule->getItemGiftsDiscount();
+            if ($giftsDiscount && $giftsDiscount->getType() !== Discount::TYPE_PERCENTAGE) {
+                $giftsDiscount->setValue($giftsDiscount->getValue() * $rate);
+                $rule->setItemGiftsDiscount($giftsDiscount);
+            }
         }
 
         return $rule;

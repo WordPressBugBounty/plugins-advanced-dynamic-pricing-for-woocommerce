@@ -5,6 +5,7 @@ namespace ADP\BaseVersion\Includes;
 use ADP\BaseVersion\Includes\CartProcessor\CartProcessor;
 use ADP\BaseVersion\Includes\CartProcessor\FreeAutoAddItemsController;
 use ADP\BaseVersion\Includes\Compatibility\CTXFeedCmp;
+use ADP\BaseVersion\Includes\Compatibility\DonationForWoocommerceCmp;
 use ADP\BaseVersion\Includes\Compatibility\GermanMarketCmp;
 use ADP\BaseVersion\Includes\Compatibility\KlarnaCmp;
 use ADP\BaseVersion\Includes\Compatibility\SmartCouponsCmp;
@@ -114,6 +115,12 @@ class Engine
         if ($germanMarket->isActive()) {
             $germanMarket->prepareHooks();
         }
+
+        $donationForWoocommerceCmp = new DonationForWoocommerceCmp();
+        if ($donationForWoocommerceCmp->isActive()) {
+            $donationForWoocommerceCmp->prepareHooks();
+        }
+
         if ($this->context->getOption("support_persistence_rules") ) {
             //must refill min_price when run >WooCommerce>Status>Tools>Product lookup tables, Regenerate
             $persistentRuleRepository = new PersistentRuleRepository();

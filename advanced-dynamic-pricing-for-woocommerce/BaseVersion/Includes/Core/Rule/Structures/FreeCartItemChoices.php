@@ -30,12 +30,18 @@ class FreeCartItemChoices implements \Serializable
     protected $attributes;
     const ATTR_TEMP = 'temporary';
 
+    /**
+     * @var int|null
+     */
+    protected $ruleId;
+
     public function __construct()
     {
         $this->choices     = array();
         $this->requiredQty = floatval(0);
         $this->required    = false;
         $this->attributes  = array();
+        $this->ruleId      = null;
     }
 
     public function __clone()
@@ -108,6 +114,22 @@ class FreeCartItemChoices implements \Serializable
     }
 
     /**
+     * @param int|null $ruleId
+     */
+    public function setRuleId($ruleId)
+    {
+        $this->ruleId = is_numeric($ruleId) ? intval($ruleId) : null;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getRuleId()
+    {
+        return $this->ruleId;
+    }
+
+    /**
      * @param Rule $rule
      * @param int $index
      * @param Gift $gift
@@ -124,7 +146,7 @@ class FreeCartItemChoices implements \Serializable
             $tmpMode = "false";
         }
 
-        $pieces = array(strval($index), strval($tmpMode), $this->serialize());
+        $pieces = array(strval($index), strval($tmpMode), serialize($this->getDataForHash()));
 
         return md5(join("_", $pieces));
     }
@@ -138,6 +160,16 @@ class FreeCartItemChoices implements \Serializable
     }
 
     public function __serialize()
+    {
+        return array_merge($this->getDataForHash(), [
+            'ruleId' => $this->ruleId,
+        ]);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getDataForHash()
     {
         $choices = $this->choices;
         sort($choices);
@@ -170,10 +202,11 @@ class FreeCartItemChoices implements \Serializable
             $obj->unserialize($data);
             return $obj;
         }, $data['choices'] ?? []);
-        
+
         $this->requiredQty = $data['requiredQty'];
         $this->required    = $data['required'];
         $this->attributes  = $data['attributes'];
+        $this->ruleId      = $data['ruleId'] ?? null;
     }
 
     /**

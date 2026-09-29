@@ -384,11 +384,11 @@ class CacheHelper
         }
 
         foreach ($calc->getRulesCollection()->getRules() as $rule) {
-            $parts[] = md5(serialize($rule));
+            $parts[] = $rule->getHash();
         }
 
         $parts[]= md5( json_encode( $cart->getContext()->getCustomer()->getJson() ) );
-
+        $parts[] = 'v2';
         $parts = apply_filters("adp_calculate_processed_product_hash", $parts,
                     $theProduct, $variationAttributes, $qty, $cartItemData, $cart, $calc);
 

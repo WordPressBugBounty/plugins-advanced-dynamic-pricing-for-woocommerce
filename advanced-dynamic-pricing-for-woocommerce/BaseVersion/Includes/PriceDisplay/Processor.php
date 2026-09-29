@@ -120,10 +120,12 @@ class Processor implements IWcProductProcessor
         static $last_product_key='';
         static $last_product_result;
 
+        $must_clone = false;
         if (is_numeric($theProduct)) {
             $product = CacheHelper::getWcProduct($theProduct);
         } elseif ($theProduct instanceof WC_Product) {
-            $product = clone $theProduct;
+            $product = $theProduct;
+            $must_clone = true;
         } else {
             $this->context->handleError(new Exception("Product does not exists",
                 self::ERR_PRODUCT_DOES_NOT_EXISTS));
@@ -149,6 +151,10 @@ class Processor implements IWcProductProcessor
 
         if( $key == $last_product_key )
             return $last_product_result;
+
+        // clone object only for real calculations
+        if($must_clone)
+            $product = clone $theProduct; 
 
         $last_product_key = $key;
         $last_product_result = $this->calculateWithProductWrapper(

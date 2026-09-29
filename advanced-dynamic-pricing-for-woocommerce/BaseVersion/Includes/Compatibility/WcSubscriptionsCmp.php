@@ -16,6 +16,17 @@ defined('ABSPATH') or exit;
  */
 class WcSubscriptionsCmp
 {
+
+    /**
+     * @var string
+     */
+    const WCS_REMOVE_COUPONS_CALLBACK = 'WC_Subscriptions_Coupon::remove_coupons';
+
+    /**
+     * @var bool
+     */
+    protected $couponRemovalRestored = false;
+
     /**
      * @var Context
      */
@@ -174,11 +185,22 @@ class WcSubscriptionsCmp
         if (!has_action('woocommerce_calculated_total')) {
             add_filter('woocommerce_calculated_total', '\WC_Subscriptions_Cart::calculate_subscription_totals', 1000, 2);
         }
+
+        $this->couponRemovalRestored = false;
+        if (class_exists('\WC_Subscriptions_Coupon') && ! has_action('woocommerce_before_calculate_totals', self::WCS_REMOVE_COUPONS_CALLBACK)) {
+            add_action('woocommerce_before_calculate_totals', self::WCS_REMOVE_COUPONS_CALLBACK, 10);
+            $this->couponRemovalRestored = true;
+        }
     }
 
     public function removeHooksAfterCalculateTotals()
     {
         \WC_Subscriptions_Cart::remove_calculation_price_filter();
+
+        if ($this->couponRemovalRestored) {
+            remove_action('woocommerce_before_calculate_totals', self::WCS_REMOVE_COUPONS_CALLBACK, 10);
+            $this->couponRemovalRestored = false;
+        }
     }
 
     public function getBOSWCSalePrice($wcSalePrice, $product, $item, $prodPropsWithFilters) {

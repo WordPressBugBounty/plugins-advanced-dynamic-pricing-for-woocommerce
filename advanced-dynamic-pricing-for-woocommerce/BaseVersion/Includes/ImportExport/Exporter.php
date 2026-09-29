@@ -447,6 +447,14 @@ class Exporter
 
         $free_products['max_amount_for_gifts'] = $ruleObject->getMaxAmountForGifts();
 
+        if (method_exists($ruleObject, 'getItemGiftsDiscount') && $ruleObject->getItemGiftsDiscount()) {
+            $giftsDiscount          = $ruleObject->getItemGiftsDiscount();
+            $free_products['total'] = array(
+                'type'  => $this->getDiscountType($giftsDiscount),
+                'value' => $giftsDiscount->getValue(),
+            );
+        }
+
         return $free_products;
     }
 

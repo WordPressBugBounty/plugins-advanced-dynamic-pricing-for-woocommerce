@@ -77,7 +77,7 @@ use ADP\BaseVersion\Includes\AdminExtensions\Ajax;
     <?php endif; ?>
 
     <div style="clear: both; margin: 5px 0;">
-        <div style="float: left; margin: 5px 0; width: 39px; text-align: center;">
+        <div style="float: left; margin: 10px 0; width: 39px; text-align: center;">
             <input type="checkbox" id="bulk-action-select-all">
         </div>
 

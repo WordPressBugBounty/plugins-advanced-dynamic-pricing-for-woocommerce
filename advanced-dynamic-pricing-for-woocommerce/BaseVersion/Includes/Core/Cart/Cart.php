@@ -110,6 +110,18 @@ class Cart
         }
         $this->freeItems = $newItems;
 
+        $newItems = array();
+        foreach ($this->autoAddItems as $item) {
+            $newItems[] = clone $item;
+        }
+        $this->autoAddItems = $newItems;
+
+        $newItems = array();
+        foreach ($this->recommendedPromotions as $item) {
+            $newItems[] = clone $item;
+        }
+        $this->recommendedPromotions = $newItems;
+
         $this->cartContext = clone $this->cartContext;
 
         $newAdj = array();
@@ -242,6 +254,7 @@ class Cart
             if ($freeItem->hash() === $newFreeItem->hash()) {
                 $freeItem->qty += $newFreeItem->qty;
                 $freeItem->setQtyAlreadyInWcCart($freeItem->getQtyAlreadyInWcCart() + $newFreeItem->getQtyAlreadyInWcCart());
+                $freeItem->setPrice($newFreeItem->getPrice());
 
                 return true;
             }
@@ -676,7 +689,7 @@ class Cart
             }, $this->fees),
 
             'couponsAdjustments' => array_map(function($item) {
-                return $item->toArray();
+                return ['class' => get_class($item)] + $item->toArray();
             }, $this->couponsAdjustments),
 
             'notices' => array_map(function($item) {
@@ -713,9 +726,11 @@ class Cart
             return Fee::fromArray($data);
         }, $data['fees'] ?? []);
 
-        // $this->couponsAdjustments = array_map(function($data) {
-        //     return Fee::fromArray($data);
-        // }, $data['couponsAdjustments'] ?? []);
+        $this->couponsAdjustments = array_map(function($data) {
+            $class = $data['class'] ?? DisableWcCouponsCart::class;
+
+            return $class::fromArray($data);
+        }, $data['couponsAdjustments'] ?? []);
 
         $this->notices = array_map(function($data) {
             return Notice::fromArray($data);

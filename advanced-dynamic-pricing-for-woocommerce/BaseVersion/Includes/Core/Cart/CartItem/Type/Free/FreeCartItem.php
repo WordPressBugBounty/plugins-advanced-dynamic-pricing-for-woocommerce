@@ -31,6 +31,11 @@ class FreeCartItem extends SerializableCartItem
     /**
      * @var float
      */
+    protected $price;
+
+    /**
+     * @var float
+     */
     public $qty;
 
     /**
@@ -119,6 +124,7 @@ class FreeCartItem extends SerializableCartItem
 
         $this->initialPrice = floatval($product->get_price(''));
         $this->initialTax   = floatval(0);
+        $this->price        = floatval(0);
 
         if ($product->get_parent_id()) {
             $this->parentProduct = CacheHelper::getWcProduct($product->get_parent_id());
@@ -190,6 +196,32 @@ class FreeCartItem extends SerializableCartItem
     public function getInitialTax()
     {
         return $this->initialTax;
+    }
+
+    /**
+     * @param float $price
+     */
+    public function setPrice($price)
+    {
+        if (is_numeric($price)) {
+            $this->price = floatval($price);
+        }
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrice()
+    {
+        return floatval($this->price);
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscountAmount()
+    {
+        return max(floatval(0), $this->getInitialPrice() - $this->getPrice());
     }
 
     public function hash()

@@ -185,7 +185,9 @@ class CartItemConverter
     {
         $facade = $hostFacade;
 
-        $rules = [$freeItem->getRuleId() => [$freeItem->getInitialPrice()]];
+        $giftPrice = $freeItem->getPrice();
+
+        $rules = [$freeItem->getRuleId() => [$freeItem->getDiscountAmount()]];
 
         $cartItemQty = $facade->getQty();
         $facade->setQty($freeItem->getQty());
@@ -197,8 +199,8 @@ class CartItemConverter
         $priceAdjBuilder = CartItemPriceAdjustment::builder()
             ->source(CartItemPriceUpdateSourceEnum::SOURCE_FREE_ITEM())
             ->originalPrice(floatval($facade->getProduct()->get_price('edit')))
-            ->amount($freeItem->getInitialPrice())
-            ->newPrice(0.0)
+            ->amount($freeItem->getDiscountAmount())
+            ->newPrice($giftPrice)
             ->ruleId($freeItem->getRuleId());
 
         if ($freeItem->isReplaceWithCoupon()) {
@@ -209,7 +211,7 @@ class CartItemConverter
             $facade->setReplaceCouponCode($freeItem->getReplaceCouponCode());
         } else {
             $priceAdjBuilder->type(CartItemPriceUpdateTypeEnum::DEFAULT());
-            $facade->setNewPrice(0);
+            $facade->setNewPrice($giftPrice);
             $facade->setDiscounts($rules);
         }
 

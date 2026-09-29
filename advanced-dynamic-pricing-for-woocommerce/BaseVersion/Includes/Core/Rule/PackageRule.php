@@ -5,6 +5,7 @@ namespace ADP\BaseVersion\Includes\Core\Rule;
 use ADP\BaseVersion\Includes\Context;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\AutoAdd;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\AutoAddsCollection;
+use ADP\BaseVersion\Includes\Core\Rule\Structures\Discount;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\Gift;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\GiftsCollection;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\PackageItem;
@@ -157,6 +158,11 @@ class PackageRule extends BaseRule implements Rule
     protected $maxAmountForGifts;
 
     /**
+     * @var Discount|null
+     */
+    protected $itemGiftsDiscount;
+
+    /**
      * @var bool
      */
     protected $isGiftsBelowCheapestItem;
@@ -187,6 +193,7 @@ class PackageRule extends BaseRule implements Rule
         $this->itemGiftSubtotalDivider = null;
         $this->roleDiscounts           = array();
         $this->maxAmountForGifts       = null;
+        $this->itemGiftsDiscount       = null;
         $this->isGiftsBelowCheapestItem = false;
     }
 
@@ -197,6 +204,10 @@ class PackageRule extends BaseRule implements Rule
         }, $this->packages);
 
         $this->itemGiftsCollection = clone $this->itemGiftsCollection;
+
+        if ($this->itemGiftsDiscount) {
+            $this->itemGiftsDiscount = clone $this->itemGiftsDiscount;
+        }
 
         $this->roleDiscounts = array_map(function ($item) {
             return clone $item;
@@ -731,6 +742,22 @@ class PackageRule extends BaseRule implements Rule
     public function getMaxAmountForGifts()
     {
         return $this->maxAmountForGifts;
+    }
+
+    /**
+     * @param Discount|null $discount
+     */
+    public function setItemGiftsDiscount($discount)
+    {
+        $this->itemGiftsDiscount = $discount instanceof Discount ? $discount : null;
+    }
+
+    /**
+     * @return Discount|null
+     */
+    public function getItemGiftsDiscount()
+    {
+        return $this->itemGiftsDiscount;
     }
 
     /**

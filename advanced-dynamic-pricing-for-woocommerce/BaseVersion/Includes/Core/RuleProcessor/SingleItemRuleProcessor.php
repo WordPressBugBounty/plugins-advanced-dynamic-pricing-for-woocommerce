@@ -207,6 +207,10 @@ class SingleItemRuleProcessor implements RuleProcessor
             return;
         }
 
+        if ($this->rule->getActivationCouponCode() && ! $this->isRuleMatchedCart($cart)) {
+            $cart->addCouponsAdjustments(new DisableWcCouponsCart($this->rule->getActivationCouponCode(), $this->rule->getId()));
+        }
+
         if ( ! $this->activationTriggerStrategy->canBeAppliedUsingCouponCode($cart)) {
             $this->status = self::STATUS_DISABLED_BY_COUPON_CODE_TRIGGER;
 
@@ -214,9 +218,6 @@ class SingleItemRuleProcessor implements RuleProcessor
         }
 
         if ( ! $this->isRuleMatchedCart($cart)) {
-            if ($this->rule->getActivationCouponCode()) {
-                $cart->addCouponsAdjustments(new DisableWcCouponsCart($this->rule->getActivationCouponCode(), $this->rule->getId()));
-            }
             return;
         }
 

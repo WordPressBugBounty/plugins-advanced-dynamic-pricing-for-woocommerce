@@ -11,6 +11,7 @@ use ADP\BaseVersion\Includes\Core\Cart\Notice;
 use ADP\BaseVersion\Includes\Core\Rule\PackageRule;
 use ADP\BaseVersion\Includes\Core\Rule\Rule;
 use ADP\BaseVersion\Includes\Core\Rule\SingleItemRule;
+use ADP\BaseVersion\Includes\Core\Rule\Structures\Discount;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\FreeCartItemChoices;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\Gift;
 use ADP\BaseVersion\Includes\Core\RuleProcessor\ProductStock\ProductStockController;
@@ -271,6 +272,7 @@ class GiftStrategy
             $gift->getMode()->equals(GiftModeEnum::REQUIRE_TO_CHOOSE())
             || $gift->getMode()->equals(GiftModeEnum::REQUIRE_TO_CHOOSE_FROM_PRODUCT_CAT())
         );
+        $freeCartItemChoices->setRuleId($this->rule->getId());
 
         return $freeCartItemChoices;
     }
@@ -386,6 +388,38 @@ class GiftStrategy
     }
 
     /**
+     * @param float $initialPrice
+     * @return float
+     */
+    protected function calculateGiftPrice($initialPrice)
+    {
+        return self::calculateGiftPriceForRule($this->rule, $initialPrice);
+    }
+
+    /**
+     * @param Rule $rule
+     * @param float $initialPrice
+     * @return float
+     */
+    public static function calculateGiftPriceForRule($rule, $initialPrice)
+    {
+        if (!$rule || !method_exists($rule, 'getItemGiftsDiscount')) {
+            return floatval(0);
+        }
+
+        $discount = $rule->getItemGiftsDiscount();
+
+        if (!($discount instanceof Discount)) {
+            return floatval(0);
+        }
+
+        /** @var PriceCalculator $priceCalculator */
+        $priceCalculator = Factory::get("Core_RuleProcessor_PriceCalculator", $rule, $discount);
+
+        return floatval($priceCalculator->calculateSinglePrice(floatval($initialPrice)));
+    }
+
+    /**
      * @param Cart $cart
      * @param int $productId
      * @param float $qty
@@ -440,6 +474,7 @@ class GiftStrategy
         }
 
         $freeItem->setCartItemData($cartItemData);
+        $freeItem->setPrice($this->calculateGiftPrice($freeItem->getInitialPrice()));
 
         if ($isReplace && $replaceCode) {
             $freeItem->setReplaceWithCoupon($isReplace);

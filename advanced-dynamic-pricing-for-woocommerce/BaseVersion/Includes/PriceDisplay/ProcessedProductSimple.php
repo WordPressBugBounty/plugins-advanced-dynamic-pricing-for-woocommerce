@@ -71,6 +71,13 @@ class ProcessedProductSimple
      */
     protected $listOfFreeCartItemChoices;
 
+    const NOT_CACHED_PROPERTIES = array(
+        'context',
+        'compareStrategy',
+        'priceFunctions',
+        'overrideCentsStrategy',
+    );
+
     /**
      * @param Context|WC_Product $contextOrProduct
      * @param WC_Product|array<int, BasicCartItem> $productOrCartItems
@@ -106,6 +113,34 @@ class ProcessedProductSimple
     public function withContext(Context $context)
     {
         $this->context = $context;
+    }
+
+    /**
+     * @return array
+     */
+    public function __serialize()
+    {
+        return array_diff_key(get_object_vars($this), array_flip(self::NOT_CACHED_PROPERTIES));
+    }
+
+    /**
+     * @param array $data
+     */
+    public function __unserialize($data)
+    {
+        foreach ($data as $property => $value) {
+            $pos      = strrpos($property, "\0");
+            $property = $pos === false ? $property : substr($property, $pos + 1);
+
+            if ( ! in_array($property, self::NOT_CACHED_PROPERTIES, true)) {
+                $this->$property = $value;
+            }
+        }
+
+        $this->context               = adp_context();
+        $this->compareStrategy       = new CompareStrategy();
+        $this->priceFunctions        = new PriceFunctions();
+        $this->overrideCentsStrategy = new OverrideCentsStrategy();
     }
 
     /**

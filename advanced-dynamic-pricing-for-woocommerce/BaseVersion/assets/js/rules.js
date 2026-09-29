@@ -2814,6 +2814,14 @@ jQuery(document).ready(function ($) {
             if (data.repeat_subtotal) {
                 $container.find('.wdp-get-products-repeat .repeat-subtotal-value').val(data.repeat_subtotal);
             }
+
+            if (data.total && data.total.type) {
+                $container.find('.gifts-total-type').val(data.total.type);
+            }
+
+            if (data.total && data.total.value !== undefined) {
+                $container.find('.gifts-total-value').val(data.total.value);
+            }
         }
 
         update_get_products_options_visibility($container);

@@ -8,6 +8,7 @@ use ADP\BaseVersion\Includes\Core\Rule\SingleItemRule\ProductsRangeAdjustments;
 use ADP\BaseVersion\Includes\Core\Rule\SingleItemRule\ConditionMessage;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\AutoAdd;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\AutoAddsCollection;
+use ADP\BaseVersion\Includes\Core\Rule\Structures\Discount;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\Filter;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\Gift;
 use ADP\BaseVersion\Includes\Core\Rule\Structures\GiftsCollection;
@@ -150,6 +151,11 @@ class SingleItemRule extends BaseRule implements Rule
     protected $maxAmountForGifts;
 
     /**
+     * @var Discount|null
+     */
+    protected $itemGiftsDiscount;
+
+    /**
      * @var bool
      */
     protected $isGiftsBelowCheapestItem;
@@ -188,6 +194,7 @@ class SingleItemRule extends BaseRule implements Rule
         $this->autoAddSubtotalDivider  = null;
         $this->roleDiscounts           = array();
         $this->maxAmountForGifts       = null;
+        $this->itemGiftsDiscount       = null;
         $this->isGiftsBelowCheapestItem = false;
     }
 
@@ -200,6 +207,10 @@ class SingleItemRule extends BaseRule implements Rule
         }, $this->filters);
 
         $this->itemGiftsCollection = clone $this->itemGiftsCollection;
+
+        if ($this->itemGiftsDiscount) {
+            $this->itemGiftsDiscount = clone $this->itemGiftsDiscount;
+        }
 
         $this->roleDiscounts = array_map(function ($item) {
             return clone $item;
@@ -745,6 +756,22 @@ class SingleItemRule extends BaseRule implements Rule
     public function getMaxAmountForGifts()
     {
         return $this->maxAmountForGifts;
+    }
+
+    /**
+     * @param Discount|null $discount
+     */
+    public function setItemGiftsDiscount($discount)
+    {
+        $this->itemGiftsDiscount = $discount instanceof Discount ? $discount : null;
+    }
+
+    /**
+     * @return Discount|null
+     */
+    public function getItemGiftsDiscount()
+    {
+        return $this->itemGiftsDiscount;
     }
 
     /**
